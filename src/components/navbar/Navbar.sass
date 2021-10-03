@@ -1,0 +1,49 @@
+@import '../../App'
+    
+.navbarContainer
+    background: white
+    padding: 14px 20px
+    position: fixed
+    bottom: 0
+    left: 0
+    width: 100%
+    z-index: 200
+    box-shadow: 0px 10px 20px 0px rgba(0,0,0,0.7)
+
+    .navbar
+        display: grid
+        grid-template-columns: auto auto auto auto
+        justify-content: space-between
+        align-items: center
+
+        .navbarLink
+            text-decoration: none
+
+            .navbarLinkItemActive
+                color: $primary-color
+
+            .navbarLinkItemInactive
+                color: black
+
+@media only screen and (min-width: 1100px)
+    .navbarContainer
+        background: white
+        padding: 24px 0
+        position: fixed
+        top: 0
+        left: 0
+        bottom: auto
+        width: 100%
+        z-index: 200
+        box-shadow: 0px 5px 15px 0px rgba(0,0,0,0.1)
+
+        .navbar
+            display: grid
+            grid-template-columns: auto auto auto auto
+            justify-content: space-between
+            align-items: center
+            width: 1100px
+            margin: 0 auto
+
+
+        
