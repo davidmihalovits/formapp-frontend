@@ -32,9 +32,10 @@ const Form = () => {
     const [totalCostAmount, setTotalCostAmount] = useState("");
     const [regulatoryNctsCode, setRegulatoryNctsCode] = useState("");
     const [regulatoryNctsEmail, setRegulatoryNctsEmail] = useState("");
-    const [regulatoryForeignTravel, setRegulatoryForeignTravel] = useState("");
-    const [regulatoryCiBrief, setRegulatoryCiBrief] = useState("");
-    const [regulatoryItEquipment, setRegulatoryItEquipment] = useState("");
+    const [regulatoryForeignTravel, setRegulatoryForeignTravel] =
+        useState(false);
+    const [regulatoryCiBrief, setRegulatoryCiBrief] = useState(false);
+    const [regulatoryItEquipment, setRegulatoryItEquipment] = useState(false);
 
     useEffect(() => {
         const calculateTotalCostAmount = () => {
@@ -60,8 +61,67 @@ const Form = () => {
         otherCost,
     ]);
 
-    const submit = (e) => {
+    const submit = async (e) => {
         e.preventDefault();
+
+        const confirmed = window.confirm("Are you sure you want to upload?");
+
+        if (confirmed) {
+            setLoading(true);
+
+            await fetch(
+                "https://dreamy-poincare-c504b4.netlify.app/.netlify/functions/addTraveler",
+                //"http://localhost:8888/.netlify/functions/addTraveler",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        fullName: fullName,
+                        email: email,
+                        employeeId: employeeId,
+                        program: program,
+                        chargeCode: chargeCode,
+                        workStreetAddress: workStreetAddress,
+                        workCity: workCity,
+                        workState: workState,
+                        workZipcode: workZipcode,
+                        travelDaysAway: travelDaysAway,
+                        travelMethod: travelMethod,
+                        startDate: startDate,
+                        endDate: endDate,
+                        travelCity: travelCity,
+                        travelState: travelState,
+                        travelCountry: travelCountry,
+                        justification: justification,
+                        travelAdvanceCheckbox: travelAdvanceCheckbox,
+                        travelAdvanceAmount: travelAdvanceAmount,
+                        transportCost: transportCost,
+                        rentalCost: rentalCost,
+                        mileageCost: mileageCost,
+                        lodgingCost: lodgingCost,
+                        mealsCost: mealsCost,
+                        registrationFees: registrationFees,
+                        otherCost: otherCost,
+                        totalCostAmount: totalCostAmount,
+                        regulatoryNctsCode: regulatoryNctsCode,
+                        regulatoryNctsEmail: regulatoryNctsEmail,
+                        regulatoryForeignTravel: regulatoryForeignTravel,
+                        regulatoryCiBrief: regulatoryCiBrief,
+                        regulatoryItEquipment: regulatoryItEquipment,
+                    }),
+                }
+            )
+                .then((res) => res.json())
+                .then((data) => console.log(data));
+
+            setLoading(false);
+            window.location.reload();
+            return false;
+        } else {
+            return alert("Canceled upload.");
+        }
     };
 
     return (
@@ -80,7 +140,6 @@ const Form = () => {
                             value={fullName}
                             onChange={(e) => setFullName(e.target.value)}
                             className="formInput"
-                            placeholder="Joe Smith"
                         />
                         <label className="formLabel" htmlFor="email">
                             Email
@@ -141,7 +200,6 @@ const Form = () => {
                                 setWorkStreetAddress(e.target.value)
                             }
                             className="formInput"
-                            placeholder="10210 Greenbelt Rd"
                         />
                         <label className="formLabel" htmlFor="workCity">
                             City
@@ -153,7 +211,6 @@ const Form = () => {
                             value={workCity}
                             onChange={(e) => setWorkCity(e.target.value)}
                             className="formInput"
-                            placeholder="Lanham"
                         />
                         <label className="formLabel" htmlFor="workState">
                             State
@@ -165,7 +222,6 @@ const Form = () => {
                             value={workState}
                             onChange={(e) => setWorkState(e.target.value)}
                             className="formInput"
-                            placeholder="MD"
                         />
                         <label className="formLabel" htmlFor="workZipcode">
                             Zipcode
@@ -483,7 +539,7 @@ const Form = () => {
                     </div>
                 </div>
                 <button type="submit" className="formButton" disabled={loading}>
-                    {loading ? "Uploading..." : "Upload"}
+                    {loading ? "Loading..." : "Upload"}
                 </button>
             </form>
         </div>

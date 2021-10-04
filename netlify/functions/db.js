@@ -5,14 +5,10 @@ exports.handler = async () => {
     try {
         const mongoURI = process.env.mongoURI;
 
-        new MongoClient(
-            mongoURI,
-            {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-            },
-            console.log("MongoDB connected.")
-        );
+        new MongoClient(mongoURI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
 
         return { statusCode: 200, body: JSON.stringify("MongoDB connected.") };
     } catch (error) {
