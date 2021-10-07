@@ -39,6 +39,7 @@ const loginRequest = async (req, res) => {
 
     const transporter = nodemailer.createTransport({
         service: "gmail",
+        port: 465,
         auth: {
             type: "OAuth2",
             user: "dev@webabstract.io",
