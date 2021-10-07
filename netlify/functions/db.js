@@ -1,11 +1,8 @@
-const { MongoClient } = require("mongodb");
-require("dotenv").config();
+const mongoose = require("mongoose");
 
 exports.handler = async () => {
     try {
-        const mongoURI = process.env.mongoURI;
-
-        new MongoClient(mongoURI, {
+        await mongoose.connect(process.env.mongoURI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });

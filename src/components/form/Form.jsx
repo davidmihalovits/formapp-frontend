@@ -64,14 +64,14 @@ const Form = () => {
     const submit = async (e) => {
         e.preventDefault();
 
-        const confirmed = window.confirm("Are you sure you want to upload?");
+        const confirmed = window.confirm("Submit form?");
 
         if (confirmed) {
             setLoading(true);
 
             await fetch(
-                "https://dreamy-poincare-c504b4.netlify.app/.netlify/functions/addTraveler",
-                //"http://localhost:8888/.netlify/functions/addTraveler",
+                "https://dreamy-poincare-c504b4.netlify.app/.netlify/functions/submitForm",
+                //"http://localhost:8888/.netlify/functions/submitForm",
                 {
                     method: "POST",
                     headers: {
@@ -117,10 +117,10 @@ const Form = () => {
                 .then((data) => console.log(data));
 
             setLoading(false);
-            window.location.reload();
-            return false;
+            alert("Successful.");
+            return window.location.reload();
         } else {
-            return alert("Canceled upload.");
+            return alert("Cancelled.");
         }
     };
 
@@ -539,7 +539,7 @@ const Form = () => {
                     </div>
                 </div>
                 <button type="submit" className="formButton" disabled={loading}>
-                    {loading ? "Loading..." : "Upload"}
+                    {loading ? "Loading..." : "Submit"}
                 </button>
             </form>
         </div>
