@@ -6,7 +6,7 @@ const { google } = require("googleapis");
 const loginRequest = async (req, res) => {
     const user = await User.findOne({ credential: res.credential });
 
-    if (!user) {
+    if (user.email !== res.credential) {
         return {
             statusCode: 500,
             body: JSON.stringify(`User not found.`),
