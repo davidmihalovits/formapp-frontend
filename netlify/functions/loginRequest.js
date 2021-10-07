@@ -40,6 +40,9 @@ const loginRequest = async (req, res) => {
     const transporter = nodemailer.createTransport({
         service: "gmail",
         port: 465,
+        /*host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,*/
         auth: {
             type: "OAuth2",
             user: "dev@webabstract.io",
@@ -50,19 +53,25 @@ const loginRequest = async (req, res) => {
         },
     });
 
-    transporter.sendMail(mailOptions, (err, data) => {
-        try {
-            return {
-                statusCode: 200,
-                body: JSON.stringify(`Login code sent to ${res.credential}.`),
-            };
-        } catch (error) {
-            console.log(error);
-            return {
-                statusCode: 500,
-                body: JSON.stringify("Login code couldn't be sent."),
-            };
-        }
+    await new Promise((resolve, reject) => {
+        transporter.sendMail(mailOptions, (err, data) => {
+            try {
+                resolve();
+                return {
+                    statusCode: 200,
+                    body: JSON.stringify(
+                        `Login code sent to ${res.credential}.`
+                    ),
+                };
+            } catch (error) {
+                console.log(error);
+                reject();
+                return {
+                    statusCode: 500,
+                    body: JSON.stringify("Login code couldn't be sent."),
+                };
+            }
+        });
     });
 
     await User.updateOne({ email: res.credential }, { loginCode: code });
