@@ -40,7 +40,7 @@ const loginRequest = async (req, res) => {
     const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 465,
-        secure: true,
+        secure: false,
         auth: {
             type: "OAuth2",
             user: "dev@webabstract.io",
