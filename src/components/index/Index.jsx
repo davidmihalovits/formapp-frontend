@@ -12,7 +12,7 @@ const Index = () => {
         e.preventDefault();
 
         await fetch(
-            "https://dreamy-poincare-c504b4.netlify.app/.netlify/functions/register",
+            "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/register",
             //"http://localhost:8888/.netlify/functions/register",
             {
                 method: "POST",
@@ -33,7 +33,7 @@ const Index = () => {
         e.preventDefault();
 
         await fetch(
-            "https://dreamy-poincare-c504b4.netlify.app/.netlify/functions/loginRequest",
+            "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/loginRequest",
             //"http://localhost:8888/.netlify/functions/loginRequest",
             {
                 method: "POST",
@@ -54,7 +54,7 @@ const Index = () => {
         e.preventDefault();
 
         await fetch(
-            "https://dreamy-poincare-c504b4.netlify.app/.netlify/functions/login",
+            "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/login",
             //"http://localhost:8888/.netlify/functions/login",
             {
                 method: "POST",

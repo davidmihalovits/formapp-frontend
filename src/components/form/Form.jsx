@@ -70,7 +70,7 @@ const Form = () => {
             setLoading(true);
 
             await fetch(
-                "https://dreamy-poincare-c504b4.netlify.app/.netlify/functions/submitForm",
+                "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/submitForm",
                 //"http://localhost:8888/.netlify/functions/submitForm",
                 {
                     method: "POST",
