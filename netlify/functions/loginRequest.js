@@ -49,6 +49,9 @@ const loginRequest = async (req, res) => {
             refreshToken: REFRESH_TOKEN,
             accessToken: accessToken,
         },
+        tls: {
+            rejectUnauthorized: false,
+        },
     });
 
     transporter.sendMail(mailOptions, (err, data) => {
