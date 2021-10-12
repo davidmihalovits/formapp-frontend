@@ -1,137 +1,66 @@
 @import '../../App'
     
-.formContainer
+.submittedformContainer
     margin: 20px 20px 100px 20px
 
-    .form
-        max-width: 500px
-        margin: 0 auto
+    .submittedform
+        .submittedformDetails
 
-        .formButton
-            width: 100%
-            height: 55px
-            margin-top: 60px
-            background-color: $primary-color
-            color: white
-            font-size: 18px
-            border-radius: 4px
-            border: none
-            outline: none
-            cursor: pointer
+            .submittedformDetailsTitle
+                font-size: 16px
+                font-weight: 500
 
-        .formItems
-            .formItem
-                margin: 60px 0 0 0
+            .submittedformDetailsInput
+                background: #fafafa
+                border-radius: 10px
+                margin: 5px auto 30px auto
+                padding: 15px
 
-                &:first-child
-                    margin: 0
+        .submittedformForm
+            border-top: 1px solid black
+            margin-top: 70px
 
-                .formLabel
-                    display: block
-                    font-size: 12px
-                    font-weight: 500
-                    margin: 15px 0 2px 0
+            .submittedformFormLabel
+                display: block
+                font-size: 12px
+                font-weight: 500
+                margin: 15px 0 2px 0
 
-                .formInput
-                    width: 100%
-                    font-size: 18px
-                    padding: 12px
-                    outline: none
-                    border: 1px solid #fafafa
-                    border-radius: 4px
-                    background-color: #fafafa
-                    color: $primary-color
+            .submittedformFormInput
+                width: 100%
+                font-size: 18px
+                padding: 12px
+                outline: none
+                border: 1px solid #fafafa
+                border-radius: 4px
+                background-color: #fafafa
+                color: $primary-color
 
-                    &:focus
-                        border: 1px solid $primary-color
+                &:focus
+                    border: 1px solid $primary-color
 
-                .formTextarea
-                    width: 100%
-                    height: 200px
-                    font-size: 18px
-                    padding: 12px
-                    outline: none
-                    border: 1px solid #fafafa
-                    border-radius: 4px
-                    background-color: #fafafa
-                    resize: none
-                    color: $primary-color
-
-                    &:focus
-                        border: 1px solid $primary-color
-
-                .formSubtitle
-                    font-size: 24px
-                    font-weight: 900
-
-                .travelAdvanceCheckboxText
-                    display: grid
-                    grid-template-columns: auto 1fr
-                    margin-top: 15px
-                    align-items: center
-
-                    .travelAdvanceText
-                        width: 150px
-                        font-size: 16px
-                        font-weight: 500
-
-                    .travelAdvanceCheckboxChecked
-                        width: 25px
-                        height: 25px
-                        border-radius: 4px
-                        border: 1px solid black
-                        cursor: pointer
-                        position: relative
-
-                        .travelAdvanceCheckboxCheckedCheckmark
-                            left: 8px
-                            top: 4px
-                            width: 7px
-                            height: 13px
-                            border: solid $primary-color
-                            border-width: 0 3px 3px 0
-                            transform: rotate(45deg)
-                            position: absolute
-                            cursor: pointer
-
-                    .travelAdvanceCheckboxUnchecked
-                        width: 25px
-                        height: 25px
-                        border-radius: 4px
-                        border: 1px solid black
-                        cursor: pointer
-
-                .costTotalContainer
-                    display: grid
-                    grid-template-columns: auto 1fr
-                    margin-top: 15px
-                    align-items: center
-
-                    .costTotalText
-                        margin-right: 15px
-                        font-size: 16px
-                        font-weight: 500
-
-                    .costTotalAmount
-                        font-size: 22px
-                        font-weight: 700
-                        color: $primary-color
-
-@media only screen and (min-width: 1100px)
-    .formContainer
-        margin: 120px 0
-
-        .form
-            max-width: 1100px
-
-            .formButton
-                width: 200px
-
-            .formItems
+            .submittedformFormButtons
                 display: grid
                 grid-template-columns: 1fr 1fr
-                gap: 60px 120px
+                gap: 0 20px
+                margin-top: 20px
 
-                .formItem
-                    margin: 0
-    
+                .submittedformFormButtonsButton
+                    width: 100%
+                    height: 55px
+                    background-color: $primary-color
+                    color: white
+                    font-size: 18px
+                    border-radius: 4px
+                    border: none
+                    outline: none
+                    cursor: pointer
+
+@media only screen and (min-width: 1100px)
+    .submittedformContainer
+        margin: 120px auto
+        width: 500px
+
+        .submittedform
+            max-width: 1100px
+            margin: 0 auto

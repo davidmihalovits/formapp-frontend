@@ -1,8 +1,13 @@
-const Traveler = require("../models/Traveler");
+const Form = require("../models/Form");
 const mongoose = require("mongoose");
 
 const submitForm = async (req, res) => {
-    let newTraveler = new Traveler({
+    const counted = await Form.countDocuments();
+
+    let newForm = new Form({
+        formName: `${res.program}-${res.fullName.replace(/\s/g, "")}-${
+            res.chargeCode
+        }-${res.regulatoryNctsCode}-${res.startDate}-${counted + 1}`,
         fullName: res.fullName,
         email: res.email,
         employeeId: res.employeeId,
@@ -37,11 +42,11 @@ const submitForm = async (req, res) => {
         regulatoryItEquipment: res.regulatoryItEquipment,
     });
 
-    await newTraveler.save();
+    await newForm.save();
 
     return {
         statusCode: 200,
-        body: JSON.stringify(`Traveler ${res.fullName} added.`),
+        body: JSON.stringify(`Form for ${res.fullName} submitted.`),
     };
 };
 

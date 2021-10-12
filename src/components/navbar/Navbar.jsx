@@ -1,7 +1,7 @@
 import "./Navbar.sass";
 import { Link, useLocation } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = (props) => {
     const location = useLocation();
 
     const token = localStorage.getItem("token");
@@ -9,20 +9,53 @@ const Navbar = () => {
     if (token) {
         return (
             <div className="navbarContainer">
+                {props.user && (
+                    <p
+                        style={{
+                            fontSize: "10px",
+                            position: "absolute",
+                            margin: "-10px auto 0 auto",
+                            textAlign: "center",
+                            left: "0",
+                            right: "0",
+                            color: "gray",
+                        }}
+                    >
+                        {props.user.user.email}
+                    </p>
+                )}
                 <div className="navbar">
-                    <Link to="/form" className="navbarLink">
+                    <Link to="/submit" className="navbarLink">
                         <p
                             className={
-                                location.pathname === "/form"
+                                location.pathname === "/submit"
                                     ? "navbarLinkItemActive"
                                     : "navbarLinkItemInactive"
                             }
                         >
-                            Form
+                            Submit
                         </p>
                     </Link>
-                    <p className="navbarItem">item2</p>
-                    <p className="navbarItem">item3</p>
+                    <Link to="/pending" className="navbarLink">
+                        <p
+                            className={
+                                location.pathname === "/pending"
+                                    ? "navbarLinkItemActive"
+                                    : "navbarLinkItemInactive"
+                            }
+                        >
+                            Pending
+                        </p>
+                    </Link>
+                    <p
+                        className={
+                            location.pathname === "/activity"
+                                ? "navbarLinkItemActive"
+                                : "navbarLinkItemInactive"
+                        }
+                    >
+                        Activity
+                    </p>
                     <p
                         className="navbarItem"
                         onClick={() => {

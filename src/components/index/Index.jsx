@@ -109,6 +109,17 @@ const Index = () => {
                         </div>
                         <p className="indexBoxText">Supervisor</p>
                     </div>
+                    <div className="indexBoxRadioText">
+                        <div
+                            className="indexBoxRadio"
+                            onClick={() => setRole("TravelerSupervisor")}
+                        >
+                            {role === "TravelerSupervisor" && (
+                                <span className="indexBoxRadioCheckmark"></span>
+                            )}
+                        </div>
+                        <p className="indexBoxText">Both</p>
+                    </div>
                     <button className="indexBoxButton" onClick={register}>
                         Register
                     </button>

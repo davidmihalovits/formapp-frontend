@@ -1,0 +1,61 @@
+@import '../../App'
+
+.pendingContainer
+    margin: 20px 20px 100px 20px
+
+    .pending
+        .pendingLink
+            text-decoration: none
+            color: black
+            
+            .pendingLinkForms
+                background: #fafafa
+                border-radius: 10px
+                margin: 20px auto 0 auto
+                padding: 30px 15px
+                max-width: 320px
+
+                .pendingLinkFormsName
+                    font-size: 18px
+                    font-weight: 500
+
+                .pendingLinkFormsApproved
+                    font-size: 14px
+                    font-weight: 500
+                    color: #28b834
+                    margin-top: 10px
+
+                .pendingLinkFormsRejected
+                    font-size: 14px
+                    font-weight: 500
+                    color: #dd1572
+                    margin-top: 20px
+
+                .pendingLinkFormsComment
+                    font-style: italic
+                    font-size: 14px
+                    font-weight: 500
+                    color: #888888
+
+                .pendingLinkFormsBy
+                    font-size: 12px
+                    font-weight: 500
+                    color: #b8b8b8
+
+@media only screen and (min-width: 1100px)
+    .pendingContainer
+        margin: 120px 0
+
+        .pending
+            max-width: 1100px
+            margin: 0 auto
+            display: grid
+            grid-template-columns: 1fr 1fr 1fr
+            gap: 40px
+
+            .pendingLink
+                .pendingLinkForms
+                    max-width: none
+                    width: 100%
+                    margin: 0
+

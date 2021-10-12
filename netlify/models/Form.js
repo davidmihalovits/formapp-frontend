@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
 
-const TravelerSchema = mongoose.Schema(
+const FormSchema = mongoose.Schema(
     {
+        formName: {
+            type: String,
+        },
         fullName: {
             type: String,
         },
@@ -98,8 +101,17 @@ const TravelerSchema = mongoose.Schema(
         regulatoryItEquipment: {
             type: Boolean,
         },
+        approved: {
+            type: String,
+        },
+        comment: {
+            type: String,
+        },
+        approvalBy: {
+            type: String,
+        },
     },
     { timestamps: true }
 );
 
-module.exports = mongoose.model("Traveler", TravelerSchema);
+module.exports = mongoose.model("Form", FormSchema);

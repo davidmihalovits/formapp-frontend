@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
 const login = async (req, res) => {
-    const user = await User.findOne({ code: res.code });
+    const user = await User.findOne({ loginCode: res.code });
 
     if (user.loginCode !== res.code) {
         return {
@@ -12,7 +12,7 @@ const login = async (req, res) => {
         };
     }
 
-    await User.updateOne({ code: res.code }, { loginCode: "" });
+    await User.updateOne({ loginCode: res.code }, { loginCode: "" });
 
     var token = jwt.sign({ user: user }, process.env.jwtSecret, {
         expiresIn: "1d",

@@ -1,115 +1,40 @@
 import "./Form.sass";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const Form = () => {
+    const [comment, setComment] = useState("");
     const [loading, setLoading] = useState(false);
-    const [fullName, setFullName] = useState("");
-    const [email, setEmail] = useState("");
-    const [employeeId, setEmployeeId] = useState("");
-    const [program, setProgram] = useState("");
-    const [chargeCode, setChargeCode] = useState("");
-    const [workStreetAddress, setWorkStreetAddress] = useState("");
-    const [workCity, setWorkCity] = useState("");
-    const [workState, setWorkState] = useState("");
-    const [workZipcode, setWorkZipcode] = useState("");
-    const [travelDaysAway, setTravelDaysAway] = useState("");
-    const [travelMethod, setTravelMethod] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
-    const [travelCity, setTravelCity] = useState("");
-    const [travelState, setTravelState] = useState("");
-    const [travelCountry, setTravelCountry] = useState("");
-    const [justification, setJustification] = useState("");
-    const [travelAdvanceCheckbox, setTravelAdvanceCheckbox] = useState(false);
-    const [travelAdvanceAmount, setTravelAdvanceAmount] = useState("");
-    const [transportCost, setTransportCost] = useState("");
-    const [rentalCost, setRentalCost] = useState("");
-    const [mileageCost, setMileageCost] = useState("");
-    const [lodgingCost, setLodgingCost] = useState("");
-    const [mealsCost, setMealsCost] = useState("");
-    const [registrationFees, setRegistrationFees] = useState("");
-    const [otherCost, setOtherCost] = useState("");
-    const [totalCostAmount, setTotalCostAmount] = useState("");
-    const [regulatoryNctsCode, setRegulatoryNctsCode] = useState("");
-    const [regulatoryNctsEmail, setRegulatoryNctsEmail] = useState("");
-    const [regulatoryForeignTravel, setRegulatoryForeignTravel] =
-        useState(false);
-    const [regulatoryCiBrief, setRegulatoryCiBrief] = useState(false);
-    const [regulatoryItEquipment, setRegulatoryItEquipment] = useState(false);
+    const [approveOrReject, setApproveOrReject] = useState("");
 
-    useEffect(() => {
-        const calculateTotalCostAmount = () => {
-            setTotalCostAmount(
-                Number(transportCost) +
-                    Number(rentalCost) +
-                    Number(mileageCost) +
-                    Number(lodgingCost) +
-                    Number(mealsCost) +
-                    Number(registrationFees) +
-                    Number(otherCost)
-            );
-        };
+    const location = useLocation();
 
-        calculateTotalCostAmount();
-    }, [
-        transportCost,
-        rentalCost,
-        mileageCost,
-        lodgingCost,
-        mealsCost,
-        registrationFees,
-        otherCost,
-    ]);
-
-    const submit = async (e) => {
+    const approveReject = async (e) => {
         e.preventDefault();
+        const token = localStorage.getItem("token");
 
-        const confirmed = window.confirm("Submit form?");
+        if (!token) {
+            return console.log("No token.");
+        }
+
+        const confirmed = window.confirm("Are you sure?");
 
         if (confirmed) {
             setLoading(true);
 
             await fetch(
-                "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/submitForm",
-                //"http://localhost:8888/.netlify/functions/submitForm",
+                "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/approveReject",
+                //"http://localhost:8888/.netlify/functions/approveReject",
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        Authorization: token,
                     },
                     body: JSON.stringify({
-                        fullName: fullName,
-                        email: email,
-                        employeeId: employeeId,
-                        program: program,
-                        chargeCode: chargeCode,
-                        workStreetAddress: workStreetAddress,
-                        workCity: workCity,
-                        workState: workState,
-                        workZipcode: workZipcode,
-                        travelDaysAway: travelDaysAway,
-                        travelMethod: travelMethod,
-                        startDate: startDate,
-                        endDate: endDate,
-                        travelCity: travelCity,
-                        travelState: travelState,
-                        travelCountry: travelCountry,
-                        justification: justification,
-                        travelAdvanceCheckbox: travelAdvanceCheckbox,
-                        travelAdvanceAmount: travelAdvanceAmount,
-                        transportCost: transportCost,
-                        rentalCost: rentalCost,
-                        mileageCost: mileageCost,
-                        lodgingCost: lodgingCost,
-                        mealsCost: mealsCost,
-                        registrationFees: registrationFees,
-                        otherCost: otherCost,
-                        totalCostAmount: totalCostAmount,
-                        regulatoryNctsCode: regulatoryNctsCode,
-                        regulatoryNctsEmail: regulatoryNctsEmail,
-                        regulatoryForeignTravel: regulatoryForeignTravel,
-                        regulatoryCiBrief: regulatoryCiBrief,
-                        regulatoryItEquipment: regulatoryItEquipment,
+                        comment: comment,
+                        approved: approveOrReject,
+                        formDetails: location.state.props,
                     }),
                 }
             )
@@ -120,428 +45,236 @@ const Form = () => {
             alert("Successful.");
             return window.location.reload();
         } else {
+            setLoading(false);
             return alert("Cancelled.");
         }
     };
 
     return (
-        <div className="formContainer">
-            <form className="form" onSubmit={submit} noValidate>
-                <div className="formItems">
-                    <div className="formItem">
-                        <h2 className="formSubtitle">General Information</h2>
-                        <label className="formLabel" htmlFor="fullName">
-                            Full Name
-                        </label>
-                        <input
-                            id="fullName"
-                            name="fullName"
-                            type="text"
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="email">
-                            Email
-                        </label>
-                        <input
-                            id="email"
-                            name="email"
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="employeeId">
-                            Employee ID
-                        </label>
-                        <input
-                            id="employeeId"
-                            name="employeeId"
-                            type="text"
-                            value={employeeId}
-                            onChange={(e) => setEmployeeId(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="program">
-                            Program
-                        </label>
-                        <input
-                            id="program"
-                            name="program"
-                            type="text"
-                            value={program}
-                            onChange={(e) => setProgram(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="chargeCode">
-                            Charge Code
-                        </label>
-                        <input
-                            id="chargeCode"
-                            name="chargeCode"
-                            type="text"
-                            value={chargeCode}
-                            onChange={(e) => setChargeCode(e.target.value)}
-                            className="formInput"
-                        />
-                        <label
-                            className="formLabel"
-                            htmlFor="workStreetAddress"
-                        >
-                            Street Address
-                        </label>
-                        <input
-                            id="workStreetAddress"
-                            name="workStreetAddress"
-                            type="text"
-                            value={workStreetAddress}
-                            onChange={(e) =>
-                                setWorkStreetAddress(e.target.value)
-                            }
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="workCity">
-                            City
-                        </label>
-                        <input
-                            id="workCity"
-                            name="workCity"
-                            type="text"
-                            value={workCity}
-                            onChange={(e) => setWorkCity(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="workState">
-                            State
-                        </label>
-                        <input
-                            id="workState"
-                            name="workState"
-                            type="text"
-                            value={workState}
-                            onChange={(e) => setWorkState(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="workZipcode">
-                            Zipcode
-                        </label>
-                        <input
-                            id="workZipcode"
-                            name="workZipcode"
-                            type="text"
-                            value={workZipcode}
-                            onChange={(e) => setWorkZipcode(e.target.value)}
-                            className="formInput"
-                        />
+        <div className="submittedformContainer">
+            <div className="submittedform">
+                <div className="submittedformItems">
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">Form Name:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.formName}
+                        </p>
                     </div>
-                    <div className="formItem">
-                        <h2 className="formSubtitle">Travel Information</h2>
-                        <label className="formLabel" htmlFor="travelDaysAway">
-                            Days Away
-                        </label>
-                        <input
-                            id="travelDaysAway"
-                            name="travelDaysAway"
-                            type="text"
-                            value={travelDaysAway}
-                            onChange={(e) => setTravelDaysAway(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="travelMethod">
-                            Travel Method
-                        </label>
-                        <input
-                            id="travelMethod"
-                            name="travelMethod"
-                            type="text"
-                            value={travelMethod}
-                            onChange={(e) => setTravelMethod(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="startDate">
-                            Start Date
-                        </label>
-                        <input
-                            id="startDate"
-                            name="startDate"
-                            type="text"
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="endDate">
-                            End Date
-                        </label>
-                        <input
-                            id="endDate"
-                            name="endDate"
-                            type="text"
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="travelCity">
-                            City
-                        </label>
-                        <input
-                            id="travelCity"
-                            name="travelCity"
-                            type="text"
-                            value={travelCity}
-                            onChange={(e) => setTravelCity(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="travelState">
-                            State
-                        </label>
-                        <input
-                            id="travelState"
-                            name="travelState"
-                            type="text"
-                            value={travelState}
-                            onChange={(e) => setTravelState(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="travelCountry">
-                            Country
-                        </label>
-                        <input
-                            id="travelCountry"
-                            name="travelCountry"
-                            type="text"
-                            value={travelCountry}
-                            onChange={(e) => setTravelCountry(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="justification">
-                            Justification
-                        </label>
-                        <textarea
-                            id="justification"
-                            name="justification"
-                            type="text"
-                            value={justification}
-                            onChange={(e) => setJustification(e.target.value)}
-                            className="formTextarea"
-                        />
-                        <div className="travelAdvanceCheckboxText">
-                            <p className="travelAdvanceText">Travel Advance</p>
-                            <span
-                                className={
-                                    travelAdvanceCheckbox
-                                        ? "travelAdvanceCheckboxChecked"
-                                        : "travelAdvanceCheckboxUnchecked"
-                                }
-                                onClick={() =>
-                                    setTravelAdvanceCheckbox(
-                                        !travelAdvanceCheckbox
-                                    )
-                                }
-                            >
-                                {travelAdvanceCheckbox && (
-                                    <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                )}
-                            </span>
-                        </div>
-                        <label
-                            className="formLabel"
-                            htmlFor="travelAdvanceAmount"
-                        >
-                            Amount
-                        </label>
-                        <input
-                            id="travelAdvanceAmount"
-                            name="travelAdvanceAmount"
-                            type="text"
-                            value={travelAdvanceAmount}
-                            onChange={(e) =>
-                                setTravelAdvanceAmount(e.target.value)
-                            }
-                            className="formInput"
-                        />
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">Full Name:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.fullName}
+                        </p>
                     </div>
-                    <div className="formItem">
-                        <h2 className="formSubtitle">Estimated Cost</h2>
-                        <label className="formLabel" htmlFor="transportCost">
-                            Transport Cost
-                        </label>
-                        <input
-                            id="transportCost"
-                            name="transportCost"
-                            type="number"
-                            value={transportCost}
-                            onChange={(e) => setTransportCost(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="rentalCost">
-                            Rental Cost
-                        </label>
-                        <input
-                            id="rentalCost"
-                            name="rentalCost"
-                            type="number"
-                            value={rentalCost}
-                            onChange={(e) => setRentalCost(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="mileageCost">
-                            Mileage Cost
-                        </label>
-                        <input
-                            id="mileageCost"
-                            name="mileageCost"
-                            type="number"
-                            value={mileageCost}
-                            onChange={(e) => setMileageCost(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="lodgingCost">
-                            Lodging Cost
-                        </label>
-                        <input
-                            id="lodgingCost"
-                            name="lodgingCost"
-                            type="number"
-                            value={lodgingCost}
-                            onChange={(e) => setLodgingCost(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="mealsCost">
-                            Meals Cost
-                        </label>
-                        <input
-                            id="mealsCost"
-                            name="mealsCost"
-                            type="number"
-                            value={mealsCost}
-                            onChange={(e) => setMealsCost(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="registrationFees">
-                            Registration Fees
-                        </label>
-                        <input
-                            id="registrationFees"
-                            name="registrationFees"
-                            type="number"
-                            value={registrationFees}
-                            onChange={(e) =>
-                                setRegistrationFees(e.target.value)
-                            }
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="otherCost">
-                            Other Cost
-                        </label>
-                        <input
-                            id="otherCost"
-                            name="otherCost"
-                            type="number"
-                            value={otherCost}
-                            onChange={(e) => setOtherCost(e.target.value)}
-                            className="formInput"
-                        />
-                        <div className="costTotalContainer">
-                            <p className="costTotalText">Total:</p>
-                            <p className="costTotalAmount">{totalCostAmount}</p>
-                        </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">Email:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.email}
+                        </p>
                     </div>
-                    <div className="formItem">
-                        <h2 className="formSubtitle">Regulatory</h2>
-                        <label
-                            className="formLabel"
-                            htmlFor="regulatoryNctsCode"
-                        >
-                            NCTS Code
-                        </label>
-                        <input
-                            id="regulatoryNctsCode"
-                            name="regulatoryNctsCode"
-                            type="text"
-                            value={regulatoryNctsCode}
-                            onChange={(e) =>
-                                setRegulatoryNctsCode(e.target.value)
-                            }
-                            className="formInput"
-                        />
-                        <label
-                            className="formLabel"
-                            htmlFor="regulatoryNctsEmail"
-                        >
-                            NCTS Email
-                        </label>
-                        <input
-                            id="regulatoryNctsEmail"
-                            name="regulatoryNctsEmail"
-                            type="text"
-                            value={regulatoryNctsEmail}
-                            onChange={(e) =>
-                                setRegulatoryNctsEmail(e.target.value)
-                            }
-                            className="formInput"
-                        />
-                        <div className="travelAdvanceCheckboxText">
-                            <p className="travelAdvanceText">Foreign Travel</p>
-                            <span
-                                className={
-                                    regulatoryForeignTravel
-                                        ? "travelAdvanceCheckboxChecked"
-                                        : "travelAdvanceCheckboxUnchecked"
-                                }
-                                onClick={() =>
-                                    setRegulatoryForeignTravel(
-                                        !regulatoryForeignTravel
-                                    )
-                                }
-                            >
-                                {regulatoryForeignTravel && (
-                                    <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                )}
-                            </span>
-                        </div>
-                        <div className="travelAdvanceCheckboxText">
-                            <p className="travelAdvanceText">CI Brief</p>
-                            <span
-                                className={
-                                    regulatoryCiBrief
-                                        ? "travelAdvanceCheckboxChecked"
-                                        : "travelAdvanceCheckboxUnchecked"
-                                }
-                                onClick={() =>
-                                    setRegulatoryCiBrief(!regulatoryCiBrief)
-                                }
-                            >
-                                {regulatoryCiBrief && (
-                                    <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                )}
-                            </span>
-                        </div>
-                        <div className="travelAdvanceCheckboxText">
-                            <p className="travelAdvanceText">IT Equipment</p>
-                            <span
-                                className={
-                                    regulatoryItEquipment
-                                        ? "travelAdvanceCheckboxChecked"
-                                        : "travelAdvanceCheckboxUnchecked"
-                                }
-                                onClick={() =>
-                                    setRegulatoryItEquipment(
-                                        !regulatoryItEquipment
-                                    )
-                                }
-                            >
-                                {regulatoryItEquipment && (
-                                    <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                )}
-                            </span>
-                        </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">
+                            Employee ID:
+                        </p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.employeeId}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">Program:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.program}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">
+                            Charge Code:
+                        </p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.chargeCode}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">
+                            Street Address:
+                        </p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.workStreetAddress}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">City:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.workCity}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">State:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.workState}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">Zip:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.workZipcode}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">Days Away:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.travelDaysAway}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">
+                            Travel Method:
+                        </p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.travelMethod}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">Start Date:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.startDate}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">End Date:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.endDate}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">City:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.travelCity}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">State:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.travelState}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">Country:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.travelCountry}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">
+                            Justification:
+                        </p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.justification}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">
+                            Travel Advance:
+                        </p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.travelAdvanceCheckbox
+                                ? "Yes"
+                                : "No"}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">Amount:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.travelAdvanceAmount
+                                ? location.state.props.travelAdvanceAmount
+                                : "0"}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">
+                            Estimated Cost:
+                        </p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.totalCostAmount}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">NCTS Code:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.regulatoryNctsCode}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">NCTS Email:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.regulatoryNctsEmail}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">
+                            Foreign Travel:
+                        </p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.regulatoryForeignTravel
+                                ? "Yes"
+                                : "No"}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">CI Brief:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.regulatoryCiBrief
+                                ? "Yes"
+                                : "No"}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">
+                            IT Equipment:
+                        </p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.regulatoryItEquipment
+                                ? "Yes"
+                                : "No"}
+                        </p>
                     </div>
                 </div>
-                <button type="submit" className="formButton" disabled={loading}>
-                    {loading ? "Loading..." : "Submit"}
-                </button>
-            </form>
+                <form
+                    className="submittedformForm"
+                    onSubmit={approveReject}
+                    noValidate
+                >
+                    <label className="submittedformFormLabel" htmlFor="comment">
+                        Comment
+                    </label>
+                    <input
+                        id="comment"
+                        name="comment"
+                        type="text"
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        className="submittedformFormInput"
+                    />
+                    <div className="submittedformFormButtons">
+                        <button
+                            onClick={() => setApproveOrReject("Approved")}
+                            type="submit"
+                            className="submittedformFormButtonsButton"
+                            disabled={loading}
+                        >
+                            {loading ? "Loading..." : "Approve"}
+                        </button>
+                        <button
+                            onClick={() => setApproveOrReject("Rejected")}
+                            type="submit"
+                            className="submittedformFormButtonsButton"
+                            disabled={loading}
+                        >
+                            {loading ? "Loading..." : "Reject"}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };
