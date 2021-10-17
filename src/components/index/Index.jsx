@@ -3,7 +3,8 @@ import { useState } from "react";
 
 const Index = () => {
     const [email, setEmail] = useState("");
-    const [role, setRole] = useState("");
+    const [travelerRole, setTravelerRole] = useState("");
+    const [supervisorRole, setSupervisorRole] = useState("");
     const [credential, setCredential] = useState("");
     const [code, setCode] = useState("");
     const [loginCodeSent, setLoginCodeSent] = useState(false);
@@ -21,7 +22,7 @@ const Index = () => {
                 },
                 body: JSON.stringify({
                     email: email,
-                    role: role,
+                    role: `${travelerRole}${supervisorRole}`,
                 }),
             }
         )
@@ -90,9 +91,14 @@ const Index = () => {
                     <div className="indexBoxRadioText">
                         <div
                             className="indexBoxRadio"
-                            onClick={() => setRole("Traveler")}
+                            onClick={() => {
+                                if (travelerRole === "Traveler") {
+                                    return setTravelerRole("");
+                                }
+                                setTravelerRole("Traveler");
+                            }}
                         >
-                            {role === "Traveler" && (
+                            {travelerRole && (
                                 <span className="indexBoxRadioCheckmark"></span>
                             )}
                         </div>
@@ -101,24 +107,18 @@ const Index = () => {
                     <div className="indexBoxRadioText">
                         <div
                             className="indexBoxRadio"
-                            onClick={() => setRole("Supervisor")}
+                            onClick={() => {
+                                if (supervisorRole === "Supervisor") {
+                                    return setSupervisorRole("");
+                                }
+                                setSupervisorRole("Supervisor");
+                            }}
                         >
-                            {role === "Supervisor" && (
+                            {supervisorRole && (
                                 <span className="indexBoxRadioCheckmark"></span>
                             )}
                         </div>
                         <p className="indexBoxText">Supervisor</p>
-                    </div>
-                    <div className="indexBoxRadioText">
-                        <div
-                            className="indexBoxRadio"
-                            onClick={() => setRole("TravelerSupervisor")}
-                        >
-                            {role === "TravelerSupervisor" && (
-                                <span className="indexBoxRadioCheckmark"></span>
-                            )}
-                        </div>
-                        <p className="indexBoxText">Both</p>
                     </div>
                     <button className="indexBoxButton" onClick={register}>
                         Register

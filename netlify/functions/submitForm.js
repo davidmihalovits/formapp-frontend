@@ -1,10 +1,11 @@
 const Form = require("../models/Form");
+const Activity = require("../models/Activity");
 const mongoose = require("mongoose");
 
 const submitForm = async (req, res) => {
     const counted = await Form.countDocuments();
 
-    let newForm = new Form({
+    let newForm = await new Form({
         formName: `${res.program}-${res.fullName.replace(/\s/g, "")}-${
             res.chargeCode
         }-${res.regulatoryNctsCode}-${res.startDate}-${counted + 1}`,
@@ -43,6 +44,14 @@ const submitForm = async (req, res) => {
     });
 
     await newForm.save();
+
+    let newActivity = await new Activity({
+        createdBy: res.email,
+        form: newForm._id,
+        name: newForm.formName,
+    });
+
+    await newActivity.save();
 
     return {
         statusCode: 200,

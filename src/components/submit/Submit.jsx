@@ -1,10 +1,9 @@
 import "./Submit.sass";
 import { useState, useEffect } from "react";
 
-const Submit = () => {
+const Submit = (props) => {
     const [loading, setLoading] = useState(false);
     const [fullName, setFullName] = useState("");
-    const [email, setEmail] = useState("");
     const [employeeId, setEmployeeId] = useState("");
     const [program, setProgram] = useState("");
     const [chargeCode, setChargeCode] = useState("");
@@ -12,8 +11,7 @@ const Submit = () => {
     const [workCity, setWorkCity] = useState("");
     const [workState, setWorkState] = useState("");
     const [workZipcode, setWorkZipcode] = useState("");
-    const [travelDaysAway, setTravelDaysAway] = useState("");
-    const [travelMethod, setTravelMethod] = useState("");
+    const [travelMethod, setTravelMethod] = useState("Air");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [travelCity, setTravelCity] = useState("");
@@ -79,7 +77,7 @@ const Submit = () => {
                     },
                     body: JSON.stringify({
                         fullName: fullName,
-                        email: email,
+                        email: props.user && props.user.user.email,
                         employeeId: employeeId,
                         program: program,
                         chargeCode: chargeCode,
@@ -87,7 +85,9 @@ const Submit = () => {
                         workCity: workCity,
                         workState: workState,
                         workZipcode: workZipcode,
-                        travelDaysAway: travelDaysAway,
+                        travelDaysAway: days
+                            .toLocaleString()
+                            .replaceAll(/[-]/g, ""),
                         travelMethod: travelMethod,
                         startDate: startDate,
                         endDate: endDate,
@@ -125,6 +125,17 @@ const Submit = () => {
         }
     };
 
+    const onKeyPressDateFormat = (e) => {
+        if (e.target.value.length === 2 || e.target.value.length === 5) {
+            e.target.value += "/";
+        }
+    };
+
+    var date1 = new Date(startDate);
+    var date2 = new Date(endDate);
+    var difference = date1.getTime() - date2.getTime();
+    var days = Math.ceil(difference / (1000 * 3600 * 24));
+
     return (
         <div className="formContainer">
             <form className="form" onSubmit={submit} noValidate>
@@ -145,14 +156,9 @@ const Submit = () => {
                         <label className="formLabel" htmlFor="email">
                             Email
                         </label>
-                        <input
-                            id="email"
-                            name="email"
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="formInput"
-                        />
+                        <p className="formInput">
+                            {props.user && props.user.user.email}
+                        </p>
                         <label className="formLabel" htmlFor="employeeId">
                             Employee ID
                         </label>
@@ -241,47 +247,71 @@ const Submit = () => {
                         <label className="formLabel" htmlFor="travelDaysAway">
                             Days Away
                         </label>
-                        <input
-                            id="travelDaysAway"
-                            name="travelDaysAway"
-                            type="text"
-                            value={travelDaysAway}
-                            onChange={(e) => setTravelDaysAway(e.target.value)}
+                        <p
                             className="formInput"
-                        />
+                            style={{ height: "53.2px", cursor: "not-allowed" }}
+                        >
+                            {startDate.length === 8 && endDate.length === 8
+                                ? isNaN(days)
+                                    ? null
+                                    : days
+                                          .toLocaleString()
+                                          .replaceAll(/[-]/g, "")
+                                : null}
+                        </p>
                         <label className="formLabel" htmlFor="travelMethod">
                             Travel Method
                         </label>
-                        <input
+                        <select
                             id="travelMethod"
                             name="travelMethod"
                             type="text"
                             value={travelMethod}
                             onChange={(e) => setTravelMethod(e.target.value)}
                             className="formInput"
-                        />
+                            style={{ cursor: "pointer" }}
+                        >
+                            <option value="Air">Air</option>
+                            <option value="Land">Land</option>
+                        </select>
                         <label className="formLabel" htmlFor="startDate">
                             Start Date
                         </label>
-                        <input
-                            id="startDate"
-                            name="startDate"
-                            type="text"
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                            className="formInput"
-                        />
+                        <div className="formInputBox">
+                            <input
+                                id="startDate"
+                                name="startDate"
+                                type="text"
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                                maxLength="8"
+                                className="formInput"
+                                placeholder="mm/dd/yy"
+                                onKeyPress={(e) => onKeyPressDateFormat(e)}
+                            />
+                            {startDate.length === 8 && (
+                                <div className="formInputBoxCheckmark"></div>
+                            )}
+                        </div>
                         <label className="formLabel" htmlFor="endDate">
                             End Date
                         </label>
-                        <input
-                            id="endDate"
-                            name="endDate"
-                            type="text"
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
-                            className="formInput"
-                        />
+                        <div className="formInputBox">
+                            <input
+                                id="endDate"
+                                name="endDate"
+                                type="text"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                                maxLength="8"
+                                className="formInput"
+                                placeholder="mm/dd/yy"
+                                onKeyPress={(e) => onKeyPressDateFormat(e)}
+                            />
+                            {endDate.length === 8 && (
+                                <div className="formInputBoxCheckmark"></div>
+                            )}
+                        </div>
                         <label className="formLabel" htmlFor="travelCity">
                             City
                         </label>

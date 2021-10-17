@@ -1,13 +1,61 @@
 import "./Form.sass";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import Moment from "react-moment";
 
-const Form = () => {
+const Form = (props) => {
     const [comment, setComment] = useState("");
     const [loading, setLoading] = useState(false);
     const [approveOrReject, setApproveOrReject] = useState("");
+    const [activity, setActivity] = useState("");
 
     const location = useLocation();
+
+    const viewed = async () => {
+        await fetch(
+            "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/viewForm",
+            //"http://localhost:8888/.netlify/functions/viewForm",
+            {
+                method: "POST",
+                /*headers: {
+                    Authorization: token,
+                },*/
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    _id: location.state.props._id,
+                    email: location.state.props.email,
+                    user: props.user.user.email,
+                }),
+            }
+        )
+            .then((res) => res.json())
+            .then((data) => console.log(data));
+    };
+
+    const getActivity = async () => {
+        await fetch(
+            "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/getActivity",
+            //"http://localhost:8888/.netlify/functions/getActivity",
+            {
+                method: "GET",
+                headers: {
+                    form: location.state.props._id,
+                },
+            }
+        )
+            .then((res) => res.json())
+            .then((data) => setActivity(data));
+    };
+
+    useEffect(() => {
+        if (props.user) {
+            viewed();
+        }
+        getActivity();
+        // eslint-disable-next-line
+    }, [props.user]);
 
     const approveReject = async (e) => {
         e.preventDefault();
@@ -35,6 +83,7 @@ const Form = () => {
                         comment: comment,
                         approved: approveOrReject,
                         formDetails: location.state.props,
+                        email: props.user.user.email,
                     }),
                 }
             )
@@ -42,7 +91,7 @@ const Form = () => {
                 .then((data) => console.log(data));
 
             setLoading(false);
-            alert("Successful.");
+            alert("Successfully signed.");
             return window.location.reload();
         } else {
             setLoading(false);
@@ -53,6 +102,46 @@ const Form = () => {
     return (
         <div className="submittedformContainer">
             <div className="submittedform">
+                <div className="submittedformActivity">
+                    <h2 className="submittedformActivityTitle">Activity</h2>
+                    {activity &&
+                        activity.activity
+                            .map((a, key) => {
+                                return (
+                                    <div
+                                        className="submittedformActivityList"
+                                        key={key}
+                                    >
+                                        {a.signedBy && (
+                                            <p className="submittedformActivityText">
+                                                Signed by: {a.signedBy}
+                                            </p>
+                                        )}
+                                        {a.viewedBy && (
+                                            <p className="submittedformActivityText">
+                                                Viewed by: {a.viewedBy}
+                                            </p>
+                                        )}
+
+                                        <p className="submittedformActivityText">
+                                            Time: {a.date}
+                                        </p>
+                                    </div>
+                                );
+                            })
+                            .reverse()}
+                    <div className="submittedformActivityList">
+                        <p className="submittedformActivityText">
+                            Created by: {activity.createdBy}
+                        </p>
+                        <p className="submittedformActivityText">
+                            Time:{" "}
+                            <Moment format="MMMM Do YYYY, h:mm:ss a">
+                                {activity.createdAt}
+                            </Moment>
+                        </p>
+                    </div>
+                </div>
                 <div className="submittedformItems">
                     <div className="submittedformDetails">
                         <p className="submittedformDetailsTitle">Form Name:</p>
@@ -239,41 +328,64 @@ const Form = () => {
                         </p>
                     </div>
                 </div>
-                <form
-                    className="submittedformForm"
-                    onSubmit={approveReject}
-                    noValidate
-                >
-                    <label className="submittedformFormLabel" htmlFor="comment">
-                        Comment
-                    </label>
-                    <input
-                        id="comment"
-                        name="comment"
-                        type="text"
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                        className="submittedformFormInput"
-                    />
-                    <div className="submittedformFormButtons">
-                        <button
-                            onClick={() => setApproveOrReject("Approved")}
-                            type="submit"
-                            className="submittedformFormButtonsButton"
-                            disabled={loading}
+                {props.user && props.user.user.role !== "Traveler" ? (
+                    <form
+                        className="submittedformForm"
+                        onSubmit={approveReject}
+                        noValidate
+                    >
+                        <label
+                            className="submittedformFormLabel"
+                            htmlFor="comment"
                         >
-                            {loading ? "Loading..." : "Approve"}
-                        </button>
-                        <button
-                            onClick={() => setApproveOrReject("Rejected")}
-                            type="submit"
-                            className="submittedformFormButtonsButton"
-                            disabled={loading}
-                        >
-                            {loading ? "Loading..." : "Reject"}
-                        </button>
-                    </div>
-                </form>
+                            Comment
+                        </label>
+                        <input
+                            id="comment"
+                            name="comment"
+                            type="text"
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                            className="submittedformFormInput"
+                        />
+                        <div className="submittedformFormButtons">
+                            <button
+                                onClick={() => setApproveOrReject("Approved")}
+                                type="submit"
+                                className="submittedformFormButtonsButton"
+                                disabled={loading}
+                            >
+                                {loading ? "Loading..." : "Approve"}
+                            </button>
+                            <button
+                                onClick={() => setApproveOrReject("Rejected")}
+                                type="submit"
+                                className="submittedformFormButtonsButton"
+                                disabled={loading}
+                            >
+                                {loading ? "Loading..." : "Reject"}
+                            </button>
+                        </div>
+                    </form>
+                ) : null}
+                <div className="submittedformFeedback">
+                    {location.state.props.approved === "Approved" && (
+                        <p className="submittedformFeedbackApproved">
+                            {location.state.props.approved}
+                        </p>
+                    )}
+                    {location.state.props.approved === "Rejected" && (
+                        <p className="submittedformFeedbackRejected">
+                            {location.state.props.approved}
+                        </p>
+                    )}
+                    <p className="submittedformFeedbackComment">
+                        {location.state.props.comment}
+                    </p>
+                    <p className="submittedformFeedbackBy">
+                        {location.state.props.approvalBy}
+                    </p>
+                </div>
             </div>
         </div>
     );

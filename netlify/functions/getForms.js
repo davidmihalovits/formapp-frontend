@@ -23,6 +23,10 @@ const getForms = async (req, res, next) => {
 
     const forms = await Form.find().sort({ createdAt: -1 });
 
+    const formsForTravelers = await Form.find({
+        email: verified.user.email,
+    }).sort({ createdAt: -1 });
+
     if (
         verified.user.role === "Supervisor" ||
         verified.user.role === "TravelerSupervisor"
@@ -30,6 +34,13 @@ const getForms = async (req, res, next) => {
         return {
             statusCode: 200,
             body: JSON.stringify(forms),
+        };
+    }
+
+    if (verified.user.role === "Traveler") {
+        return {
+            statusCode: 200,
+            body: JSON.stringify(formsForTravelers),
         };
     }
 

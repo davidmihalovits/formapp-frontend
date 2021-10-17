@@ -51,7 +51,7 @@ const App = () => {
                         {!localStorage.getItem("token") ? (
                             <Redirect to="/" />
                         ) : (
-                            <Submit />
+                            <Submit user={user} />
                         )}
                     </Route>
                     <Route exact path="/pending">
@@ -65,7 +65,7 @@ const App = () => {
                         {!localStorage.getItem("token") ? (
                             <Redirect to="/" />
                         ) : (
-                            <Form />
+                            <Form user={user} />
                         )}
                     </Route>
                 </Switch>

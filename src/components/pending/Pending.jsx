@@ -39,7 +39,10 @@ const Pending = () => {
                             <Link
                                 key={key}
                                 to={{
-                                    pathname: `/pending/${f.formName}`,
+                                    pathname: `/pending/${f.formName.replaceAll(
+                                        /[. /-]/g,
+                                        ""
+                                    )}`,
                                     state: { props: f },
                                 }}
                                 className="pendingLink"

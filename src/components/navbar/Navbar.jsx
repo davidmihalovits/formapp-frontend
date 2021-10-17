@@ -18,7 +18,7 @@ const Navbar = (props) => {
                             textAlign: "center",
                             left: "0",
                             right: "0",
-                            color: "gray",
+                            color: "#D2D2D2",
                         }}
                     >
                         {props.user.user.email}
@@ -47,15 +47,6 @@ const Navbar = (props) => {
                             Pending
                         </p>
                     </Link>
-                    <p
-                        className={
-                            location.pathname === "/activity"
-                                ? "navbarLinkItemActive"
-                                : "navbarLinkItemInactive"
-                        }
-                    >
-                        Activity
-                    </p>
                     <p
                         className="navbarItem"
                         onClick={() => {
