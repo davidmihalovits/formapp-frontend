@@ -22,7 +22,7 @@ const viewForm = async (req, res) => {
             $push: {
                 activity: {
                     viewedBy: res.user,
-                    date: moment().utc().format("MMMM Do YYYY, h:mm:ss a"),
+                    date: moment().format("MMMM Do YYYY, h:mm:ss a"),
                 },
             },
         }

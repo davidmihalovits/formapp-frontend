@@ -1,7 +1,7 @@
 import "./Form.sass";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Moment from "react-moment";
+import moment from "moment";
 
 const Form = (props) => {
     const [comment, setComment] = useState("");
@@ -136,9 +136,9 @@ const Form = (props) => {
                         </p>
                         <p className="submittedformActivityText">
                             Time:{" "}
-                            <Moment format="MMMM Do YYYY, h:mm:ss a">
-                                {activity.createdAt}
-                            </Moment>
+                            {moment
+                                .utc(activity.createdAt)
+                                .format("MMMM Do YYYY, h:mm:ss a")}
                         </p>
                     </div>
                 </div>

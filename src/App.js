@@ -1,6 +1,7 @@
 import "./App.sass";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 import Navbar from "./components/navbar/Navbar";
 import Submit from "./components/submit/Submit";
 import Index from "./components/index/Index";
@@ -31,8 +32,24 @@ const App = () => {
             .then((data) => setUser(data));
     };
 
+    const logoutTokenExpired = async () => {
+        var token = localStorage.getItem("token");
+        var decoded = jwt_decode(token);
+
+        const tokenExpired = new Date(decoded.exp * 1000);
+        const timeNow = new Date();
+
+        if (tokenExpired < timeNow) {
+            localStorage.removeItem("token");
+            window.location.reload();
+        }
+    };
+
     useEffect(() => {
         getUser();
+
+        var token = localStorage.getItem("token");
+        if (token) logoutTokenExpired();
     }, []);
 
     return (
