@@ -47,6 +47,28 @@ const Navbar = (props) => {
                             Pending
                         </p>
                     </Link>
+                    <Link to="/approved" className="navbarLink">
+                        <p
+                            className={
+                                location.pathname === "/approved"
+                                    ? "navbarLinkItemActive"
+                                    : "navbarLinkItemInactive"
+                            }
+                        >
+                            Approved
+                        </p>
+                    </Link>
+                    <Link to="/rejected" className="navbarLink">
+                        <p
+                            className={
+                                location.pathname === "/rejected"
+                                    ? "navbarLinkItemActive"
+                                    : "navbarLinkItemInactive"
+                            }
+                        >
+                            Rejected
+                        </p>
+                    </Link>
                     <p
                         className="navbarItem"
                         onClick={() => {

@@ -6,6 +6,8 @@ import Navbar from "./components/navbar/Navbar";
 import Submit from "./components/submit/Submit";
 import Index from "./components/index/Index";
 import Pending from "./components/pending/Pending";
+import Approved from "./components/approved/Approved";
+import Rejected from "./components/rejected/Rejected";
 import Form from "./components/form/Form";
 
 const App = () => {
@@ -83,6 +85,20 @@ const App = () => {
                             <Redirect to="/" />
                         ) : (
                             <Form user={user} />
+                        )}
+                    </Route>
+                    <Route exact path="/approved">
+                        {!localStorage.getItem("token") ? (
+                            <Redirect to="/" />
+                        ) : (
+                            <Approved />
+                        )}
+                    </Route>
+                    <Route exact path="/rejected">
+                        {!localStorage.getItem("token") ? (
+                            <Redirect to="/" />
+                        ) : (
+                            <Rejected />
                         )}
                     </Route>
                 </Switch>

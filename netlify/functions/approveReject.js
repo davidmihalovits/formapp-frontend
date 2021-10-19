@@ -2,7 +2,6 @@ const Form = require("../models/Form");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const Activity = require("../models/Activity");
-const moment = require("moment");
 
 const approveReject = async (req, res, next) => {
     const token = req.auth.authorization;
@@ -44,7 +43,9 @@ const approveReject = async (req, res, next) => {
             $push: {
                 activity: {
                     signedBy: req.body.email,
-                    date: moment().format("MMMM Do YYYY, h:mm:ss a"),
+                    approved: req.body.approved,
+                    comment: req.body.comment,
+                    date: new Date(),
                 },
             },
         }

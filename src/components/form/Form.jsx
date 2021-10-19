@@ -113,18 +113,38 @@ const Form = (props) => {
                                         key={key}
                                     >
                                         {a.signedBy && (
-                                            <p className="submittedformActivityText">
-                                                Signed by: {a.signedBy}
-                                            </p>
+                                            <>
+                                                <p className="submittedformActivityText">
+                                                    Signed by:
+                                                    <br />
+                                                    {a.signedBy}
+                                                </p>
+                                                {a.approved === "Approved" && (
+                                                    <p className="submittedformActivityApproved">
+                                                        Approved
+                                                    </p>
+                                                )}
+                                                {a.approved === "Rejected" && (
+                                                    <p className="submittedformActivityRejected">
+                                                        Rejected
+                                                    </p>
+                                                )}
+                                                <p className="submittedformActivityComment">
+                                                    {a.comment}
+                                                </p>
+                                            </>
                                         )}
                                         {a.viewedBy && (
                                             <p className="submittedformActivityText">
-                                                Viewed by: {a.viewedBy}
+                                                Viewed by:
+                                                <br />
+                                                {a.viewedBy}
                                             </p>
                                         )}
-
                                         <p className="submittedformActivityText">
-                                            Time: {a.date}
+                                            {moment(a.date).format(
+                                                "MMMM Do YYYY, h:mm:ss a"
+                                            )}
                                         </p>
                                     </div>
                                 );
@@ -132,17 +152,22 @@ const Form = (props) => {
                             .reverse()}
                     <div className="submittedformActivityList">
                         <p className="submittedformActivityText">
-                            Created by: {activity.createdBy}
+                            Created by:
+                            <br />
+                            {activity.createdBy}
                         </p>
                         <p className="submittedformActivityText">
                             Time:{" "}
-                            {moment
-                                .utc(activity.createdAt)
-                                .format("MMMM Do YYYY, h:mm:ss a")}
+                            {moment(activity.createdAt).format(
+                                "MMMM Do YYYY, h:mm:ss a"
+                            )}
                         </p>
                     </div>
                 </div>
                 <div className="submittedformItems">
+                    <h2 className="submittedformItemsSubtitle">
+                        General Information
+                    </h2>
                     <div className="submittedformDetails">
                         <p className="submittedformDetailsTitle">Form Name:</p>
                         <p className="submittedformDetailsInput">
@@ -209,12 +234,9 @@ const Form = (props) => {
                             {location.state.props.workZipcode}
                         </p>
                     </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">Days Away:</p>
-                        <p className="submittedformDetailsInput">
-                            {location.state.props.travelDaysAway}
-                        </p>
-                    </div>
+                    <h2 className="submittedformItemsSubtitle">
+                        Travel Information
+                    </h2>
                     <div className="submittedformDetails">
                         <p className="submittedformDetailsTitle">
                             Travel Method:
@@ -233,6 +255,12 @@ const Form = (props) => {
                         <p className="submittedformDetailsTitle">End Date:</p>
                         <p className="submittedformDetailsInput">
                             {location.state.props.endDate}
+                        </p>
+                    </div>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">Days Away:</p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.travelDaysAway}
                         </p>
                     </div>
                     <div className="submittedformDetails">
@@ -261,6 +289,15 @@ const Form = (props) => {
                             {location.state.props.justification}
                         </p>
                     </div>
+                    <h2 className="submittedformItemsSubtitle">Travel Cost</h2>
+                    <div className="submittedformDetails">
+                        <p className="submittedformDetailsTitle">
+                            Estimated Cost:
+                        </p>
+                        <p className="submittedformDetailsInput">
+                            {location.state.props.totalCostAmount}
+                        </p>
+                    </div>
                     <div className="submittedformDetails">
                         <p className="submittedformDetailsTitle">
                             Travel Advance:
@@ -279,14 +316,7 @@ const Form = (props) => {
                                 : "0"}
                         </p>
                     </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">
-                            Estimated Cost:
-                        </p>
-                        <p className="submittedformDetailsInput">
-                            {location.state.props.totalCostAmount}
-                        </p>
-                    </div>
+                    <h2 className="submittedformItemsSubtitle">Regulatory</h2>
                     <div className="submittedformDetails">
                         <p className="submittedformDetailsTitle">NCTS Code:</p>
                         <p className="submittedformDetailsInput">

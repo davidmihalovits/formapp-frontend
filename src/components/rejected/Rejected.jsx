@@ -1,8 +1,8 @@
-import "./Pending.sass";
+import "./Rejected.sass";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const Pending = () => {
+const Rejected = () => {
     const [forms, setForms] = useState([]);
 
     const getForms = async () => {
@@ -35,9 +35,7 @@ const Pending = () => {
             <div className="pending">
                 {forms &&
                     forms
-                        .filter(
-                            (form) => !form.approved || form.approved === ""
-                        )
+                        .filter((form) => form.approved === "Rejected")
                         .map((f, key) => {
                             return (
                                 <Link
@@ -55,11 +53,6 @@ const Pending = () => {
                                         <p className="pendingLinkFormsName">
                                             {f.formName}
                                         </p>
-                                        {f.approved === "Approved" && (
-                                            <p className="pendingLinkFormsApproved">
-                                                Approved
-                                            </p>
-                                        )}
                                         {f.approved === "Rejected" && (
                                             <p className="pendingLinkFormsRejected">
                                                 Rejected
@@ -80,4 +73,4 @@ const Pending = () => {
     );
 };
 
-export default Pending;
+export default Rejected;

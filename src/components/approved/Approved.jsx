@@ -1,8 +1,7 @@
-import "./Pending.sass";
+import "./Approved.sass";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
-const Pending = () => {
+const Approved = () => {
     const [forms, setForms] = useState([]);
 
     const getForms = async () => {
@@ -35,22 +34,10 @@ const Pending = () => {
             <div className="pending">
                 {forms &&
                     forms
-                        .filter(
-                            (form) => !form.approved || form.approved === ""
-                        )
+                        .filter((form) => form.approved === "Approved")
                         .map((f, key) => {
                             return (
-                                <Link
-                                    key={key}
-                                    to={{
-                                        pathname: `/pending/${f.formName.replaceAll(
-                                            /[. /-]/g,
-                                            ""
-                                        )}`,
-                                        state: { props: f },
-                                    }}
-                                    className="pendingLink"
-                                >
+                                <div className="pendingLink" key={key}>
                                     <div className="pendingLinkForms">
                                         <p className="pendingLinkFormsName">
                                             {f.formName}
@@ -60,11 +47,6 @@ const Pending = () => {
                                                 Approved
                                             </p>
                                         )}
-                                        {f.approved === "Rejected" && (
-                                            <p className="pendingLinkFormsRejected">
-                                                Rejected
-                                            </p>
-                                        )}
                                         <p className="pendingLinkFormsComment">
                                             {f.comment && `"${f.comment}"`}
                                         </p>
@@ -72,7 +54,7 @@ const Pending = () => {
                                             {f.approvalBy}
                                         </p>
                                     </div>
-                                </Link>
+                                </div>
                             );
                         })}
             </div>
@@ -80,4 +62,4 @@ const Pending = () => {
     );
 };
 
-export default Pending;
+export default Approved;

@@ -34,6 +34,8 @@ const Submit = (props) => {
         useState(false);
     const [regulatoryCiBrief, setRegulatoryCiBrief] = useState(false);
     const [regulatoryItEquipment, setRegulatoryItEquipment] = useState(false);
+    const [travelAdvanceMoreThanTotal, setTravelAdvanceMoreThanTotal] =
+        useState(false);
 
     useEffect(() => {
         const calculateTotalCostAmount = () => {
@@ -135,6 +137,14 @@ const Submit = (props) => {
     var date2 = new Date(endDate);
     var difference = date1.getTime() - date2.getTime();
     var days = Math.ceil(difference / (1000 * 3600 * 24));
+
+    useEffect(() => {
+        const travelAdvMoreThanTravelCost =
+            travelAdvanceAmount > totalCostAmount;
+
+        if (travelAdvMoreThanTravelCost) setTravelAdvanceMoreThanTotal(true);
+        if (!travelAdvMoreThanTravelCost) setTravelAdvanceMoreThanTotal(false);
+    }, [travelAdvanceAmount, totalCostAmount]);
 
     return (
         <div className="formContainer">
@@ -244,21 +254,6 @@ const Submit = (props) => {
                     </div>
                     <div className="formItem">
                         <h2 className="formSubtitle">Travel Information</h2>
-                        <label className="formLabel" htmlFor="travelDaysAway">
-                            Days Away
-                        </label>
-                        <p
-                            className="formInput"
-                            style={{ height: "53.2px", cursor: "not-allowed" }}
-                        >
-                            {startDate.length === 8 && endDate.length === 8
-                                ? isNaN(days)
-                                    ? null
-                                    : days
-                                          .toLocaleString()
-                                          .replaceAll(/[-]/g, "")
-                                : null}
-                        </p>
                         <label className="formLabel" htmlFor="travelMethod">
                             Travel Method
                         </label>
@@ -312,6 +307,21 @@ const Submit = (props) => {
                                 <div className="formInputBoxCheckmark"></div>
                             )}
                         </div>
+                        <label className="formLabel" htmlFor="travelDaysAway">
+                            Days Away
+                        </label>
+                        <p
+                            className="formInput"
+                            style={{ height: "53.2px", cursor: "not-allowed" }}
+                        >
+                            {startDate.length === 8 && endDate.length === 8
+                                ? isNaN(days)
+                                    ? null
+                                    : days
+                                          .toLocaleString()
+                                          .replaceAll(/[-]/g, "")
+                                : null}
+                        </p>
                         <label className="formLabel" htmlFor="travelCity">
                             City
                         </label>
@@ -355,41 +365,6 @@ const Submit = (props) => {
                             value={justification}
                             onChange={(e) => setJustification(e.target.value)}
                             className="formTextarea"
-                        />
-                        <div className="travelAdvanceCheckboxText">
-                            <p className="travelAdvanceText">Travel Advance</p>
-                            <span
-                                className={
-                                    travelAdvanceCheckbox
-                                        ? "travelAdvanceCheckboxChecked"
-                                        : "travelAdvanceCheckboxUnchecked"
-                                }
-                                onClick={() =>
-                                    setTravelAdvanceCheckbox(
-                                        !travelAdvanceCheckbox
-                                    )
-                                }
-                            >
-                                {travelAdvanceCheckbox && (
-                                    <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                )}
-                            </span>
-                        </div>
-                        <label
-                            className="formLabel"
-                            htmlFor="travelAdvanceAmount"
-                        >
-                            Amount
-                        </label>
-                        <input
-                            id="travelAdvanceAmount"
-                            name="travelAdvanceAmount"
-                            type="text"
-                            value={travelAdvanceAmount}
-                            onChange={(e) =>
-                                setTravelAdvanceAmount(e.target.value)
-                            }
-                            className="formInput"
                         />
                     </div>
                     <div className="formItem">
@@ -477,6 +452,47 @@ const Submit = (props) => {
                             <p className="costTotalText">Total:</p>
                             <p className="costTotalAmount">{totalCostAmount}</p>
                         </div>
+                        <div className="travelAdvanceCheckboxText">
+                            <p className="travelAdvanceText">Travel Advance</p>
+                            <span
+                                className={
+                                    travelAdvanceCheckbox
+                                        ? "travelAdvanceCheckboxChecked"
+                                        : "travelAdvanceCheckboxUnchecked"
+                                }
+                                onClick={() =>
+                                    setTravelAdvanceCheckbox(
+                                        !travelAdvanceCheckbox
+                                    )
+                                }
+                            >
+                                {travelAdvanceCheckbox && (
+                                    <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                )}
+                            </span>
+                        </div>
+                        <label
+                            className="formLabel"
+                            htmlFor="travelAdvanceAmount"
+                        >
+                            Amount
+                        </label>
+                        <input
+                            id="travelAdvanceAmount"
+                            name="travelAdvanceAmount"
+                            type="text"
+                            value={travelAdvanceAmount}
+                            onChange={(e) =>
+                                setTravelAdvanceAmount(e.target.value)
+                            }
+                            className="formInput"
+                        />
+                        {travelAdvanceMoreThanTotal && (
+                            <p className="formError">
+                                Travel advance amount can't be higher than total
+                                travel cost.
+                            </p>
+                        )}
                     </div>
                     <div className="formItem">
                         <h2 className="formSubtitle">Regulatory</h2>

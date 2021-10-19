@@ -12,21 +12,24 @@
 
     .navbar
         display: grid
-        grid-template-columns: auto auto auto
+        grid-template-columns: auto auto auto auto auto
         justify-content: space-between
         align-items: center
 
         .navbarItem
             cursor: pointer
+            font-size: 14px
 
         .navbarLink
             text-decoration: none
 
             .navbarLinkItemActive
                 color: $primary-color
+                font-size: 14px
 
             .navbarLinkItemInactive
                 color: black
+                font-size: 14px
 
 @media only screen and (min-width: 1100px)
     .navbarContainer
@@ -42,12 +45,22 @@
 
         .navbar
             display: grid
-            grid-template-columns: auto auto auto
+            grid-template-columns: auto auto auto auto auto
             justify-content: center
             align-items: center
-            gap: 0 100px
+            gap: 0 70px
             width: 1100px
             margin: 0 auto
+
+            .navbarItem
+                font-size: 18px
+
+            .navbarLink
+                .navbarLinkItemActive
+                    font-size: 18px
+
+                .navbarLinkItemInactive
+                    font-size: 18px
 
 
         

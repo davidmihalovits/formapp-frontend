@@ -1,6 +1,5 @@
 const Activity = require("../models/Activity");
 const mongoose = require("mongoose");
-const moment = require("moment");
 
 const viewForm = async (req, res) => {
     const form = await Activity.findOne({
@@ -22,7 +21,7 @@ const viewForm = async (req, res) => {
             $push: {
                 activity: {
                     viewedBy: res.user,
-                    date: moment().format("MMMM Do YYYY, h:mm:ss a"),
+                    date: new Date(),
                 },
             },
         }
