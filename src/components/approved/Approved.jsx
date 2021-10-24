@@ -1,5 +1,6 @@
 import "./Approved.sass";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Approved = () => {
     const [forms, setForms] = useState([]);
@@ -37,24 +38,32 @@ const Approved = () => {
                         .filter((form) => form.approved === "Approved")
                         .map((f, key) => {
                             return (
-                                <div className="pendingLink" key={key}>
-                                    <div className="pendingLinkForms">
-                                        <p className="pendingLinkFormsName">
-                                            {f.formName}
-                                        </p>
-                                        {f.approved === "Approved" && (
-                                            <p className="pendingLinkFormsApproved">
-                                                Approved
+                                <Link
+                                    key={key}
+                                    to={`/rejected/${
+                                        f._id
+                                    }#${f.formName.replaceAll(/[. /]/g, "")}`}
+                                    className="pendingLink"
+                                >
+                                    <div className="pendingLink" key={key}>
+                                        <div className="pendingLinkForms">
+                                            <p className="pendingLinkFormsName">
+                                                {f.formName}
                                             </p>
-                                        )}
-                                        <p className="pendingLinkFormsComment">
-                                            {f.comment && `"${f.comment}"`}
-                                        </p>
-                                        <p className="pendingLinkFormsBy">
-                                            {f.approvalBy}
-                                        </p>
+                                            {f.approved === "Approved" && (
+                                                <p className="pendingLinkFormsApproved">
+                                                    Approved
+                                                </p>
+                                            )}
+                                            <p className="pendingLinkFormsComment">
+                                                {f.comment && `"${f.comment}"`}
+                                            </p>
+                                            <p className="pendingLinkFormsBy">
+                                                {f.approvalBy}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
+                                </Link>
                             );
                         })}
             </div>

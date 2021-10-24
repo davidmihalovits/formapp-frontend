@@ -2,7 +2,7 @@ const Form = require("../models/Form");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
-const getForms = async (req, res, next) => {
+const getForm = async (req, res, next) => {
     const token = req.auth.authorization;
 
     if (!token) {
@@ -21,32 +21,11 @@ const getForms = async (req, res, next) => {
         };
     }
 
-    const forms = await Form.find().sort({ updatedAt: -1 });
-
-    const formsForTravelers = await Form.find({
-        email: verified.user.email,
-    }).sort({ updatedAt: -1 });
-
-    if (
-        verified.user.role === "Supervisor" ||
-        verified.user.role === "TravelerSupervisor"
-    ) {
-        return {
-            statusCode: 200,
-            body: JSON.stringify(forms),
-        };
-    }
-
-    if (verified.user.role === "Traveler") {
-        return {
-            statusCode: 200,
-            body: JSON.stringify(formsForTravelers),
-        };
-    }
+    const form = await Form.findOne({ _id: req.id });
 
     return {
         statusCode: 200,
-        body: JSON.stringify([]),
+        body: JSON.stringify(form),
     };
 };
 
@@ -58,5 +37,9 @@ module.exports.handler = async (event, context) => {
         useUnifiedTopology: true,
     });
 
-    return getForms({ db: db, auth: event.headers });
+    return getForm({
+        db: db,
+        auth: event.headers,
+        id: event.queryStringParameters.id,
+    });
 };

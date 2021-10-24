@@ -93,7 +93,7 @@ const FormSchema = mongoose.Schema(
             type: String,
         },
         regulatoryForeignTravel: {
-            type: Boolean,
+            type: String,
         },
         regulatoryCiBrief: {
             type: Boolean,

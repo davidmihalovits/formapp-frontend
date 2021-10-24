@@ -3,9 +3,10 @@ import { useState, useEffect } from "react";
 
 const Submit = (props) => {
     const [loading, setLoading] = useState(false);
+    const [showSection, setShowSection] = useState("general");
     const [fullName, setFullName] = useState("");
     const [employeeId, setEmployeeId] = useState("");
-    const [program, setProgram] = useState("");
+    const [program, setProgram] = useState("HBG");
     const [chargeCode, setChargeCode] = useState("");
     const [workStreetAddress, setWorkStreetAddress] = useState("");
     const [workCity, setWorkCity] = useState("");
@@ -28,10 +29,11 @@ const Submit = (props) => {
     const [registrationFees, setRegistrationFees] = useState("");
     const [otherCost, setOtherCost] = useState("");
     const [totalCostAmount, setTotalCostAmount] = useState("");
+    const [isNcts, setIsNcts] = useState(Boolean);
     const [regulatoryNctsCode, setRegulatoryNctsCode] = useState("");
     const [regulatoryNctsEmail, setRegulatoryNctsEmail] = useState("");
     const [regulatoryForeignTravel, setRegulatoryForeignTravel] =
-        useState(false);
+        useState("Foreign");
     const [regulatoryCiBrief, setRegulatoryCiBrief] = useState(false);
     const [regulatoryItEquipment, setRegulatoryItEquipment] = useState(false);
     const [travelAdvanceMoreThanTotal, setTravelAdvanceMoreThanTotal] =
@@ -146,448 +148,655 @@ const Submit = (props) => {
         if (!travelAdvMoreThanTravelCost) setTravelAdvanceMoreThanTotal(false);
     }, [travelAdvanceAmount, totalCostAmount]);
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [showSection]);
+
     return (
         <div className="formContainer">
             <form className="form" onSubmit={submit} noValidate>
                 <div className="formItems">
-                    <div className="formItem">
-                        <h2 className="formSubtitle">General Information</h2>
-                        <label className="formLabel" htmlFor="fullName">
-                            Full Name
-                        </label>
-                        <input
-                            id="fullName"
-                            name="fullName"
-                            type="text"
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="email">
-                            Email
-                        </label>
-                        <p className="formInput">
-                            {props.user && props.user.user.email}
-                        </p>
-                        <label className="formLabel" htmlFor="employeeId">
-                            Employee ID
-                        </label>
-                        <input
-                            id="employeeId"
-                            name="employeeId"
-                            type="text"
-                            value={employeeId}
-                            onChange={(e) => setEmployeeId(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="program">
-                            Program
-                        </label>
-                        <input
-                            id="program"
-                            name="program"
-                            type="text"
-                            value={program}
-                            onChange={(e) => setProgram(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="chargeCode">
-                            Charge Code
-                        </label>
-                        <input
-                            id="chargeCode"
-                            name="chargeCode"
-                            type="text"
-                            value={chargeCode}
-                            onChange={(e) => setChargeCode(e.target.value)}
-                            className="formInput"
-                        />
-                        <label
-                            className="formLabel"
-                            htmlFor="workStreetAddress"
-                        >
-                            Street Address
-                        </label>
-                        <input
-                            id="workStreetAddress"
-                            name="workStreetAddress"
-                            type="text"
-                            value={workStreetAddress}
-                            onChange={(e) =>
-                                setWorkStreetAddress(e.target.value)
-                            }
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="workCity">
-                            City
-                        </label>
-                        <input
-                            id="workCity"
-                            name="workCity"
-                            type="text"
-                            value={workCity}
-                            onChange={(e) => setWorkCity(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="workState">
-                            State
-                        </label>
-                        <input
-                            id="workState"
-                            name="workState"
-                            type="text"
-                            value={workState}
-                            onChange={(e) => setWorkState(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="workZipcode">
-                            Zipcode
-                        </label>
-                        <input
-                            id="workZipcode"
-                            name="workZipcode"
-                            type="text"
-                            value={workZipcode}
-                            onChange={(e) => setWorkZipcode(e.target.value)}
-                            className="formInput"
-                        />
-                    </div>
-                    <div className="formItem">
-                        <h2 className="formSubtitle">Travel Information</h2>
-                        <label className="formLabel" htmlFor="travelMethod">
-                            Travel Method
-                        </label>
-                        <select
-                            id="travelMethod"
-                            name="travelMethod"
-                            type="text"
-                            value={travelMethod}
-                            onChange={(e) => setTravelMethod(e.target.value)}
-                            className="formInput"
-                            style={{ cursor: "pointer" }}
-                        >
-                            <option value="Air">Air</option>
-                            <option value="Land">Land</option>
-                        </select>
-                        <label className="formLabel" htmlFor="startDate">
-                            Start Date
-                        </label>
-                        <div className="formInputBox">
+                    {showSection === "general" && (
+                        <div className="formItem">
+                            <h2 className="formSubtitle">
+                                General Information
+                            </h2>
+                            <label className="formLabel" htmlFor="fullName">
+                                Full Name
+                            </label>
                             <input
-                                id="startDate"
-                                name="startDate"
+                                id="fullName"
+                                name="fullName"
                                 type="text"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                                maxLength="8"
+                                value={fullName}
+                                onChange={(e) => setFullName(e.target.value)}
                                 className="formInput"
-                                placeholder="mm/dd/yy"
-                                onKeyPress={(e) => onKeyPressDateFormat(e)}
                             />
-                            {startDate.length === 8 && (
-                                <div className="formInputBoxCheckmark"></div>
-                            )}
-                        </div>
-                        <label className="formLabel" htmlFor="endDate">
-                            End Date
-                        </label>
-                        <div className="formInputBox">
-                            <input
-                                id="endDate"
-                                name="endDate"
-                                type="text"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                                maxLength="8"
-                                className="formInput"
-                                placeholder="mm/dd/yy"
-                                onKeyPress={(e) => onKeyPressDateFormat(e)}
-                            />
-                            {endDate.length === 8 && (
-                                <div className="formInputBoxCheckmark"></div>
-                            )}
-                        </div>
-                        <label className="formLabel" htmlFor="travelDaysAway">
-                            Days Away
-                        </label>
-                        <p
-                            className="formInput"
-                            style={{ height: "53.2px", cursor: "not-allowed" }}
-                        >
-                            {startDate.length === 8 && endDate.length === 8
-                                ? isNaN(days)
-                                    ? null
-                                    : days
-                                          .toLocaleString()
-                                          .replaceAll(/[-]/g, "")
-                                : null}
-                        </p>
-                        <label className="formLabel" htmlFor="travelCity">
-                            City
-                        </label>
-                        <input
-                            id="travelCity"
-                            name="travelCity"
-                            type="text"
-                            value={travelCity}
-                            onChange={(e) => setTravelCity(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="travelState">
-                            State
-                        </label>
-                        <input
-                            id="travelState"
-                            name="travelState"
-                            type="text"
-                            value={travelState}
-                            onChange={(e) => setTravelState(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="travelCountry">
-                            Country
-                        </label>
-                        <input
-                            id="travelCountry"
-                            name="travelCountry"
-                            type="text"
-                            value={travelCountry}
-                            onChange={(e) => setTravelCountry(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="justification">
-                            Justification
-                        </label>
-                        <textarea
-                            id="justification"
-                            name="justification"
-                            type="text"
-                            value={justification}
-                            onChange={(e) => setJustification(e.target.value)}
-                            className="formTextarea"
-                        />
-                    </div>
-                    <div className="formItem">
-                        <h2 className="formSubtitle">Estimated Cost</h2>
-                        <label className="formLabel" htmlFor="transportCost">
-                            Transport Cost
-                        </label>
-                        <input
-                            id="transportCost"
-                            name="transportCost"
-                            type="number"
-                            value={transportCost}
-                            onChange={(e) => setTransportCost(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="rentalCost">
-                            Rental Cost
-                        </label>
-                        <input
-                            id="rentalCost"
-                            name="rentalCost"
-                            type="number"
-                            value={rentalCost}
-                            onChange={(e) => setRentalCost(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="mileageCost">
-                            Mileage Cost
-                        </label>
-                        <input
-                            id="mileageCost"
-                            name="mileageCost"
-                            type="number"
-                            value={mileageCost}
-                            onChange={(e) => setMileageCost(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="lodgingCost">
-                            Lodging Cost
-                        </label>
-                        <input
-                            id="lodgingCost"
-                            name="lodgingCost"
-                            type="number"
-                            value={lodgingCost}
-                            onChange={(e) => setLodgingCost(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="mealsCost">
-                            Meals Cost
-                        </label>
-                        <input
-                            id="mealsCost"
-                            name="mealsCost"
-                            type="number"
-                            value={mealsCost}
-                            onChange={(e) => setMealsCost(e.target.value)}
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="registrationFees">
-                            Registration Fees
-                        </label>
-                        <input
-                            id="registrationFees"
-                            name="registrationFees"
-                            type="number"
-                            value={registrationFees}
-                            onChange={(e) =>
-                                setRegistrationFees(e.target.value)
-                            }
-                            className="formInput"
-                        />
-                        <label className="formLabel" htmlFor="otherCost">
-                            Other Cost
-                        </label>
-                        <input
-                            id="otherCost"
-                            name="otherCost"
-                            type="number"
-                            value={otherCost}
-                            onChange={(e) => setOtherCost(e.target.value)}
-                            className="formInput"
-                        />
-                        <div className="costTotalContainer">
-                            <p className="costTotalText">Total:</p>
-                            <p className="costTotalAmount">{totalCostAmount}</p>
-                        </div>
-                        <div className="travelAdvanceCheckboxText">
-                            <p className="travelAdvanceText">Travel Advance</p>
-                            <span
-                                className={
-                                    travelAdvanceCheckbox
-                                        ? "travelAdvanceCheckboxChecked"
-                                        : "travelAdvanceCheckboxUnchecked"
-                                }
-                                onClick={() =>
-                                    setTravelAdvanceCheckbox(
-                                        !travelAdvanceCheckbox
-                                    )
-                                }
-                            >
-                                {travelAdvanceCheckbox && (
-                                    <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                )}
-                            </span>
-                        </div>
-                        <label
-                            className="formLabel"
-                            htmlFor="travelAdvanceAmount"
-                        >
-                            Amount
-                        </label>
-                        <input
-                            id="travelAdvanceAmount"
-                            name="travelAdvanceAmount"
-                            type="text"
-                            value={travelAdvanceAmount}
-                            onChange={(e) =>
-                                setTravelAdvanceAmount(e.target.value)
-                            }
-                            className="formInput"
-                        />
-                        {travelAdvanceMoreThanTotal && (
-                            <p className="formError">
-                                Travel advance amount can't be higher than total
-                                travel cost.
+                            <label className="formLabel" htmlFor="email">
+                                Email
+                            </label>
+                            <p className="formInput">
+                                {props.user && props.user.user.email}
                             </p>
-                        )}
-                    </div>
-                    <div className="formItem">
-                        <h2 className="formSubtitle">Regulatory</h2>
-                        <label
-                            className="formLabel"
-                            htmlFor="regulatoryNctsCode"
-                        >
-                            NCTS Code
-                        </label>
-                        <input
-                            id="regulatoryNctsCode"
-                            name="regulatoryNctsCode"
-                            type="text"
-                            value={regulatoryNctsCode}
-                            onChange={(e) =>
-                                setRegulatoryNctsCode(e.target.value)
-                            }
-                            className="formInput"
-                        />
-                        <label
-                            className="formLabel"
-                            htmlFor="regulatoryNctsEmail"
-                        >
-                            NCTS Email
-                        </label>
-                        <input
-                            id="regulatoryNctsEmail"
-                            name="regulatoryNctsEmail"
-                            type="text"
-                            value={regulatoryNctsEmail}
-                            onChange={(e) =>
-                                setRegulatoryNctsEmail(e.target.value)
-                            }
-                            className="formInput"
-                        />
-                        <div className="travelAdvanceCheckboxText">
-                            <p className="travelAdvanceText">Foreign Travel</p>
-                            <span
-                                className={
-                                    regulatoryForeignTravel
-                                        ? "travelAdvanceCheckboxChecked"
-                                        : "travelAdvanceCheckboxUnchecked"
-                                }
-                                onClick={() =>
-                                    setRegulatoryForeignTravel(
-                                        !regulatoryForeignTravel
-                                    )
-                                }
+                            <label className="formLabel" htmlFor="employeeId">
+                                Employee ID
+                            </label>
+                            <input
+                                id="employeeId"
+                                name="employeeId"
+                                type="text"
+                                value={employeeId}
+                                onChange={(e) => setEmployeeId(e.target.value)}
+                                className="formInput"
+                            />
+                            <label className="formLabel" htmlFor="program">
+                                Program
+                            </label>
+                            <select
+                                id="program"
+                                name="program"
+                                type="text"
+                                value={program}
+                                onChange={(e) => setProgram(e.target.value)}
+                                className="formInput"
+                                style={{ cursor: "pointer" }}
                             >
-                                {regulatoryForeignTravel && (
-                                    <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                )}
-                            </span>
-                        </div>
-                        <div className="travelAdvanceCheckboxText">
-                            <p className="travelAdvanceText">CI Brief</p>
-                            <span
-                                className={
-                                    regulatoryCiBrief
-                                        ? "travelAdvanceCheckboxChecked"
-                                        : "travelAdvanceCheckboxUnchecked"
-                                }
-                                onClick={() =>
-                                    setRegulatoryCiBrief(!regulatoryCiBrief)
-                                }
+                                <option value="HBG">HBG</option>
+                                <option value="STARSS">STARSS</option>
+                                <option value="ESES">ESES</option>
+                                <option value="TESS">TESS</option>
+                                <option value="SAMDA">SAMDA</option>
+                                <option value="LITES">LITES</option>
+                                <option value="SSAIHQ">SSAIHQ</option>
+                                <option value="TIDES">TIDES</option>
+                                <option value="GEUSTAR">GEUSTAR</option>
+                            </select>
+                            <label className="formLabel" htmlFor="chargeCode">
+                                Charge Code
+                            </label>
+                            <input
+                                id="chargeCode"
+                                name="chargeCode"
+                                type="text"
+                                value={chargeCode}
+                                onChange={(e) => setChargeCode(e.target.value)}
+                                className="formInput"
+                            />
+                            <label
+                                className="formLabel"
+                                htmlFor="workStreetAddress"
                             >
-                                {regulatoryCiBrief && (
-                                    <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                )}
-                            </span>
-                        </div>
-                        <div className="travelAdvanceCheckboxText">
-                            <p className="travelAdvanceText">IT Equipment</p>
-                            <span
-                                className={
-                                    regulatoryItEquipment
-                                        ? "travelAdvanceCheckboxChecked"
-                                        : "travelAdvanceCheckboxUnchecked"
+                                Street Address
+                            </label>
+                            <input
+                                id="workStreetAddress"
+                                name="workStreetAddress"
+                                type="text"
+                                value={workStreetAddress}
+                                onChange={(e) =>
+                                    setWorkStreetAddress(e.target.value)
                                 }
-                                onClick={() =>
-                                    setRegulatoryItEquipment(
-                                        !regulatoryItEquipment
-                                    )
-                                }
+                                className="formInput"
+                            />
+                            <label className="formLabel" htmlFor="workCity">
+                                City
+                            </label>
+                            <input
+                                id="workCity"
+                                name="workCity"
+                                type="text"
+                                value={workCity}
+                                onChange={(e) => setWorkCity(e.target.value)}
+                                className="formInput"
+                            />
+                            <label className="formLabel" htmlFor="workState">
+                                State
+                            </label>
+                            <input
+                                id="workState"
+                                name="workState"
+                                type="text"
+                                value={workState}
+                                onChange={(e) => setWorkState(e.target.value)}
+                                className="formInput"
+                            />
+                            <label className="formLabel" htmlFor="workZipcode">
+                                Zipcode
+                            </label>
+                            <input
+                                id="workZipcode"
+                                name="workZipcode"
+                                type="text"
+                                value={workZipcode}
+                                onChange={(e) => setWorkZipcode(e.target.value)}
+                                className="formInput"
+                            />
+                            <button
+                                onClick={() => setShowSection("ncts")}
+                                type="button"
+                                className="formButton"
                             >
-                                {regulatoryItEquipment && (
-                                    <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                )}
-                            </span>
+                                Next
+                            </button>
                         </div>
-                    </div>
+                    )}
+                    {showSection === "ncts" && (
+                        <div className="formItem">
+                            <h2 className="formSubtitle">
+                                NASA Conference Travel System
+                            </h2>
+                            <p className="formLabel">
+                                Is this a conference/seminar/workshop in NCTS?
+                            </p>
+                            <div className="nctsCheckboxText">
+                                <p className="nctsText">No</p>
+                                <span
+                                    className={
+                                        !isNcts
+                                            ? "nctsCheckboxChecked"
+                                            : "nctsCheckboxUnchecked"
+                                    }
+                                    onClick={() => setIsNcts(false)}
+                                >
+                                    {!isNcts && (
+                                        <span className="nctsCheckboxCheckedCheckmark"></span>
+                                    )}
+                                </span>
+                            </div>
+                            <div className="nctsCheckboxText">
+                                <p className="nctsText">Yes</p>
+                                <span
+                                    className={
+                                        isNcts
+                                            ? "nctsCheckboxChecked"
+                                            : "nctsCheckboxUnchecked"
+                                    }
+                                    onClick={() => setIsNcts(true)}
+                                >
+                                    {isNcts && (
+                                        <span className="nctsCheckboxCheckedCheckmark"></span>
+                                    )}
+                                </span>
+                            </div>
+                            {isNcts && (
+                                <>
+                                    <label
+                                        className="formLabel"
+                                        htmlFor="regulatoryNctsCode"
+                                    >
+                                        NCTS Code
+                                    </label>
+                                    <input
+                                        id="regulatoryNctsCode"
+                                        name="regulatoryNctsCode"
+                                        type="text"
+                                        value={regulatoryNctsCode}
+                                        onChange={(e) =>
+                                            setRegulatoryNctsCode(
+                                                e.target.value
+                                            )
+                                        }
+                                        className="formInput"
+                                    />
+                                    <label
+                                        className="formLabel"
+                                        htmlFor="regulatoryNctsEmail"
+                                    >
+                                        NCTS Email
+                                    </label>
+                                    <input
+                                        id="regulatoryNctsEmail"
+                                        name="regulatoryNctsEmail"
+                                        type="text"
+                                        value={regulatoryNctsEmail}
+                                        onChange={(e) =>
+                                            setRegulatoryNctsEmail(
+                                                e.target.value
+                                            )
+                                        }
+                                        className="formInput"
+                                    />
+                                </>
+                            )}
+                            <button
+                                onClick={() => setShowSection("travel")}
+                                type="button"
+                                className="formButton"
+                            >
+                                Next
+                            </button>
+                        </div>
+                    )}
+                    {showSection === "travel" && (
+                        <div className="formItem">
+                            <h2 className="formSubtitle">Travel Information</h2>
+                            <div className="travelAdvanceCheckboxText">
+                                <p className="travelAdvanceText">Foreign</p>
+                                <span
+                                    className={
+                                        regulatoryForeignTravel === "Foreign"
+                                            ? "travelAdvanceCheckboxChecked"
+                                            : "travelAdvanceCheckboxUnchecked"
+                                    }
+                                    onClick={() =>
+                                        setRegulatoryForeignTravel("Foreign")
+                                    }
+                                >
+                                    {regulatoryForeignTravel === "Foreign" && (
+                                        <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                    )}
+                                </span>
+                            </div>
+                            <p className="formTravelTypeText">Not in USA</p>
+                            <div className="travelAdvanceCheckboxText">
+                                <p className="travelAdvanceText">Virtual</p>
+                                <span
+                                    className={
+                                        regulatoryForeignTravel === "Virtual"
+                                            ? "travelAdvanceCheckboxChecked"
+                                            : "travelAdvanceCheckboxUnchecked"
+                                    }
+                                    onClick={() =>
+                                        setRegulatoryForeignTravel("Virtual")
+                                    }
+                                >
+                                    {regulatoryForeignTravel === "Virtual" && (
+                                        <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                    )}
+                                </span>
+                            </div>
+                            <p className="formTravelTypeText">
+                                Takes place without travel
+                            </p>
+                            <div className="travelAdvanceCheckboxText">
+                                <p className="travelAdvanceText">Local</p>
+                                <span
+                                    className={
+                                        regulatoryForeignTravel === "Local"
+                                            ? "travelAdvanceCheckboxChecked"
+                                            : "travelAdvanceCheckboxUnchecked"
+                                    }
+                                    onClick={() =>
+                                        setRegulatoryForeignTravel("Local")
+                                    }
+                                >
+                                    {regulatoryForeignTravel === "Local" && (
+                                        <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                    )}
+                                </span>
+                            </div>
+                            <p className="formTravelTypeText">
+                                50 miles or less away but in USA
+                            </p>
+                            <div className="travelAdvanceCheckboxText">
+                                <p className="travelAdvanceText">Domestic</p>
+                                <span
+                                    className={
+                                        regulatoryForeignTravel === "Domestic"
+                                            ? "travelAdvanceCheckboxChecked"
+                                            : "travelAdvanceCheckboxUnchecked"
+                                    }
+                                    onClick={() =>
+                                        setRegulatoryForeignTravel("Domestic")
+                                    }
+                                >
+                                    {regulatoryForeignTravel === "Domestic" && (
+                                        <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                    )}
+                                </span>
+                            </div>
+                            <p className="formTravelTypeText">
+                                Over 50 miles away but in USA
+                            </p>
+                            <label className="formLabel" htmlFor="travelMethod">
+                                Travel Method
+                            </label>
+                            <select
+                                id="travelMethod"
+                                name="travelMethod"
+                                type="text"
+                                value={travelMethod}
+                                onChange={(e) =>
+                                    setTravelMethod(e.target.value)
+                                }
+                                className="formInput"
+                                style={{ cursor: "pointer" }}
+                            >
+                                <option value="Air">Air</option>
+                                <option value="Train">Train</option>
+                                <option value="Bus">Bus</option>
+                                <option value="Rental Car">Rental Car</option>
+                                <option value="Personal Vehicle">
+                                    Personal Vehicle
+                                </option>
+                                <option value="Taxi/Uber">Taxi/Uber</option>
+                                <option value="None">None</option>
+                            </select>
+                            <label className="formLabel" htmlFor="startDate">
+                                Start Date
+                            </label>
+                            <div className="formInputBox">
+                                <input
+                                    id="startDate"
+                                    name="startDate"
+                                    type="text"
+                                    value={startDate}
+                                    onChange={(e) =>
+                                        setStartDate(e.target.value)
+                                    }
+                                    maxLength="8"
+                                    className="formInput"
+                                    placeholder="mm/dd/yy"
+                                    onKeyPress={(e) => onKeyPressDateFormat(e)}
+                                />
+                                {startDate.length === 8 && (
+                                    <div className="formInputBoxCheckmark"></div>
+                                )}
+                            </div>
+                            <label className="formLabel" htmlFor="endDate">
+                                End Date
+                            </label>
+                            <div className="formInputBox">
+                                <input
+                                    id="endDate"
+                                    name="endDate"
+                                    type="text"
+                                    value={endDate}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                    maxLength="8"
+                                    className="formInput"
+                                    placeholder="mm/dd/yy"
+                                    onKeyPress={(e) => onKeyPressDateFormat(e)}
+                                />
+                                {endDate.length === 8 && (
+                                    <div className="formInputBoxCheckmark"></div>
+                                )}
+                            </div>
+                            <label
+                                className="formLabel"
+                                htmlFor="travelDaysAway"
+                            >
+                                Days Away
+                            </label>
+                            <p
+                                className="formInput"
+                                style={{
+                                    height: "53.2px",
+                                    cursor: "not-allowed",
+                                }}
+                            >
+                                {startDate.length === 8 && endDate.length === 8
+                                    ? isNaN(days)
+                                        ? null
+                                        : days
+                                              .toLocaleString()
+                                              .replaceAll(/[-]/g, "")
+                                    : null}
+                            </p>
+                            <label className="formLabel" htmlFor="travelCity">
+                                City
+                            </label>
+                            <input
+                                id="travelCity"
+                                name="travelCity"
+                                type="text"
+                                value={travelCity}
+                                onChange={(e) => setTravelCity(e.target.value)}
+                                className="formInput"
+                            />
+                            <label className="formLabel" htmlFor="travelState">
+                                State
+                            </label>
+                            <input
+                                id="travelState"
+                                name="travelState"
+                                type="text"
+                                value={travelState}
+                                onChange={(e) => setTravelState(e.target.value)}
+                                className="formInput"
+                            />
+                            <label
+                                className="formLabel"
+                                htmlFor="travelCountry"
+                            >
+                                Country
+                            </label>
+                            <input
+                                id="travelCountry"
+                                name="travelCountry"
+                                type="text"
+                                value={travelCountry}
+                                onChange={(e) =>
+                                    setTravelCountry(e.target.value)
+                                }
+                                className="formInput"
+                            />
+                            <label
+                                className="formLabel"
+                                htmlFor="justification"
+                            >
+                                Justification
+                            </label>
+                            <textarea
+                                id="justification"
+                                name="justification"
+                                type="text"
+                                value={justification}
+                                onChange={(e) =>
+                                    setJustification(e.target.value)
+                                }
+                                className="formTextarea"
+                            />
+                            <button
+                                onClick={() => setShowSection("estimated")}
+                                type="button"
+                                className="formButton"
+                            >
+                                Next
+                            </button>
+                        </div>
+                    )}
+                    {showSection === "estimated" && (
+                        <div className="formItem">
+                            <h2 className="formSubtitle">Estimated Cost</h2>
+                            <label
+                                className="formLabel"
+                                htmlFor="transportCost"
+                            >
+                                Transport Cost
+                            </label>
+                            <input
+                                id="transportCost"
+                                name="transportCost"
+                                type="number"
+                                value={transportCost}
+                                onChange={(e) =>
+                                    setTransportCost(e.target.value)
+                                }
+                                className="formInput"
+                            />
+                            <label className="formLabel" htmlFor="rentalCost">
+                                Rental Cost
+                            </label>
+                            <input
+                                id="rentalCost"
+                                name="rentalCost"
+                                type="number"
+                                value={rentalCost}
+                                onChange={(e) => setRentalCost(e.target.value)}
+                                className="formInput"
+                            />
+                            <label className="formLabel" htmlFor="mileageCost">
+                                Mileage Cost
+                            </label>
+                            <input
+                                id="mileageCost"
+                                name="mileageCost"
+                                type="number"
+                                value={mileageCost}
+                                onChange={(e) => setMileageCost(e.target.value)}
+                                className="formInput"
+                            />
+                            <label className="formLabel" htmlFor="lodgingCost">
+                                Lodging Cost
+                            </label>
+                            <input
+                                id="lodgingCost"
+                                name="lodgingCost"
+                                type="number"
+                                value={lodgingCost}
+                                onChange={(e) => setLodgingCost(e.target.value)}
+                                className="formInput"
+                            />
+                            <label className="formLabel" htmlFor="mealsCost">
+                                Meals Cost
+                            </label>
+                            <input
+                                id="mealsCost"
+                                name="mealsCost"
+                                type="number"
+                                value={mealsCost}
+                                onChange={(e) => setMealsCost(e.target.value)}
+                                className="formInput"
+                            />
+                            <label
+                                className="formLabel"
+                                htmlFor="registrationFees"
+                            >
+                                Registration Fees
+                            </label>
+                            <input
+                                id="registrationFees"
+                                name="registrationFees"
+                                type="number"
+                                value={registrationFees}
+                                onChange={(e) =>
+                                    setRegistrationFees(e.target.value)
+                                }
+                                className="formInput"
+                            />
+                            <label className="formLabel" htmlFor="otherCost">
+                                Other Cost
+                            </label>
+                            <input
+                                id="otherCost"
+                                name="otherCost"
+                                type="number"
+                                value={otherCost}
+                                onChange={(e) => setOtherCost(e.target.value)}
+                                className="formInput"
+                            />
+                            <div className="costTotalContainer">
+                                <p className="costTotalText">Total:</p>
+                                <p className="costTotalAmount">
+                                    {totalCostAmount}
+                                </p>
+                            </div>
+                            <div className="travelAdvanceCheckboxText">
+                                <p className="travelAdvanceText">
+                                    Travel Advance
+                                </p>
+                                <span
+                                    className={
+                                        travelAdvanceCheckbox
+                                            ? "travelAdvanceCheckboxChecked"
+                                            : "travelAdvanceCheckboxUnchecked"
+                                    }
+                                    onClick={() =>
+                                        setTravelAdvanceCheckbox(
+                                            !travelAdvanceCheckbox
+                                        )
+                                    }
+                                >
+                                    {travelAdvanceCheckbox && (
+                                        <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                    )}
+                                </span>
+                            </div>
+                            <label
+                                className="formLabel"
+                                htmlFor="travelAdvanceAmount"
+                            >
+                                Amount
+                            </label>
+                            <input
+                                id="travelAdvanceAmount"
+                                name="travelAdvanceAmount"
+                                type="text"
+                                value={travelAdvanceAmount}
+                                onChange={(e) =>
+                                    setTravelAdvanceAmount(e.target.value)
+                                }
+                                className="formInput"
+                            />
+                            {travelAdvanceMoreThanTotal && (
+                                <p className="formError">
+                                    Travel advance amount can't be higher than
+                                    total travel cost.
+                                </p>
+                            )}
+                            <button
+                                onClick={() => setShowSection("regulatory")}
+                                type="button"
+                                className="formButton"
+                            >
+                                Next
+                            </button>
+                        </div>
+                    )}
+                    {showSection === "regulatory" && (
+                        <div className="formItem">
+                            <h2 className="formSubtitle">Regulatory</h2>
+                            <div className="travelAdvanceCheckboxText">
+                                <p className="travelAdvanceText">CI Brief</p>
+                                <span
+                                    className={
+                                        regulatoryCiBrief
+                                            ? "travelAdvanceCheckboxChecked"
+                                            : "travelAdvanceCheckboxUnchecked"
+                                    }
+                                    onClick={() =>
+                                        setRegulatoryCiBrief(!regulatoryCiBrief)
+                                    }
+                                >
+                                    {regulatoryCiBrief && (
+                                        <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                    )}
+                                </span>
+                            </div>
+                            <div className="travelAdvanceCheckboxText">
+                                <p className="travelAdvanceText">
+                                    IT Equipment
+                                </p>
+                                <span
+                                    className={
+                                        regulatoryItEquipment
+                                            ? "travelAdvanceCheckboxChecked"
+                                            : "travelAdvanceCheckboxUnchecked"
+                                    }
+                                    onClick={() =>
+                                        setRegulatoryItEquipment(
+                                            !regulatoryItEquipment
+                                        )
+                                    }
+                                >
+                                    {regulatoryItEquipment && (
+                                        <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                    )}
+                                </span>
+                            </div>
+                        </div>
+                    )}
                 </div>
-                <button type="submit" className="formButton" disabled={loading}>
-                    {loading ? "Loading..." : "Submit"}
-                </button>
+                {showSection === "regulatory" && (
+                    <button
+                        type="submit"
+                        className="formButton"
+                        disabled={loading}
+                    >
+                        {loading ? "Loading..." : "Submit"}
+                    </button>
+                )}
             </form>
         </div>
     );

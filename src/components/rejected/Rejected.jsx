@@ -2,7 +2,7 @@ import "./Rejected.sass";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const Rejected = () => {
+const Rejected = (props) => {
     const [forms, setForms] = useState([]);
 
     const getForms = async () => {
@@ -40,13 +40,9 @@ const Rejected = () => {
                             return (
                                 <Link
                                     key={key}
-                                    to={{
-                                        pathname: `/pending/${f.formName.replaceAll(
-                                            /[. /-]/g,
-                                            ""
-                                        )}`,
-                                        state: { props: f },
-                                    }}
+                                    to={`/rejected/${
+                                        f._id
+                                    }#${f.formName.replaceAll(/[. /]/g, "")}`}
                                     className="pendingLink"
                                 >
                                     <div className="pendingLinkForms">

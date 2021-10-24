@@ -84,7 +84,13 @@ const App = () => {
                         {!localStorage.getItem("token") ? (
                             <Redirect to="/" />
                         ) : (
-                            <Form user={user} />
+                            <Route
+                                exact
+                                path="/pending/:id"
+                                render={(props) => (
+                                    <Form {...props} user={user} />
+                                )}
+                            />
                         )}
                     </Route>
                     <Route exact path="/approved">
@@ -94,11 +100,37 @@ const App = () => {
                             <Approved />
                         )}
                     </Route>
+                    <Route exact path="/approved/:id">
+                        {!localStorage.getItem("token") ? (
+                            <Redirect to="/" />
+                        ) : (
+                            <Route
+                                exact
+                                path="/approved/:id"
+                                render={(props) => (
+                                    <Form {...props} user={user} />
+                                )}
+                            />
+                        )}
+                    </Route>
                     <Route exact path="/rejected">
                         {!localStorage.getItem("token") ? (
                             <Redirect to="/" />
                         ) : (
                             <Rejected />
+                        )}
+                    </Route>
+                    <Route exact path="/rejected/:id">
+                        {!localStorage.getItem("token") ? (
+                            <Redirect to="/" />
+                        ) : (
+                            <Route
+                                exact
+                                path="/rejected/:id"
+                                render={(props) => (
+                                    <Form {...props} user={user} />
+                                )}
+                            />
                         )}
                     </Route>
                 </Switch>

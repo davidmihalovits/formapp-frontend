@@ -10,10 +10,11 @@
             margin-bottom: 15px
             
         .submittedformActivity
-            background: #BBDEFB
+            background: #fafafa
             padding: 20px
             border-radius: 10px
-            margin-bottom: 50px
+            margin-bottom: 60px
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px 
 
             .submittedformActivityTitle
                 font-size: 22px
@@ -41,20 +42,50 @@
                     font-weight: 500
                     color: #888888
 
+        .submittedformEditButton
+            margin: 0 0 20px auto
+            cursor: pointer
+            outline: none
+            border: 1px solid black
+            font-size: 12px
+            background: white
+            padding: 10px 18px
+            border-radius: 4px
+            display: block
+
         .submittedformDetails
             .submittedformDetailsTitle
-                font-size: 16px
+                font-size: 12px
                 font-weight: 500
 
             .submittedformDetailsInput
                 background: #fafafa
-                border-radius: 10px
+                border-radius: 4px
                 margin: 5px auto 30px auto
-                padding: 15px
+                padding: 12px
+                font-size: 18px
+                color: #a5a5a5
+
+                //margin: 5px auto 30px auto
+                //padding: 12px
+                //width: 100%
+                //font-size: 18px
+                //padding: 12px
+                //outline: none
+                //border: 1px solid #fafafa
+                //border-radius: 4px
+                //background-color: #fafafa
+                //color: $primary-color
+
+                //&:focus
+                //    border: 1px solid $primary-color
+
+                //&:disabled
+                //    color:#c0c0c0
 
         .submittedformForm
             border-top: 1px solid black
-            margin-top: 70px
+            margin-top: 60px
 
             .submittedformFormLabel
                 display: block
@@ -91,30 +122,6 @@
                     border: none
                     outline: none
                     cursor: pointer
-
-        .submittedformFeedback
-            .submittedformFeedbackApproved
-                font-size: 14px
-                font-weight: 500
-                color: #28b834
-                margin-top: 10px
-
-            .submittedformFeedbackRejected
-                font-size: 14px
-                font-weight: 500
-                color: #dd1572
-                margin-top: 20px
-
-            .submittedformFeedbackComment
-                font-style: italic
-                font-size: 14px
-                font-weight: 500
-                color: #888888
-
-            .submittedformFeedbackBy
-                font-size: 12px
-                font-weight: 500
-                color: #b8b8b8
 
 @media only screen and (min-width: 1100px)
     .submittedformContainer
