@@ -40,7 +40,7 @@ const Approved = () => {
                             return (
                                 <Link
                                     key={key}
-                                    to={`/rejected/${
+                                    to={`/approved/${
                                         f._id
                                     }#${f.formName.replaceAll(/[. /]/g, "")}`}
                                     className="pendingLink"

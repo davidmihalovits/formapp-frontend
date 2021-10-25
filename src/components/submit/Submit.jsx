@@ -36,6 +36,7 @@ const Submit = (props) => {
         useState("Foreign");
     const [regulatoryCiBrief, setRegulatoryCiBrief] = useState(false);
     const [regulatoryItEquipment, setRegulatoryItEquipment] = useState(false);
+    const [regulatoryVisa, setRegulatoryVisa] = useState("Not required");
     const [travelAdvanceMoreThanTotal, setTravelAdvanceMoreThanTotal] =
         useState(false);
 
@@ -114,6 +115,7 @@ const Submit = (props) => {
                         regulatoryForeignTravel: regulatoryForeignTravel,
                         regulatoryCiBrief: regulatoryCiBrief,
                         regulatoryItEquipment: regulatoryItEquipment,
+                        regulatoryVisa: regulatoryVisa,
                     }),
                 }
             )
@@ -135,10 +137,20 @@ const Submit = (props) => {
         }
     };
 
+    /*useEffect(() => {
+        const months = startDate.substring(0, 2);
+        console.log(months);
+        if (months > 12) {
+            console.log("more than 12");
+        }
+    }, [startDate]);*/
+
     var date1 = new Date(startDate);
     var date2 = new Date(endDate);
     var difference = date1.getTime() - date2.getTime();
     var days = Math.ceil(difference / (1000 * 3600 * 24));
+    const date1Hours = date1.setHours(0, 0, 0, 0);
+    const date2Hours = date2.setHours(0, 0, 0, 0);
 
     useEffect(() => {
         const travelAdvMoreThanTravelCost =
@@ -186,9 +198,25 @@ const Submit = (props) => {
                                 name="employeeId"
                                 type="text"
                                 value={employeeId}
-                                onChange={(e) => setEmployeeId(e.target.value)}
+                                onChange={(e) => {
+                                    const re = /^[0-9\b]+$/;
+                                    if (
+                                        e.target.value === "" ||
+                                        re.test(e.target.value)
+                                    ) {
+                                        setEmployeeId(e.target.value);
+                                    }
+                                }}
                                 className="formInput"
+                                placeholder="1 - 9999"
+                                maxLength="4"
                             />
+                            {(employeeId > 9999 || employeeId < 1) &&
+                                employeeId && (
+                                    <p className="formError">
+                                        Employee ID must range from 1 to 9999.
+                                    </p>
+                                )}
                             <label className="formLabel" htmlFor="program">
                                 Program
                             </label>
@@ -512,6 +540,11 @@ const Submit = (props) => {
                                     <div className="formInputBoxCheckmark"></div>
                                 )}
                             </div>
+                            {date1Hours >= date2Hours && (
+                                <p className="formError">
+                                    End date must be higher than start date.
+                                </p>
+                            )}
                             <label
                                 className="formLabel"
                                 htmlFor="travelDaysAway"
@@ -735,68 +768,105 @@ const Submit = (props) => {
                                     total travel cost.
                                 </p>
                             )}
-                            <button
-                                onClick={() => setShowSection("regulatory")}
-                                type="button"
-                                className="formButton"
-                            >
-                                Next
-                            </button>
+                            {regulatoryForeignTravel !== "Foreign" ? (
+                                <button
+                                    type="submit"
+                                    className="formButton"
+                                    disabled={loading}
+                                >
+                                    {loading ? "Loading..." : "Submit"}
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => setShowSection("regulatory")}
+                                    type="button"
+                                    className="formButton"
+                                >
+                                    Next
+                                </button>
+                            )}
                         </div>
                     )}
                     {showSection === "regulatory" && (
-                        <div className="formItem">
-                            <h2 className="formSubtitle">Regulatory</h2>
-                            <div className="travelAdvanceCheckboxText">
-                                <p className="travelAdvanceText">CI Brief</p>
-                                <span
-                                    className={
-                                        regulatoryCiBrief
-                                            ? "travelAdvanceCheckboxChecked"
-                                            : "travelAdvanceCheckboxUnchecked"
-                                    }
-                                    onClick={() =>
-                                        setRegulatoryCiBrief(!regulatoryCiBrief)
-                                    }
+                        <>
+                            <div className="formItem">
+                                <h2 className="formSubtitle">Regulatory</h2>
+                                <div className="travelAdvanceCheckboxText">
+                                    <p className="travelAdvanceText">
+                                        CI Brief
+                                    </p>
+                                    <span
+                                        className={
+                                            regulatoryCiBrief
+                                                ? "travelAdvanceCheckboxChecked"
+                                                : "travelAdvanceCheckboxUnchecked"
+                                        }
+                                        onClick={() =>
+                                            setRegulatoryCiBrief(
+                                                !regulatoryCiBrief
+                                            )
+                                        }
+                                    >
+                                        {regulatoryCiBrief && (
+                                            <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                        )}
+                                    </span>
+                                </div>
+                                <div className="travelAdvanceCheckboxText">
+                                    <p className="travelAdvanceText">
+                                        IT Equipment
+                                    </p>
+                                    <span
+                                        className={
+                                            regulatoryItEquipment
+                                                ? "travelAdvanceCheckboxChecked"
+                                                : "travelAdvanceCheckboxUnchecked"
+                                        }
+                                        onClick={() =>
+                                            setRegulatoryItEquipment(
+                                                !regulatoryItEquipment
+                                            )
+                                        }
+                                    >
+                                        {regulatoryItEquipment && (
+                                            <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                        )}
+                                    </span>
+                                </div>
+                                <label
+                                    className="formLabel"
+                                    htmlFor="regulatoryVisa"
                                 >
-                                    {regulatoryCiBrief && (
-                                        <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                    )}
-                                </span>
-                            </div>
-                            <div className="travelAdvanceCheckboxText">
-                                <p className="travelAdvanceText">
-                                    IT Equipment
-                                </p>
-                                <span
-                                    className={
-                                        regulatoryItEquipment
-                                            ? "travelAdvanceCheckboxChecked"
-                                            : "travelAdvanceCheckboxUnchecked"
+                                    Visa Status
+                                </label>
+                                <select
+                                    id="regulatoryVisa"
+                                    name="regulatoryVisa"
+                                    type="text"
+                                    value={regulatoryVisa}
+                                    onChange={(e) =>
+                                        setRegulatoryVisa(e.target.value)
                                     }
-                                    onClick={() =>
-                                        setRegulatoryItEquipment(
-                                            !regulatoryItEquipment
-                                        )
-                                    }
+                                    className="formInput"
+                                    style={{ cursor: "pointer" }}
                                 >
-                                    {regulatoryItEquipment && (
-                                        <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                    )}
-                                </span>
+                                    <option value="Not required">
+                                        Not required
+                                    </option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Valid">Valid</option>
+                                </select>
                             </div>
-                        </div>
+                            <button
+                                type="submit"
+                                className="formButton"
+                                disabled={loading}
+                            >
+                                {loading ? "Loading..." : "Submit"}
+                            </button>
+                        </>
                     )}
                 </div>
-                {showSection === "regulatory" && (
-                    <button
-                        type="submit"
-                        className="formButton"
-                        disabled={loading}
-                    >
-                        {loading ? "Loading..." : "Submit"}
-                    </button>
-                )}
             </form>
         </div>
     );

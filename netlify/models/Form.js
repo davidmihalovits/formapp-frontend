@@ -101,6 +101,9 @@ const FormSchema = mongoose.Schema(
         regulatoryItEquipment: {
             type: Boolean,
         },
+        regulatoryVisa: {
+            type: String,
+        },
         approved: {
             type: String,
         },

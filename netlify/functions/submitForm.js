@@ -41,6 +41,7 @@ const submitForm = async (req, res) => {
         regulatoryForeignTravel: res.regulatoryForeignTravel,
         regulatoryCiBrief: res.regulatoryCiBrief,
         regulatoryItEquipment: res.regulatoryItEquipment,
+        regulatoryVisa: res.regulatoryVisa,
     });
 
     await newForm.save();
