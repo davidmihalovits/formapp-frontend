@@ -1,6 +1,8 @@
 import "./Form.sass";
 import { useState, useEffect } from "react";
 import moment from "moment";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Form = (props) => {
     const [form, setForm] = useState("");
@@ -46,6 +48,7 @@ const Form = (props) => {
     const [regulatoryVisa, setRegulatoryVisa] = useState("");
     const [travelAdvanceMoreThanTotal, setTravelAdvanceMoreThanTotal] =
         useState(false);
+    const [step, setStep] = useState("20%");
 
     useEffect(() => {
         const calculateTotalCostAmount = () => {
@@ -70,12 +73,6 @@ const Form = (props) => {
         registrationFees,
         otherCost,
     ]);
-
-    const onKeyPressDateFormat = (e) => {
-        if (e.target.value.length === 2 || e.target.value.length === 5) {
-            e.target.value += "/";
-        }
-    };
 
     var date1 = new Date(startDate);
     var date2 = new Date(endDate);
@@ -287,8 +284,8 @@ const Form = (props) => {
                             .toLocaleString()
                             .replaceAll(/[-]/g, ""),
                         travelMethod: travelMethod,
-                        startDate: startDate,
-                        endDate: endDate,
+                        startDate: moment(startDate).format("L").toString(),
+                        endDate: moment(endDate).format("L").toString(),
                         travelCity: travelCity,
                         travelState: travelState,
                         travelCountry: travelCountry,
@@ -322,11 +319,48 @@ const Form = (props) => {
         }
     };
 
+    const submitComment = async (e) => {
+        e.preventDefault();
+
+        const confirmed = window.confirm("Edit form?");
+
+        if (confirmed) {
+            await fetch(
+                "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/comment",
+                //"http://localhost:8888/.netlify/functions/comment",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        id: form._id,
+                        email: props.user && props.user.user.email,
+                        comment: comment,
+                    }),
+                }
+            )
+                .then((res) => res.json())
+                .then((data) => console.log(data));
+
+            alert("Successful comment.");
+            return window.location.reload();
+        } else {
+            return alert("Cancelled comment.");
+        }
+    };
+
     if (editForm) {
         return (
             <div className="formContainer">
                 <form className="form" onSubmit={submitEdit} noValidate>
                     <div className="formItems">
+                        <div className="formStep">
+                            <div
+                                style={{ width: step }}
+                                className="formStepCompleted"
+                            ></div>
+                        </div>
                         {showSection === "general" && (
                             <div className="formItem">
                                 <h2 className="formSubtitle">
@@ -362,10 +396,18 @@ const Form = (props) => {
                                     name="employeeId"
                                     type="text"
                                     value={employeeId}
-                                    onChange={(e) =>
-                                        setEmployeeId(e.target.value)
-                                    }
+                                    onChange={(e) => {
+                                        const re = /^[0-9\b]+$/;
+                                        if (
+                                            e.target.value === "" ||
+                                            re.test(e.target.value)
+                                        ) {
+                                            setEmployeeId(e.target.value);
+                                        }
+                                    }}
                                     className="formInput"
+                                    placeholder="1 - 9999"
+                                    maxLength="4"
                                 />
                                 <label className="formLabel" htmlFor="program">
                                     Program
@@ -467,7 +509,10 @@ const Form = (props) => {
                                     className="formInput"
                                 />
                                 <button
-                                    onClick={() => setShowSection("ncts")}
+                                    onClick={() => {
+                                        setShowSection("ncts");
+                                        setStep("40%");
+                                    }}
                                     type="button"
                                     className="formButton"
                                 >
@@ -485,7 +530,6 @@ const Form = (props) => {
                                     NCTS?
                                 </p>
                                 <div className="nctsCheckboxText">
-                                    <p className="nctsText">No</p>
                                     <span
                                         className={
                                             !isNcts
@@ -502,9 +546,9 @@ const Form = (props) => {
                                             <span className="nctsCheckboxCheckedCheckmark"></span>
                                         )}
                                     </span>
+                                    <p className="nctsText">No</p>
                                 </div>
                                 <div className="nctsCheckboxText">
-                                    <p className="nctsText">Yes</p>
                                     <span
                                         className={
                                             isNcts
@@ -525,6 +569,7 @@ const Form = (props) => {
                                             <span className="nctsCheckboxCheckedCheckmark"></span>
                                         )}
                                     </span>
+                                    <p className="nctsText">Yes</p>
                                 </div>
                                 {isNcts && (
                                     <>
@@ -567,11 +612,24 @@ const Form = (props) => {
                                     </>
                                 )}
                                 <button
-                                    onClick={() => setShowSection("travel")}
+                                    onClick={() => {
+                                        setShowSection("travel");
+                                        setStep("60%");
+                                    }}
                                     type="button"
                                     className="formButton"
                                 >
                                     Next
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setShowSection("general");
+                                        setStep("20%");
+                                    }}
+                                    type="button"
+                                    className="formButtonBack"
+                                >
+                                    Back
                                 </button>
                             </div>
                         )}
@@ -581,7 +639,6 @@ const Form = (props) => {
                                     Travel Information
                                 </h2>
                                 <div className="travelAdvanceCheckboxText">
-                                    <p className="travelAdvanceText">Foreign</p>
                                     <span
                                         className={
                                             regulatoryForeignTravel ===
@@ -600,10 +657,10 @@ const Form = (props) => {
                                             <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                         )}
                                     </span>
+                                    <p className="travelAdvanceText">Foreign</p>
                                 </div>
                                 <p className="formTravelTypeText">Not in USA</p>
                                 <div className="travelAdvanceCheckboxText">
-                                    <p className="travelAdvanceText">Virtual</p>
                                     <span
                                         className={
                                             regulatoryForeignTravel ===
@@ -623,12 +680,12 @@ const Form = (props) => {
                                             <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                         )}
                                     </span>
+                                    <p className="travelAdvanceText">Virtual</p>
                                 </div>
                                 <p className="formTravelTypeText">
                                     Takes place without travel
                                 </p>
                                 <div className="travelAdvanceCheckboxText">
-                                    <p className="travelAdvanceText">Local</p>
                                     <span
                                         className={
                                             regulatoryForeignTravel === "Local"
@@ -645,14 +702,12 @@ const Form = (props) => {
                                             <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                         )}
                                     </span>
+                                    <p className="travelAdvanceText">Local</p>
                                 </div>
                                 <p className="formTravelTypeText">
                                     50 miles or less away but in USA
                                 </p>
                                 <div className="travelAdvanceCheckboxText">
-                                    <p className="travelAdvanceText">
-                                        Domestic
-                                    </p>
                                     <span
                                         className={
                                             regulatoryForeignTravel ===
@@ -672,6 +727,9 @@ const Form = (props) => {
                                             <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                         )}
                                     </span>
+                                    <p className="travelAdvanceText">
+                                        Domestic
+                                    </p>
                                 </div>
                                 <p className="formTravelTypeText">
                                     Over 50 miles away but in USA
@@ -711,49 +769,33 @@ const Form = (props) => {
                                 >
                                     Start Date
                                 </label>
-                                <div className="formInputBox">
-                                    <input
-                                        id="startDate"
-                                        name="startDate"
-                                        type="text"
-                                        value={startDate}
-                                        onChange={(e) =>
-                                            setStartDate(e.target.value)
-                                        }
-                                        maxLength="8"
-                                        className="formInput"
-                                        placeholder="mm/dd/yy"
-                                        onKeyPress={(e) =>
-                                            onKeyPressDateFormat(e)
-                                        }
-                                    />
-                                    {startDate.length === 8 && (
-                                        <div className="formInputBoxCheckmark"></div>
-                                    )}
-                                </div>
+                                <DatePicker
+                                    closeOnScroll={true}
+                                    selected={new Date(startDate)}
+                                    onChange={(date) => setStartDate(date)}
+                                    showMonthDropdown
+                                    showYearDropdown
+                                    dropdownMode="select"
+                                    todayButton="Today"
+                                    dateFormat="MM/dd/yyyy"
+                                    calendarStartDay={1}
+                                    className="formInput"
+                                />
                                 <label className="formLabel" htmlFor="endDate">
                                     End Date
                                 </label>
-                                <div className="formInputBox">
-                                    <input
-                                        id="endDate"
-                                        name="endDate"
-                                        type="text"
-                                        value={endDate}
-                                        onChange={(e) =>
-                                            setEndDate(e.target.value)
-                                        }
-                                        maxLength="8"
-                                        className="formInput"
-                                        placeholder="mm/dd/yy"
-                                        onKeyPress={(e) =>
-                                            onKeyPressDateFormat(e)
-                                        }
-                                    />
-                                    {endDate.length === 8 && (
-                                        <div className="formInputBoxCheckmark"></div>
-                                    )}
-                                </div>
+                                <DatePicker
+                                    closeOnScroll={true}
+                                    selected={new Date(endDate)}
+                                    onChange={(date) => setEndDate(date)}
+                                    showMonthDropdown
+                                    showYearDropdown
+                                    dropdownMode="select"
+                                    todayButton="Today"
+                                    dateFormat="MM/dd/yyyy"
+                                    calendarStartDay={1}
+                                    className="formInput"
+                                />
                                 {date1Hours >= date2Hours && (
                                     <p className="formError">
                                         End date must be higher than start date.
@@ -772,14 +814,11 @@ const Form = (props) => {
                                         cursor: "not-allowed",
                                     }}
                                 >
-                                    {startDate.length === 8 &&
-                                    endDate.length === 8
-                                        ? isNaN(days)
-                                            ? null
-                                            : days
-                                                  .toLocaleString()
-                                                  .replaceAll(/[-]/g, "")
-                                        : null}
+                                    {!isNaN(days) && date1Hours < date2Hours
+                                        ? days
+                                              .toLocaleString()
+                                              .replaceAll(/[-]/g, "")
+                                        : "-"}
                                 </p>
                                 <label
                                     className="formLabel"
@@ -846,11 +885,31 @@ const Form = (props) => {
                                     className="formTextarea"
                                 />
                                 <button
-                                    onClick={() => setShowSection("estimated")}
+                                    onClick={() => {
+                                        setShowSection("estimated");
+                                        if (
+                                            regulatoryForeignTravel !==
+                                            "Foreign"
+                                        ) {
+                                            setStep("100%");
+                                        } else {
+                                            setStep("80%");
+                                        }
+                                    }}
                                     type="button"
                                     className="formButton"
                                 >
                                     Next
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setShowSection("ncts");
+                                        setStep("40%");
+                                    }}
+                                    type="button"
+                                    className="formButtonBack"
+                                >
+                                    Back
                                 </button>
                             </div>
                         )}
@@ -976,9 +1035,6 @@ const Form = (props) => {
                                     </p>
                                 </div>
                                 <div className="travelAdvanceCheckboxText">
-                                    <p className="travelAdvanceText">
-                                        Travel Advance
-                                    </p>
                                     <span
                                         className={
                                             travelAdvanceCheckbox
@@ -995,6 +1051,9 @@ const Form = (props) => {
                                             <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                         )}
                                     </span>
+                                    <p className="travelAdvanceText">
+                                        Travel Advance
+                                    </p>
                                 </div>
                                 <label
                                     className="formLabel"
@@ -1019,23 +1078,50 @@ const Form = (props) => {
                                     </p>
                                 )}
                                 {regulatoryForeignTravel !== "Foreign" ? (
-                                    <button
-                                        type="submit"
-                                        className="formButton"
-                                        disabled={loading}
-                                    >
-                                        {loading ? "Loading..." : "Accept Edit"}
-                                    </button>
+                                    <>
+                                        <button
+                                            type="submit"
+                                            className="formButton"
+                                            disabled={loading}
+                                        >
+                                            {loading
+                                                ? "Loading..."
+                                                : "Accept Edit"}
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                setShowSection("travel");
+                                                setStep("60%");
+                                            }}
+                                            type="button"
+                                            className="formButtonBack"
+                                        >
+                                            Back
+                                        </button>
+                                    </>
                                 ) : (
-                                    <button
-                                        onClick={() =>
-                                            setShowSection("regulatory")
-                                        }
-                                        type="button"
-                                        className="formButton"
-                                    >
-                                        Next
-                                    </button>
+                                    <>
+                                        <button
+                                            onClick={() => {
+                                                setShowSection("regulatory");
+                                                setStep("100%");
+                                            }}
+                                            type="button"
+                                            className="formButton"
+                                        >
+                                            Next
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                setShowSection("travel");
+                                                setStep("60%");
+                                            }}
+                                            type="button"
+                                            className="formButtonBack"
+                                        >
+                                            Back
+                                        </button>
+                                    </>
                                 )}
                             </div>
                         )}
@@ -1044,9 +1130,6 @@ const Form = (props) => {
                                 <div className="formItem">
                                     <h2 className="formSubtitle">Regulatory</h2>
                                     <div className="travelAdvanceCheckboxText">
-                                        <p className="travelAdvanceText">
-                                            CI Brief
-                                        </p>
                                         <span
                                             className={
                                                 regulatoryCiBrief
@@ -1063,11 +1146,11 @@ const Form = (props) => {
                                                 <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                             )}
                                         </span>
+                                        <p className="travelAdvanceText">
+                                            CI Brief
+                                        </p>
                                     </div>
                                     <div className="travelAdvanceCheckboxText">
-                                        <p className="travelAdvanceText">
-                                            IT Equipment
-                                        </p>
                                         <span
                                             className={
                                                 regulatoryItEquipment
@@ -1084,6 +1167,9 @@ const Form = (props) => {
                                                 <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                             )}
                                         </span>
+                                        <p className="travelAdvanceText">
+                                            IT Equipment
+                                        </p>
                                     </div>
                                     <label
                                         className="formLabel"
@@ -1116,6 +1202,16 @@ const Form = (props) => {
                                 >
                                     {loading ? "Loading..." : "Accept Edit"}
                                 </button>
+                                <button
+                                    onClick={() => {
+                                        setShowSection("estimated");
+                                        setStep("80%");
+                                    }}
+                                    type="button"
+                                    className="formButtonBack"
+                                >
+                                    Back
+                                </button>
                             </>
                         )}
                     </div>
@@ -1123,6 +1219,7 @@ const Form = (props) => {
                         onClick={() => {
                             setShowSection("general");
                             setEditForm(false);
+                            setStep("20%");
                         }}
                         type="button"
                         className="formButtonCancel"
@@ -1182,6 +1279,18 @@ const Form = (props) => {
                                                 <br />
                                                 {a.editedBy}
                                             </p>
+                                        )}
+                                        {a.commentBy && (
+                                            <>
+                                                <p className="submittedformActivityText">
+                                                    Comment by:
+                                                    <br />
+                                                    {a.commentBy}
+                                                </p>
+                                                <p className="submittedformActivityComment">
+                                                    {a.comment}
+                                                </p>
+                                            </>
                                         )}
                                         <p className="submittedformActivityText">
                                             {moment(a.date).format(
@@ -1454,6 +1563,37 @@ const Form = (props) => {
                                 {loading ? "Loading..." : "Reject"}
                             </button>
                         </div>
+                    </form>
+                ) : null}
+                {props.user &&
+                props.user.user.email === form.email &&
+                form.approved === "Rejected" ? (
+                    <form
+                        className="submittedformForm"
+                        onSubmit={submitComment}
+                        noValidate
+                    >
+                        <label
+                            className="submittedformFormLabel"
+                            htmlFor="comment"
+                        >
+                            My comment
+                        </label>
+                        <input
+                            id="comment"
+                            name="comment"
+                            type="text"
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                            className="submittedformFormInput"
+                        />
+                        <button
+                            type="submit"
+                            className="submittedformFormButton"
+                            disabled={loading}
+                        >
+                            {loading ? "Loading..." : "Submit Comment"}
+                        </button>
                     </form>
                 ) : null}
             </div>

@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import Navbar from "./components/navbar/Navbar";
+import Profile from "./components/profile/Profile";
+import Notification from "./components/notification/Notification";
 import Submit from "./components/submit/Submit";
 import Index from "./components/index/Index";
 import Pending from "./components/pending/Pending";
@@ -64,6 +66,20 @@ const App = () => {
                             <Redirect to="/pending" />
                         ) : (
                             <Index />
+                        )}
+                    </Route>
+                    <Route exact path="/profile">
+                        {!localStorage.getItem("token") ? (
+                            <Redirect to="/" />
+                        ) : (
+                            <Profile user={user} />
+                        )}
+                    </Route>
+                    <Route exact path="/notification">
+                        {!localStorage.getItem("token") ? (
+                            <Redirect to="/" />
+                        ) : (
+                            <Notification />
                         )}
                     </Route>
                     <Route exact path="/submit">

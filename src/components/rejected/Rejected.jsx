@@ -31,8 +31,8 @@ const Rejected = (props) => {
     }, []);
 
     return (
-        <div className="pendingContainer">
-            <div className="pending">
+        <div className="rejectedContainer">
+            <div className="rejected">
                 {forms &&
                     forms
                         .filter((form) => form.approved === "Rejected")
@@ -43,22 +43,25 @@ const Rejected = (props) => {
                                     to={`/rejected/${
                                         f._id
                                     }#${f.formName.replaceAll(/[. /]/g, "")}`}
-                                    className="pendingLink"
+                                    className="rejectedLink"
                                 >
-                                    <div className="pendingLinkForms">
-                                        <p className="pendingLinkFormsName">
+                                    <div className="rejectedLinkForms">
+                                        <p className="rejectedLinkFormsName">
                                             {f.formName}
                                         </p>
                                         {f.approved === "Rejected" && (
-                                            <p className="pendingLinkFormsRejected">
+                                            <p className="rejectedLinkFormsRejected">
                                                 Rejected
                                             </p>
                                         )}
-                                        <p className="pendingLinkFormsComment">
+                                        <p className="rejectedLinkFormsComment">
                                             {f.comment && `"${f.comment}"`}
                                         </p>
-                                        <p className="pendingLinkFormsBy">
+                                        <p className="rejectedLinkFormsBy">
                                             {f.approvalBy}
+                                        </p>
+                                        <p className="rejectedLinkFormsCreator">
+                                            {f.email}
                                         </p>
                                     </div>
                                 </Link>

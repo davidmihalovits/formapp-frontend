@@ -1,7 +1,12 @@
 import "./Submit.sass";
 import { useState, useEffect } from "react";
+import moment from "moment";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Submit = (props) => {
+    const today = new Date();
+
     const [loading, setLoading] = useState(false);
     const [showSection, setShowSection] = useState("general");
     const [fullName, setFullName] = useState("");
@@ -13,7 +18,9 @@ const Submit = (props) => {
     const [workState, setWorkState] = useState("");
     const [workZipcode, setWorkZipcode] = useState("");
     const [travelMethod, setTravelMethod] = useState("Air");
-    const [startDate, setStartDate] = useState("");
+    const [startDate, setStartDate] = useState(
+        today.setDate(today.getDate() + 30)
+    );
     const [endDate, setEndDate] = useState("");
     const [travelCity, setTravelCity] = useState("");
     const [travelState, setTravelState] = useState("");
@@ -39,6 +46,7 @@ const Submit = (props) => {
     const [regulatoryVisa, setRegulatoryVisa] = useState("Not required");
     const [travelAdvanceMoreThanTotal, setTravelAdvanceMoreThanTotal] =
         useState(false);
+    const [step, setStep] = useState("20%");
 
     useEffect(() => {
         const calculateTotalCostAmount = () => {
@@ -94,8 +102,8 @@ const Submit = (props) => {
                             .toLocaleString()
                             .replaceAll(/[-]/g, ""),
                         travelMethod: travelMethod,
-                        startDate: startDate,
-                        endDate: endDate,
+                        startDate: moment(startDate).format("L").toString(),
+                        endDate: moment(endDate).format("L").toString(),
                         travelCity: travelCity,
                         travelState: travelState,
                         travelCountry: travelCountry,
@@ -131,22 +139,8 @@ const Submit = (props) => {
         }
     };
 
-    const onKeyPressDateFormat = (e) => {
-        if (e.target.value.length === 2 || e.target.value.length === 5) {
-            e.target.value += "/";
-        }
-    };
-
-    /*useEffect(() => {
-        const months = startDate.substring(0, 2);
-        console.log(months);
-        if (months > 12) {
-            console.log("more than 12");
-        }
-    }, [startDate]);*/
-
-    var date1 = new Date(startDate);
-    var date2 = new Date(endDate);
+    var date1 = new Date(moment(startDate).format("L"));
+    var date2 = new Date(moment(endDate).format("L"));
     var difference = date1.getTime() - date2.getTime();
     var days = Math.ceil(difference / (1000 * 3600 * 24));
     const date1Hours = date1.setHours(0, 0, 0, 0);
@@ -164,10 +158,31 @@ const Submit = (props) => {
         window.scrollTo(0, 0);
     }, [showSection]);
 
+    if (props.user && props.user.user.role === "Supervisor") {
+        return (
+            <div
+                style={{
+                    display: "grid",
+                    alignContent: "center",
+                    textAlign: "center",
+                    height: "100vh",
+                }}
+            >
+                <p>You are a {props.user.user.role}. You can't submit forms.</p>
+            </div>
+        );
+    }
+
     return (
         <div className="formContainer">
             <form className="form" onSubmit={submit} noValidate>
                 <div className="formItems">
+                    <div className="formStep">
+                        <div
+                            style={{ width: step }}
+                            className="formStepCompleted"
+                        ></div>
+                    </div>
                     {showSection === "general" && (
                         <div className="formItem">
                             <h2 className="formSubtitle">
@@ -211,12 +226,6 @@ const Submit = (props) => {
                                 placeholder="1 - 9999"
                                 maxLength="4"
                             />
-                            {(employeeId > 9999 || employeeId < 1) &&
-                                employeeId && (
-                                    <p className="formError">
-                                        Employee ID must range from 1 to 9999.
-                                    </p>
-                                )}
                             <label className="formLabel" htmlFor="program">
                                 Program
                             </label>
@@ -300,7 +309,10 @@ const Submit = (props) => {
                                 className="formInput"
                             />
                             <button
-                                onClick={() => setShowSection("ncts")}
+                                onClick={() => {
+                                    setShowSection("ncts");
+                                    setStep("40%");
+                                }}
                                 type="button"
                                 className="formButton"
                             >
@@ -317,7 +329,6 @@ const Submit = (props) => {
                                 Is this a conference/seminar/workshop in NCTS?
                             </p>
                             <div className="nctsCheckboxText">
-                                <p className="nctsText">No</p>
                                 <span
                                     className={
                                         !isNcts
@@ -330,9 +341,9 @@ const Submit = (props) => {
                                         <span className="nctsCheckboxCheckedCheckmark"></span>
                                     )}
                                 </span>
+                                <p className="nctsText">No</p>
                             </div>
                             <div className="nctsCheckboxText">
-                                <p className="nctsText">Yes</p>
                                 <span
                                     className={
                                         isNcts
@@ -345,6 +356,7 @@ const Submit = (props) => {
                                         <span className="nctsCheckboxCheckedCheckmark"></span>
                                     )}
                                 </span>
+                                <p className="nctsText">Yes</p>
                             </div>
                             {isNcts && (
                                 <>
@@ -387,11 +399,24 @@ const Submit = (props) => {
                                 </>
                             )}
                             <button
-                                onClick={() => setShowSection("travel")}
+                                onClick={() => {
+                                    setShowSection("travel");
+                                    setStep("60%");
+                                }}
                                 type="button"
                                 className="formButton"
                             >
                                 Next
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setShowSection("general");
+                                    setStep("20%");
+                                }}
+                                type="button"
+                                className="formButtonBack"
+                            >
+                                Back
                             </button>
                         </div>
                     )}
@@ -399,7 +424,6 @@ const Submit = (props) => {
                         <div className="formItem">
                             <h2 className="formSubtitle">Travel Information</h2>
                             <div className="travelAdvanceCheckboxText">
-                                <p className="travelAdvanceText">Foreign</p>
                                 <span
                                     className={
                                         regulatoryForeignTravel === "Foreign"
@@ -414,10 +438,10 @@ const Submit = (props) => {
                                         <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                     )}
                                 </span>
+                                <p className="travelAdvanceText">Foreign</p>
                             </div>
                             <p className="formTravelTypeText">Not in USA</p>
                             <div className="travelAdvanceCheckboxText">
-                                <p className="travelAdvanceText">Virtual</p>
                                 <span
                                     className={
                                         regulatoryForeignTravel === "Virtual"
@@ -432,12 +456,12 @@ const Submit = (props) => {
                                         <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                     )}
                                 </span>
+                                <p className="travelAdvanceText">Virtual</p>
                             </div>
                             <p className="formTravelTypeText">
                                 Takes place without travel
                             </p>
                             <div className="travelAdvanceCheckboxText">
-                                <p className="travelAdvanceText">Local</p>
                                 <span
                                     className={
                                         regulatoryForeignTravel === "Local"
@@ -452,12 +476,12 @@ const Submit = (props) => {
                                         <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                     )}
                                 </span>
+                                <p className="travelAdvanceText">Local</p>
                             </div>
                             <p className="formTravelTypeText">
                                 50 miles or less away but in USA
                             </p>
                             <div className="travelAdvanceCheckboxText">
-                                <p className="travelAdvanceText">Domestic</p>
                                 <span
                                     className={
                                         regulatoryForeignTravel === "Domestic"
@@ -472,6 +496,7 @@ const Submit = (props) => {
                                         <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                     )}
                                 </span>
+                                <p className="travelAdvanceText">Domestic</p>
                             </div>
                             <p className="formTravelTypeText">
                                 Over 50 miles away but in USA
@@ -503,43 +528,36 @@ const Submit = (props) => {
                             <label className="formLabel" htmlFor="startDate">
                                 Start Date
                             </label>
-                            <div className="formInputBox">
-                                <input
-                                    id="startDate"
-                                    name="startDate"
-                                    type="text"
-                                    value={startDate}
-                                    onChange={(e) =>
-                                        setStartDate(e.target.value)
-                                    }
-                                    maxLength="8"
-                                    className="formInput"
-                                    placeholder="mm/dd/yy"
-                                    onKeyPress={(e) => onKeyPressDateFormat(e)}
-                                />
-                                {startDate.length === 8 && (
-                                    <div className="formInputBoxCheckmark"></div>
-                                )}
-                            </div>
+                            <DatePicker
+                                closeOnScroll={true}
+                                selected={startDate}
+                                onChange={(date) => {
+                                    setStartDate(date);
+                                }}
+                                minDate={new Date()}
+                                showMonthDropdown
+                                showYearDropdown
+                                dropdownMode="select"
+                                todayButton="Today"
+                                dateFormat="MM/dd/yyyy"
+                                calendarStartDay={1}
+                                className="formInput"
+                            />
                             <label className="formLabel" htmlFor="endDate">
                                 End Date
                             </label>
-                            <div className="formInputBox">
-                                <input
-                                    id="endDate"
-                                    name="endDate"
-                                    type="text"
-                                    value={endDate}
-                                    onChange={(e) => setEndDate(e.target.value)}
-                                    maxLength="8"
-                                    className="formInput"
-                                    placeholder="mm/dd/yy"
-                                    onKeyPress={(e) => onKeyPressDateFormat(e)}
-                                />
-                                {endDate.length === 8 && (
-                                    <div className="formInputBoxCheckmark"></div>
-                                )}
-                            </div>
+                            <DatePicker
+                                closeOnScroll={true}
+                                selected={endDate}
+                                onChange={(date) => setEndDate(date)}
+                                showMonthDropdown
+                                showYearDropdown
+                                dropdownMode="select"
+                                todayButton="Today"
+                                dateFormat="MM/dd/yyyy"
+                                calendarStartDay={1}
+                                className="formInput"
+                            />
                             {date1Hours >= date2Hours && (
                                 <p className="formError">
                                     End date must be higher than start date.
@@ -558,13 +576,11 @@ const Submit = (props) => {
                                     cursor: "not-allowed",
                                 }}
                             >
-                                {startDate.length === 8 && endDate.length === 8
-                                    ? isNaN(days)
-                                        ? null
-                                        : days
-                                              .toLocaleString()
-                                              .replaceAll(/[-]/g, "")
-                                    : null}
+                                {!isNaN(days) && date1Hours < date2Hours
+                                    ? days
+                                          .toLocaleString()
+                                          .replaceAll(/[-]/g, "")
+                                    : "-"}
                             </p>
                             <label className="formLabel" htmlFor="travelCity">
                                 City
@@ -621,11 +637,28 @@ const Submit = (props) => {
                                 className="formTextarea"
                             />
                             <button
-                                onClick={() => setShowSection("estimated")}
+                                onClick={() => {
+                                    setShowSection("estimated");
+                                    if (regulatoryForeignTravel !== "Foreign") {
+                                        setStep("100%");
+                                    } else {
+                                        setStep("80%");
+                                    }
+                                }}
                                 type="button"
                                 className="formButton"
                             >
                                 Next
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setShowSection("ncts");
+                                    setStep("40%");
+                                }}
+                                type="button"
+                                className="formButtonBack"
+                            >
+                                Back
                             </button>
                         </div>
                     )}
@@ -726,9 +759,6 @@ const Submit = (props) => {
                                 </p>
                             </div>
                             <div className="travelAdvanceCheckboxText">
-                                <p className="travelAdvanceText">
-                                    Travel Advance
-                                </p>
                                 <span
                                     className={
                                         travelAdvanceCheckbox
@@ -745,6 +775,9 @@ const Submit = (props) => {
                                         <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                     )}
                                 </span>
+                                <p className="travelAdvanceText">
+                                    Travel Advance
+                                </p>
                             </div>
                             <label
                                 className="formLabel"
@@ -769,21 +802,48 @@ const Submit = (props) => {
                                 </p>
                             )}
                             {regulatoryForeignTravel !== "Foreign" ? (
-                                <button
-                                    type="submit"
-                                    className="formButton"
-                                    disabled={loading}
-                                >
-                                    {loading ? "Loading..." : "Submit"}
-                                </button>
+                                <>
+                                    <button
+                                        type="submit"
+                                        className="formButton"
+                                        disabled={loading}
+                                    >
+                                        {loading ? "Loading..." : "Submit"}
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setShowSection("travel");
+                                            setStep("60%");
+                                        }}
+                                        type="button"
+                                        className="formButtonBack"
+                                    >
+                                        Back
+                                    </button>
+                                </>
                             ) : (
-                                <button
-                                    onClick={() => setShowSection("regulatory")}
-                                    type="button"
-                                    className="formButton"
-                                >
-                                    Next
-                                </button>
+                                <>
+                                    <button
+                                        onClick={() => {
+                                            setShowSection("regulatory");
+                                            setStep("100%");
+                                        }}
+                                        type="button"
+                                        className="formButton"
+                                    >
+                                        Next
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setShowSection("travel");
+                                            setStep("60%");
+                                        }}
+                                        type="button"
+                                        className="formButtonBack"
+                                    >
+                                        Back
+                                    </button>
+                                </>
                             )}
                         </div>
                     )}
@@ -792,9 +852,6 @@ const Submit = (props) => {
                             <div className="formItem">
                                 <h2 className="formSubtitle">Regulatory</h2>
                                 <div className="travelAdvanceCheckboxText">
-                                    <p className="travelAdvanceText">
-                                        CI Brief
-                                    </p>
                                     <span
                                         className={
                                             regulatoryCiBrief
@@ -811,11 +868,11 @@ const Submit = (props) => {
                                             <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                         )}
                                     </span>
+                                    <p className="travelAdvanceText">
+                                        CI Brief
+                                    </p>
                                 </div>
                                 <div className="travelAdvanceCheckboxText">
-                                    <p className="travelAdvanceText">
-                                        IT Equipment
-                                    </p>
                                     <span
                                         className={
                                             regulatoryItEquipment
@@ -832,6 +889,9 @@ const Submit = (props) => {
                                             <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                         )}
                                     </span>
+                                    <p className="travelAdvanceText">
+                                        IT Equipment
+                                    </p>
                                 </div>
                                 <label
                                     className="formLabel"
@@ -863,6 +923,16 @@ const Submit = (props) => {
                                 disabled={loading}
                             >
                                 {loading ? "Loading..." : "Submit"}
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setShowSection("estimated");
+                                    setStep("80%");
+                                }}
+                                type="button"
+                                className="formButtonBack"
+                            >
+                                Back
                             </button>
                         </>
                     )}

@@ -67,6 +67,9 @@ const Pending = () => {
                                         <p className="pendingLinkFormsBy">
                                             {f.approvalBy}
                                         </p>
+                                        <p className="pendingLinkFormsCreator">
+                                            {f.email}
+                                        </p>
                                     </div>
                                 </Link>
                             );

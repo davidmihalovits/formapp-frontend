@@ -1,11 +1,24 @@
 @import '../../App'
-    
+
 .formContainer
     margin: 20px 20px 100px 20px
 
     .form
         max-width: 500px
         margin: 0 auto
+        
+        .formStep
+            width: 100%
+            height: 15px
+            background-color: #cacaca
+            border-radius: 10px
+            margin-bottom: 20px
+
+            .formStepCompleted
+                height: 15px
+                background: repeating-linear-gradient(45deg, $primary-color,$primary-color 10px,#1d37ca 10px,#1d37ca 20px)
+                border-radius: 10px
+                transition: 1s
 
         .formButton
             width: 100%
@@ -19,11 +32,23 @@
             outline: none
             cursor: pointer
 
+        .formButtonBack
+            width: 100%
+            height: 55px
+            margin-top: 20px
+            background-color: #fafafa
+            color: black
+            font-size: 18px
+            border-radius: 4px
+            cursor: pointer
+            outline: none
+            border: none
+
         .formButtonCancel
             width: 100%
             height: 55px
-            margin-top: 10px
-            background-color: #fafafa
+            margin-top: 20px
+            background-color: #ffe3e3
             font-size: 18px
             border-radius: 4px
             border: none
@@ -32,30 +57,11 @@
 
         .formItems
             .formItem
-                margin: 60px 0 0 0
-
-                &:first-child
-                    margin: 0
-
                 .formLabel
                     display: block
                     font-size: 12px
                     font-weight: 500
                     margin: 15px 0 2px 0
-
-                .formInputBox
-                    position: relative
-
-                    .formInputBoxCheckmark
-                        right: 20px
-                        top: 17px
-                        width: 7px
-                        height: 13px
-                        border: solid $primary-color
-                        border-width: 0 3px 3px 0
-                        transform: rotate(45deg)
-                        position: absolute
-                        cursor: pointer
 
                 .formInput
                     width: 100%
@@ -66,6 +72,7 @@
                     border-radius: 4px
                     background-color: #fafafa
                     color: $primary-color
+                    cursor: pointer
 
                     &:focus
                         border: 1px solid $primary-color
@@ -102,9 +109,9 @@
                     align-items: center
 
                     .travelAdvanceText
-                        width: 150px
                         font-size: 16px
                         font-weight: 500
+                        margin-left: 10px
 
                     .travelAdvanceCheckboxChecked
                         width: 25px
@@ -133,8 +140,10 @@
                         cursor: pointer
 
                 .formTravelTypeText
-                    font-size: 14px
+                    font-size: 13px
                     font-style: italic
+                    margin-top: 3px
+                    color: #b6b6b6
 
                 .nctsCheckboxText
                     display: grid
@@ -145,7 +154,7 @@
                     .nctsText
                         font-size: 16px
                         font-weight: 500
-                        width: 50px
+                        margin-left: 10px
 
                     .nctsCheckboxChecked
                         width: 25px
@@ -194,10 +203,7 @@
         margin: 120px 0
 
         .form
-            .formButton, .formButtonCancel
+            .formButton, .formButtonCancel, .formButtonBack
                 width: 200px
-
-            .formItems
-                .formItem
-                    margin: 0
+                display: block
     

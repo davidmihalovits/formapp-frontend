@@ -31,8 +31,8 @@ const Approved = () => {
     }, []);
 
     return (
-        <div className="pendingContainer">
-            <div className="pending">
+        <div className="approvedContainer">
+            <div className="approved">
                 {forms &&
                     forms
                         .filter((form) => form.approved === "Approved")
@@ -43,23 +43,26 @@ const Approved = () => {
                                     to={`/approved/${
                                         f._id
                                     }#${f.formName.replaceAll(/[. /]/g, "")}`}
-                                    className="pendingLink"
+                                    className="approvedLink"
                                 >
-                                    <div className="pendingLink" key={key}>
-                                        <div className="pendingLinkForms">
-                                            <p className="pendingLinkFormsName">
+                                    <div className="approvedLink" key={key}>
+                                        <div className="approvedLinkForms">
+                                            <p className="approvedLinkFormsName">
                                                 {f.formName}
                                             </p>
                                             {f.approved === "Approved" && (
-                                                <p className="pendingLinkFormsApproved">
+                                                <p className="approvedLinkFormsApproved">
                                                     Approved
                                                 </p>
                                             )}
-                                            <p className="pendingLinkFormsComment">
+                                            <p className="approvedLinkFormsComment">
                                                 {f.comment && `"${f.comment}"`}
                                             </p>
-                                            <p className="pendingLinkFormsBy">
+                                            <p className="approvedLinkFormsBy">
                                                 {f.approvalBy}
+                                            </p>
+                                            <p className="approvedLinkFormsCreator">
+                                                {f.email}
                                             </p>
                                         </div>
                                     </div>

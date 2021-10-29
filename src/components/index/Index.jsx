@@ -27,7 +27,14 @@ const Index = () => {
             }
         )
             .then((res) => res.json())
-            .then((data) => alert(data));
+            .then((data) => {
+                if (data === "Choose a role.") {
+                    return alert(data);
+                } else {
+                    alert(data);
+                    return window.location.reload();
+                }
+            });
     };
 
     const loginRequest = async (e) => {
@@ -69,9 +76,11 @@ const Index = () => {
         )
             .then((res) => res.json())
             .then((data) => {
-                if (data === "Wrong login code.") alert(data);
-                if (data.token) localStorage.setItem("token", data.token);
-                window.location.reload();
+                if (data === "Wrong login code.") return alert(data);
+                if (data.token) {
+                    localStorage.setItem("token", data.token);
+                    return window.location.reload();
+                }
             });
     };
 
@@ -79,6 +88,7 @@ const Index = () => {
         <div className="indexContainer">
             <div className="index">
                 <div className="indexBox">
+                    <h1 className="indexBoxTitle">Register</h1>
                     <input
                         id="email"
                         name="email"
@@ -125,35 +135,43 @@ const Index = () => {
                     </button>
                 </div>
                 <div className="indexBox">
-                    <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={credential}
-                        onChange={(e) => setCredential(e.target.value)}
-                        className="indexBoxInput"
-                        placeholder="Your email address"
-                    />
-                    <button className="indexBoxButton" onClick={loginRequest}>
-                        Request login code
-                    </button>
+                    <h1 className="indexBoxTitle">Login</h1>
+
+                    {loginCodeSent ? (
+                        <>
+                            <input
+                                id="code"
+                                name="code"
+                                type="text"
+                                value={code}
+                                onChange={(e) => setCode(e.target.value)}
+                                className="indexBoxInput"
+                                placeholder="Enter login code"
+                            />
+                            <button className="indexBoxButton" onClick={login}>
+                                Login
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                value={credential}
+                                onChange={(e) => setCredential(e.target.value)}
+                                className="indexBoxInput"
+                                placeholder="Your email address"
+                            />
+                            <button
+                                className="indexBoxButton"
+                                onClick={loginRequest}
+                            >
+                                Request login code
+                            </button>
+                        </>
+                    )}
                 </div>
-                {loginCodeSent && (
-                    <div className="indexBox">
-                        <input
-                            id="code"
-                            name="code"
-                            type="text"
-                            value={code}
-                            onChange={(e) => setCode(e.target.value)}
-                            className="indexBoxInput"
-                            placeholder="Enter login code"
-                        />
-                        <button className="indexBoxButton" onClick={login}>
-                            Login
-                        </button>
-                    </div>
-                )}
             </div>
         </div>
     );
