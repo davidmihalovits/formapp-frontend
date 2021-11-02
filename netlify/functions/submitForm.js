@@ -1,5 +1,7 @@
 const Form = require("../models/Form");
+const User = require("../models/User");
 const Activity = require("../models/Activity");
+const Notification = require("../models/Notification");
 const mongoose = require("mongoose");
 
 const submitForm = async (req, res) => {
@@ -51,8 +53,20 @@ const submitForm = async (req, res) => {
         form: newForm._id,
         name: newForm.formName,
     });
-
     await newActivity.save();
+
+    const everyoneExceptOnlyTravelers = await User.find({
+        $or: [{ role: "Supervisor" }, { role: "TravelerSupervisor" }],
+        email: { $ne: res.email },
+    });
+    let newNotification = await new Notification({
+        notification: `New form "${newForm.formName}" has been submitted by ${res.email}. Waiting for approval.`,
+        formId: newForm._id,
+        formName: newForm.formName,
+        read: [],
+        recipient: everyoneExceptOnlyTravelers,
+    });
+    await newNotification.save();
 
     return {
         statusCode: 200,

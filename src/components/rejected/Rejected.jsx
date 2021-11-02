@@ -1,8 +1,14 @@
 import "./Rejected.sass";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 const Rejected = (props) => {
+    const devprodUrl =
+        process.env.NODE_ENV === "development"
+            ? "http://localhost:8888/.netlify/functions"
+            : "https://awesome-minsky-48a20a.netlify.app/.netlify/functions";
+
     const [forms, setForms] = useState([]);
 
     const getForms = async () => {
@@ -12,22 +18,20 @@ const Rejected = (props) => {
             return console.log("No token.");
         }
 
-        await fetch(
-            "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/getForms",
-            //"http://localhost:8888/.netlify/functions/getForms",
-            {
-                method: "GET",
-                headers: {
-                    Authorization: token,
-                },
-            }
-        )
+        await fetch(`${devprodUrl}/getForms`, {
+            method: "GET",
+            headers: {
+                Authorization: token,
+            },
+        })
             .then((res) => res.json())
             .then((data) => setForms(data));
     };
 
     useEffect(() => {
         getForms();
+
+        // eslint-disable-next-line
     }, []);
 
     return (
@@ -58,10 +62,15 @@ const Rejected = (props) => {
                                             {f.comment && `"${f.comment}"`}
                                         </p>
                                         <p className="rejectedLinkFormsBy">
-                                            {f.approvalBy}
+                                            by {f.approvalBy}
                                         </p>
                                         <p className="rejectedLinkFormsCreator">
                                             {f.email}
+                                        </p>
+                                        <p className="rejectedLinkFormsCreatedat">
+                                            {moment(f.createdAt).format(
+                                                "MMMM Do YYYY, h:mm:ss a"
+                                            )}
                                         </p>
                                     </div>
                                 </Link>

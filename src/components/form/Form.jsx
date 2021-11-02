@@ -5,6 +5,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const Form = (props) => {
+    const devprodUrl =
+        process.env.NODE_ENV === "development"
+            ? "http://localhost:8888/.netlify/functions"
+            : "https://awesome-minsky-48a20a.netlify.app/.netlify/functions";
+
     const [form, setForm] = useState("");
     const [comment, setComment] = useState("");
     const [loading, setLoading] = useState(false);
@@ -101,8 +106,8 @@ const Form = (props) => {
         }
 
         await fetch(
-            `https://awesome-minsky-48a20a.netlify.app/.netlify/functions/getForm?id=${props.match.params.id}`,
-            //`http://localhost:8888/.netlify/functions/getForm?id=${props.match.params.id}`,
+            `${devprodUrl}/getForm?id=${props.match.params.id}`,
+
             {
                 method: "GET",
                 headers: {
@@ -115,45 +120,38 @@ const Form = (props) => {
     };
 
     const viewed = async () => {
-        await fetch(
-            "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/viewForm",
-            //"http://localhost:8888/.netlify/functions/viewForm",
-            {
-                method: "POST",
-                /*headers: {
+        await fetch(`${devprodUrl}/viewForm`, {
+            method: "POST",
+            /*headers: {
                     Authorization: token,
                 },*/
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    _id: form._id,
-                    email: form.email,
-                    user: props.user.user.email,
-                }),
-            }
-        )
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                _id: form._id,
+                email: form.email,
+                user: props.user.email,
+            }),
+        })
             .then((res) => res.json())
             .then((data) => console.log(data));
     };
 
     const getActivity = async () => {
-        await fetch(
-            "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/getActivity",
-            //"http://localhost:8888/.netlify/functions/getActivity",
-            {
-                method: "GET",
-                headers: {
-                    form: form._id,
-                },
-            }
-        )
+        await fetch(`${devprodUrl}/getActivity`, {
+            method: "GET",
+            headers: {
+                form: form._id,
+            },
+        })
             .then((res) => res.json())
             .then((data) => setActivity(data));
     };
 
     useEffect(() => {
         getForm();
+
         // eslint-disable-next-line
     }, []);
 
@@ -199,6 +197,7 @@ const Form = (props) => {
         if (form) {
             getActivity();
         }
+
         // eslint-disable-next-line
     }, [form]);
 
@@ -206,6 +205,7 @@ const Form = (props) => {
         if (props.user && form) {
             viewed();
         }
+
         // eslint-disable-next-line
     }, [props.user, form]);
 
@@ -222,23 +222,19 @@ const Form = (props) => {
         if (confirmed) {
             setLoading(true);
 
-            await fetch(
-                "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/approveReject",
-                //"http://localhost:8888/.netlify/functions/approveReject",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: token,
-                    },
-                    body: JSON.stringify({
-                        comment: comment,
-                        approved: approveOrReject,
-                        formDetails: form,
-                        email: props.user.user.email,
-                    }),
-                }
-            )
+            await fetch(`${devprodUrl}/approveReject`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: token,
+                },
+                body: JSON.stringify({
+                    comment: comment,
+                    approved: approveOrReject,
+                    formDetails: form,
+                    email: props.user.email,
+                }),
+            })
                 .then((res) => res.json())
                 .then((data) => console.log(data));
 
@@ -257,58 +253,51 @@ const Form = (props) => {
         const confirmed = window.confirm("Edit form?");
 
         if (confirmed) {
-            await fetch(
-                "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/editForm",
-                //"http://localhost:8888/.netlify/functions/editForm",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        id: form._id,
-                        formNameLastDigit: form.formName
-                            .split("-")
-                            .pop()
-                            .trim(),
-                        fullName: fullName,
-                        email: props.user && props.user.user.email,
-                        employeeId: employeeId,
-                        program: program,
-                        chargeCode: chargeCode,
-                        workStreetAddress: workStreetAddress,
-                        workCity: workCity,
-                        workState: workState,
-                        workZipcode: workZipcode,
-                        travelDaysAway: days
-                            .toLocaleString()
-                            .replaceAll(/[-]/g, ""),
-                        travelMethod: travelMethod,
-                        startDate: moment(startDate).format("L").toString(),
-                        endDate: moment(endDate).format("L").toString(),
-                        travelCity: travelCity,
-                        travelState: travelState,
-                        travelCountry: travelCountry,
-                        justification: justification,
-                        travelAdvanceCheckbox: travelAdvanceCheckbox,
-                        travelAdvanceAmount: travelAdvanceAmount,
-                        transportCost: transportCost,
-                        rentalCost: rentalCost,
-                        mileageCost: mileageCost,
-                        lodgingCost: lodgingCost,
-                        mealsCost: mealsCost,
-                        registrationFees: registrationFees,
-                        otherCost: otherCost,
-                        totalCostAmount: totalCostAmount,
-                        regulatoryNctsCode: regulatoryNctsCode,
-                        regulatoryNctsEmail: regulatoryNctsEmail,
-                        regulatoryForeignTravel: regulatoryForeignTravel,
-                        regulatoryCiBrief: regulatoryCiBrief,
-                        regulatoryItEquipment: regulatoryItEquipment,
-                        regulatoryVisa: regulatoryVisa,
-                    }),
-                }
-            )
+            await fetch(`${devprodUrl}/editForm`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id: form._id,
+                    formNameLastDigit: form.formName.split("-").pop().trim(),
+                    fullName: fullName,
+                    email: props.user && props.user.email,
+                    employeeId: employeeId,
+                    program: program,
+                    chargeCode: chargeCode,
+                    workStreetAddress: workStreetAddress,
+                    workCity: workCity,
+                    workState: workState,
+                    workZipcode: workZipcode,
+                    travelDaysAway: days
+                        .toLocaleString()
+                        .replaceAll(/[-]/g, ""),
+                    travelMethod: travelMethod,
+                    startDate: moment(startDate).format("L").toString(),
+                    endDate: moment(endDate).format("L").toString(),
+                    travelCity: travelCity,
+                    travelState: travelState,
+                    travelCountry: travelCountry,
+                    justification: justification,
+                    travelAdvanceCheckbox: travelAdvanceCheckbox,
+                    travelAdvanceAmount: travelAdvanceAmount,
+                    transportCost: transportCost,
+                    rentalCost: rentalCost,
+                    mileageCost: mileageCost,
+                    lodgingCost: lodgingCost,
+                    mealsCost: mealsCost,
+                    registrationFees: registrationFees,
+                    otherCost: otherCost,
+                    totalCostAmount: totalCostAmount,
+                    regulatoryNctsCode: regulatoryNctsCode,
+                    regulatoryNctsEmail: regulatoryNctsEmail,
+                    regulatoryForeignTravel: regulatoryForeignTravel,
+                    regulatoryCiBrief: regulatoryCiBrief,
+                    regulatoryItEquipment: regulatoryItEquipment,
+                    regulatoryVisa: regulatoryVisa,
+                }),
+            })
                 .then((res) => res.json())
                 .then((data) => console.log(data));
 
@@ -325,21 +314,17 @@ const Form = (props) => {
         const confirmed = window.confirm("Edit form?");
 
         if (confirmed) {
-            await fetch(
-                "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/comment",
-                //"http://localhost:8888/.netlify/functions/comment",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        id: form._id,
-                        email: props.user && props.user.user.email,
-                        comment: comment,
-                    }),
-                }
-            )
+            await fetch(`${devprodUrl}/comment`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id: form._id,
+                    email: props.user && props.user.email,
+                    comment: comment,
+                }),
+            })
                 .then((res) => res.json())
                 .then((data) => console.log(data));
 
@@ -360,6 +345,35 @@ const Form = (props) => {
                                 style={{ width: step }}
                                 className="formStepCompleted"
                             ></div>
+                        </div>
+                        <div className="formStepCounter">
+                            <p>{step === "20%" && "Step 1 of 5"}</p>
+                            <p>{step === "40%" && "Step 2 of 5"}</p>
+                            <p>
+                                {step === "60%" &&
+                                    regulatoryForeignTravel === "Foreign" &&
+                                    "Step 3 of 5"}
+                            </p>
+                            <p>
+                                {step === "60%" &&
+                                    regulatoryForeignTravel !== "Foreign" &&
+                                    "Step 3 of 4"}
+                            </p>
+                            <p>
+                                {step === "80%" &&
+                                    regulatoryForeignTravel === "Foreign" &&
+                                    "Step 4 of 5"}
+                            </p>
+                            <p>
+                                {step === "100%" &&
+                                    regulatoryForeignTravel === "Foreign" &&
+                                    "Step 5 of 5"}
+                            </p>
+                            <p>
+                                {step === "100%" &&
+                                    regulatoryForeignTravel !== "Foreign" &&
+                                    "Step 4 of 4"}
+                            </p>
                         </div>
                         {showSection === "general" && (
                             <div className="formItem">
@@ -383,7 +397,7 @@ const Form = (props) => {
                                     Email
                                 </label>
                                 <p className="formInput">
-                                    {props.user && props.user.user.email}
+                                    {props.user && props.user.email}
                                 </p>
                                 <label
                                     className="formLabel"
@@ -1234,368 +1248,401 @@ const Form = (props) => {
     return (
         <div className="submittedformContainer">
             <div className="submittedform">
-                <div className="submittedformActivity">
-                    <h2 className="submittedformActivityTitle">Activity</h2>
-                    {activity &&
-                        activity.activity
-                            .map((a, key) => {
-                                return (
-                                    <div
-                                        className="submittedformActivityList"
-                                        key={key}
-                                    >
-                                        {a.signedBy && (
-                                            <>
-                                                <p className="submittedformActivityText">
-                                                    Signed by:
-                                                    <br />
-                                                    {a.signedBy}
-                                                </p>
-                                                {a.approved === "Approved" && (
-                                                    <p className="submittedformActivityApproved">
-                                                        Approved
+                <div>
+                    <div className="submittedformActivity">
+                        <h2 className="submittedformActivityTitle">Activity</h2>
+                        {activity &&
+                            activity.activity
+                                .map((a, key) => {
+                                    return (
+                                        <div
+                                            className="submittedformActivityList"
+                                            key={key}
+                                        >
+                                            {a.signedBy && (
+                                                <>
+                                                    <p className="submittedformActivityText">
+                                                        Signed by:
+                                                        <br />
+                                                        {a.signedBy}
                                                     </p>
-                                                )}
-                                                {a.approved === "Rejected" && (
-                                                    <p className="submittedformActivityRejected">
-                                                        Rejected
+                                                    {a.approved ===
+                                                        "Approved" && (
+                                                        <p className="submittedformActivityApproved">
+                                                            Approved
+                                                        </p>
+                                                    )}
+                                                    {a.approved ===
+                                                        "Rejected" && (
+                                                        <p className="submittedformActivityRejected">
+                                                            Rejected
+                                                        </p>
+                                                    )}
+                                                    <p className="submittedformActivityComment">
+                                                        {a.comment}
                                                     </p>
-                                                )}
-                                                <p className="submittedformActivityComment">
-                                                    {a.comment}
-                                                </p>
-                                            </>
-                                        )}
-                                        {a.viewedBy && (
-                                            <p className="submittedformActivityText">
-                                                Viewed by:
-                                                <br />
-                                                {a.viewedBy}
-                                            </p>
-                                        )}
-                                        {a.editedBy && (
-                                            <p className="submittedformActivityText">
-                                                Edited by:
-                                                <br />
-                                                {a.editedBy}
-                                            </p>
-                                        )}
-                                        {a.commentBy && (
-                                            <>
-                                                <p className="submittedformActivityText">
-                                                    Comment by:
-                                                    <br />
-                                                    {a.commentBy}
-                                                </p>
-                                                <p className="submittedformActivityComment">
-                                                    {a.comment}
-                                                </p>
-                                            </>
-                                        )}
-                                        <p className="submittedformActivityText">
-                                            {moment(a.date).format(
-                                                "MMMM Do YYYY, h:mm:ss a"
+                                                </>
                                             )}
-                                        </p>
-                                    </div>
-                                );
-                            })
-                            .reverse()}
-                    <div className="submittedformActivityList">
-                        <p className="submittedformActivityText">
-                            Created by:
-                            <br />
-                            {activity.createdBy}
-                        </p>
-                        <p className="submittedformActivityText">
-                            Time:{" "}
-                            {moment(activity.createdAt).format(
-                                "MMMM Do YYYY, h:mm:ss a"
-                            )}
-                        </p>
-                    </div>
-                </div>
-                {props.user &&
-                props.user.user.email === form.email &&
-                form.approved !== "Approved" ? (
-                    <button
-                        className="submittedformEditButton"
-                        onClick={() => setEditForm(true)}
-                    >
-                        Edit Form
-                    </button>
-                ) : null}
-                <div className="submittedformItems">
-                    <h2 className="submittedformItemsSubtitle">
-                        General Information
-                    </h2>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">Form Name:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.formName}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">Full Name:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.fullName}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">Email:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.email}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">
-                            Employee ID:
-                        </p>
-                        <p className="submittedformDetailsInput">
-                            {form.employeeId}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">Program:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.program}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">
-                            Charge Code:
-                        </p>
-                        <p className="submittedformDetailsInput">
-                            {form.chargeCode}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">
-                            Street Address:
-                        </p>
-                        <p className="submittedformDetailsInput">
-                            {form.workStreetAddress}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">City:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.workCity}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">State:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.workState}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">Zip:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.workZipcode}
-                        </p>
-                    </div>
-                    <h2 className="submittedformItemsSubtitle">
-                        NASA Conference Travel System
-                    </h2>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">NCTS Code:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.regulatoryNctsCode}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">NCTS Email:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.regulatoryNctsEmail}
-                        </p>
-                    </div>
-                    <h2 className="submittedformItemsSubtitle">
-                        Travel Information
-                    </h2>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">
-                            Travel Type:
-                        </p>
-                        <p className="submittedformDetailsInput">
-                            {form.regulatoryForeignTravel}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">
-                            Travel Method:
-                        </p>
-                        <p className="submittedformDetailsInput">
-                            {form.travelMethod}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">Start Date:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.startDate}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">End Date:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.endDate}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">Days Away:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.travelDaysAway}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">City:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.travelCity}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">State:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.travelState}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">Country:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.travelCountry}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">
-                            Justification:
-                        </p>
-                        <p className="submittedformDetailsInput">
-                            {form.justification}
-                        </p>
-                    </div>
-                    <h2 className="submittedformItemsSubtitle">
-                        Estimated Cost
-                    </h2>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">
-                            Estimated Cost:
-                        </p>
-                        <p className="submittedformDetailsInput">
-                            {form.totalCostAmount}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">
-                            Travel Advance:
-                        </p>
-                        <p className="submittedformDetailsInput">
-                            {form.travelAdvanceCheckbox ? "Yes" : "No"}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">Amount:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.travelAdvanceAmount
-                                ? form.travelAdvanceAmount
-                                : "0"}
-                        </p>
-                    </div>
-                    <h2 className="submittedformItemsSubtitle">Regulatory</h2>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">CI Brief:</p>
-                        <p className="submittedformDetailsInput">
-                            {form.regulatoryCiBrief ? "Yes" : "No"}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">
-                            IT Equipment:
-                        </p>
-                        <p className="submittedformDetailsInput">
-                            {form.regulatoryItEquipment ? "Yes" : "No"}
-                        </p>
-                    </div>
-                    <div className="submittedformDetails">
-                        <p className="submittedformDetailsTitle">Visa Status</p>
-                        <p className="submittedformDetailsInput">
-                            {form.regulatoryVisa}
-                        </p>
-                    </div>
-                </div>
-                {props.user &&
-                props.user.user.role !== "Traveler" &&
-                props.user.user.email !== form.email &&
-                form.approved !== "Approved" ? (
-                    <form
-                        className="submittedformForm"
-                        onSubmit={approveReject}
-                        noValidate
-                    >
-                        <label
-                            className="submittedformFormLabel"
-                            htmlFor="comment"
-                        >
-                            Comment
-                        </label>
-                        <input
-                            id="comment"
-                            name="comment"
-                            type="text"
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
-                            className="submittedformFormInput"
-                        />
-                        <div className="submittedformFormButtons">
-                            <button
-                                onClick={() => setApproveOrReject("Approved")}
-                                type="submit"
-                                className="submittedformFormButtonsButton"
-                                disabled={loading}
-                            >
-                                {loading ? "Loading..." : "Approve"}
-                            </button>
-                            <button
-                                onClick={() => setApproveOrReject("Rejected")}
-                                type="submit"
-                                className="submittedformFormButtonsButton"
-                                disabled={loading}
-                            >
-                                {loading ? "Loading..." : "Reject"}
-                            </button>
+                                            {a.viewedBy && (
+                                                <p className="submittedformActivityText">
+                                                    Viewed by:
+                                                    <br />
+                                                    {a.viewedBy}
+                                                </p>
+                                            )}
+                                            {a.editedBy && (
+                                                <p className="submittedformActivityText">
+                                                    Edited by:
+                                                    <br />
+                                                    {a.editedBy}
+                                                </p>
+                                            )}
+                                            {a.commentBy && (
+                                                <>
+                                                    <p className="submittedformActivityText">
+                                                        Comment by:
+                                                        <br />
+                                                        {a.commentBy}
+                                                    </p>
+                                                    <p className="submittedformActivityComment">
+                                                        {a.comment}
+                                                    </p>
+                                                </>
+                                            )}
+                                            <p className="submittedformActivityText">
+                                                {moment(a.date).format(
+                                                    "MMMM Do YYYY, h:mm:ss a"
+                                                )}
+                                            </p>
+                                        </div>
+                                    );
+                                })
+                                .reverse()}
+                        <div className="submittedformActivityList">
+                            <p className="submittedformActivityText">
+                                Created by:
+                                <br />
+                                {activity.createdBy}
+                            </p>
+                            <p className="submittedformActivityText">
+                                {moment(activity.createdAt).format(
+                                    "MMMM Do YYYY, h:mm:ss a"
+                                )}
+                            </p>
                         </div>
-                    </form>
-                ) : null}
-                {props.user &&
-                props.user.user.email === form.email &&
-                form.approved === "Rejected" ? (
-                    <form
-                        className="submittedformForm"
-                        onSubmit={submitComment}
-                        noValidate
-                    >
-                        <label
-                            className="submittedformFormLabel"
-                            htmlFor="comment"
-                        >
-                            My comment
-                        </label>
-                        <input
-                            id="comment"
-                            name="comment"
-                            type="text"
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
-                            className="submittedformFormInput"
-                        />
+                    </div>
+                </div>
+                <div>
+                    {props.user &&
+                    props.user.email === form.email &&
+                    form.approved !== "Approved" ? (
                         <button
-                            type="submit"
-                            className="submittedformFormButton"
-                            disabled={loading}
+                            className="submittedformEditButton"
+                            onClick={() => setEditForm(true)}
                         >
-                            {loading ? "Loading..." : "Submit Comment"}
+                            Edit Form
                         </button>
-                    </form>
-                ) : null}
+                    ) : null}
+                    <div className="submittedformItems">
+                        <h2 className="submittedformItemsSubtitle">
+                            General Information
+                        </h2>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                Form Name:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.formName}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                Full Name:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.fullName}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">Email:</p>
+                            <p className="submittedformDetailsInput">
+                                {form.email}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                Employee ID:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.employeeId}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                Program:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.program}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                Charge Code:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.chargeCode}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                Street Address:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.workStreetAddress}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">City:</p>
+                            <p className="submittedformDetailsInput">
+                                {form.workCity}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">State:</p>
+                            <p className="submittedformDetailsInput">
+                                {form.workState}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">Zip:</p>
+                            <p className="submittedformDetailsInput">
+                                {form.workZipcode}
+                            </p>
+                        </div>
+                        <h2 className="submittedformItemsSubtitle">
+                            NASA Conference Travel System
+                        </h2>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                NCTS Code:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.regulatoryNctsCode}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                NCTS Email:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.regulatoryNctsEmail}
+                            </p>
+                        </div>
+                        <h2 className="submittedformItemsSubtitle">
+                            Travel Information
+                        </h2>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                Travel Type:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.regulatoryForeignTravel}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                Travel Method:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.travelMethod}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                Start Date:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.startDate}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                End Date:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.endDate}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                Days Away:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.travelDaysAway}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">City:</p>
+                            <p className="submittedformDetailsInput">
+                                {form.travelCity}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">State:</p>
+                            <p className="submittedformDetailsInput">
+                                {form.travelState}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                Country:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.travelCountry}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                Justification:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.justification}
+                            </p>
+                        </div>
+                        <h2 className="submittedformItemsSubtitle">
+                            Estimated Cost
+                        </h2>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                Estimated Cost:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.totalCostAmount}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                Travel Advance:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.travelAdvanceCheckbox ? "Yes" : "No"}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">Amount:</p>
+                            <p className="submittedformDetailsInput">
+                                {form.travelAdvanceAmount
+                                    ? form.travelAdvanceAmount
+                                    : "0"}
+                            </p>
+                        </div>
+                        <h2 className="submittedformItemsSubtitle">
+                            Regulatory
+                        </h2>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                CI Brief:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.regulatoryCiBrief ? "Yes" : "No"}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                IT Equipment:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.regulatoryItEquipment ? "Yes" : "No"}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
+                                Visa Status
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.regulatoryVisa}
+                            </p>
+                        </div>
+                    </div>
+                    {props.user &&
+                    props.user.role !== "Traveler" &&
+                    props.user.email !== form.email &&
+                    form.approved !== "Approved" ? (
+                        <form
+                            className="submittedformForm"
+                            onSubmit={approveReject}
+                            noValidate
+                        >
+                            <label
+                                className="submittedformFormLabel"
+                                htmlFor="comment"
+                            >
+                                Comment
+                            </label>
+                            <input
+                                id="comment"
+                                name="comment"
+                                type="text"
+                                value={comment}
+                                onChange={(e) => setComment(e.target.value)}
+                                className="submittedformFormInput"
+                            />
+                            <div className="submittedformFormButtons">
+                                <button
+                                    onClick={() =>
+                                        setApproveOrReject("Approved")
+                                    }
+                                    type="submit"
+                                    className="submittedformFormButtonsButton"
+                                    disabled={loading}
+                                >
+                                    {loading ? "Loading..." : "Approve"}
+                                </button>
+                                <button
+                                    onClick={() =>
+                                        setApproveOrReject("Rejected")
+                                    }
+                                    type="submit"
+                                    className="submittedformFormButtonsButton"
+                                    disabled={loading}
+                                >
+                                    {loading ? "Loading..." : "Reject"}
+                                </button>
+                            </div>
+                        </form>
+                    ) : null}
+                    {props.user &&
+                    props.user.email === form.email &&
+                    form.approved === "Rejected" ? (
+                        <form
+                            className="submittedformForm"
+                            onSubmit={submitComment}
+                            noValidate
+                        >
+                            <label
+                                className="submittedformFormLabel"
+                                htmlFor="comment"
+                            >
+                                My comment
+                            </label>
+                            <input
+                                id="comment"
+                                name="comment"
+                                type="text"
+                                value={comment}
+                                onChange={(e) => setComment(e.target.value)}
+                                className="submittedformFormInput"
+                            />
+                            <button
+                                type="submit"
+                                className="submittedformFormButton"
+                                disabled={loading}
+                            >
+                                {loading ? "Loading..." : "Submit Comment"}
+                            </button>
+                        </form>
+                    ) : null}
+                </div>
             </div>
         </div>
     );

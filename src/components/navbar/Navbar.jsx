@@ -11,22 +11,32 @@ const Navbar = (props) => {
 
     const token = localStorage.getItem("token");
 
+    const userEmail = props.user && props.user.email;
+
+    const unreadNotifications = props.notifications.map((r) =>
+        r.read.includes(userEmail)
+    );
+
     if (token && window.innerWidth >= 1100) {
         return (
             <div className="navbarContainer">
                 <div className="navbar">
-                    <Link to="/profile">
+                    <Link to="/profile" style={{ textDecoration: "none" }}>
                         <div className="navbarProfileIcon">
                             {props.user &&
-                                props.user.user.email
-                                    .substring(0, 2)
-                                    .toUpperCase()}
+                                props.user.email.substring(0, 2).toUpperCase()}
                         </div>
                     </Link>
-                    <Link to="/notification">
+                    <Link
+                        to="/notification"
+                        className="navbarBellIconBadgeContainer"
+                    >
                         <img className="navbarBellIcon" src={bell} alt="bell" />
+                        {unreadNotifications.includes(false) && (
+                            <span className="navbarBellIconBadge"></span>
+                        )}
                     </Link>
-                    {props.user && props.user.user.role !== "Supervisor" && (
+                    {props.user && props.user.role !== "Supervisor" && (
                         <Link
                             to="/submit"
                             className="navbarLink"
@@ -97,16 +107,20 @@ const Navbar = (props) => {
         return (
             <div className="navbarContainer">
                 <div className="navbar">
-                    <Link to="/profile">
+                    <Link to="/profile" style={{ textDecoration: "none" }}>
                         <div className="navbarProfileIcon">
                             {props.user &&
-                                props.user.user.email
-                                    .substring(0, 2)
-                                    .toUpperCase()}
+                                props.user.email.substring(0, 2).toUpperCase()}
                         </div>
                     </Link>
-                    <Link to="/notification">
+                    <Link
+                        to="/notification"
+                        className="navbarBellIconBadgeContainer"
+                    >
                         <img className="navbarBellIcon" src={bell} alt="bell" />
+                        {unreadNotifications.includes(false) && (
+                            <span className="navbarBellIconBadge"></span>
+                        )}
                     </Link>
                     <img
                         className="navbarHamburgerIcon"
@@ -116,24 +130,23 @@ const Navbar = (props) => {
                     />
                     {hamburgerModal && (
                         <div className="navbarHamburgerContainer">
-                            {props.user &&
-                                props.user.user.role !== "Supervisor" && (
-                                    <Link
-                                        to="/submit"
-                                        className="navbarLink"
-                                        onClick={() => setHamburgerModal(false)}
+                            {props.user && props.user.role !== "Supervisor" && (
+                                <Link
+                                    to="/submit"
+                                    className="navbarLink"
+                                    onClick={() => setHamburgerModal(false)}
+                                >
+                                    <p
+                                        className={
+                                            location.pathname === "/submit"
+                                                ? "navbarLinkItemActive"
+                                                : "navbarLinkItemInactive"
+                                        }
                                     >
-                                        <p
-                                            className={
-                                                location.pathname === "/submit"
-                                                    ? "navbarLinkItemActive"
-                                                    : "navbarLinkItemInactive"
-                                            }
-                                        >
-                                            Submit
-                                        </p>
-                                    </Link>
-                                )}
+                                        Submit
+                                    </p>
+                                </Link>
+                            )}
                             <Link
                                 to="/pending"
                                 className="navbarLink"

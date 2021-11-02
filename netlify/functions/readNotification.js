@@ -1,8 +1,8 @@
+const Notification = require("../models/Notification");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
 
-const getUser = async (req, res, next) => {
+const readNotification = async (req, res, next) => {
     const token = req.auth.authorization;
 
     if (!token) {
@@ -21,11 +21,23 @@ const getUser = async (req, res, next) => {
         };
     }
 
-    const user = await User.findOne({ email: verified.user.email });
+    /*const alreadyRead = await Notification.findOne({ formId: req.body.formId });
+
+    if (alreadyRead.read.includes(verified.user)) {
+        return {
+            statusCode: 200,
+            body: JSON.stringify("Already read this notification."),
+        };
+    }*/
+
+    await Notification.updateOne(
+        { formId: req.body.formId },
+        { read: req.body.user }
+    );
 
     return {
         statusCode: 200,
-        body: JSON.stringify(user),
+        body: JSON.stringify("Notification read."),
     };
 };
 
@@ -37,5 +49,9 @@ module.exports.handler = async (event, context) => {
         useUnifiedTopology: true,
     });
 
-    return getUser({ db: db, auth: event.headers });
+    return readNotification({
+        db: db,
+        auth: event.headers,
+        body: JSON.parse(event.body),
+    });
 };

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-const getUser = async (req, res, next) => {
+const supervisorRole = async (req, res, next) => {
     const token = req.auth.authorization;
 
     if (!token) {
@@ -21,11 +21,14 @@ const getUser = async (req, res, next) => {
         };
     }
 
-    const user = await User.findOne({ email: verified.user.email });
+    await User.updateOne(
+        { email: verified.user.email },
+        { supervisorRole: req.body.supervisorRole }
+    );
 
     return {
         statusCode: 200,
-        body: JSON.stringify(user),
+        body: JSON.stringify(`You picked ${req.body.supervisorRole}.`),
     };
 };
 
@@ -37,5 +40,9 @@ module.exports.handler = async (event, context) => {
         useUnifiedTopology: true,
     });
 
-    return getUser({ db: db, auth: event.headers });
+    return supervisorRole({
+        db: db,
+        auth: event.headers,
+        body: JSON.parse(event.body),
+    });
 };

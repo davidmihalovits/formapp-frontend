@@ -10,6 +10,9 @@ const UserSchema = mongoose.Schema(
         role: {
             type: String,
         },
+        supervisorRole: {
+            type: String,
+        },
         loginCode: {
             type: String,
         },

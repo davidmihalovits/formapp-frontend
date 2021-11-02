@@ -2,6 +2,11 @@ import "./Index.sass";
 import { useState } from "react";
 
 const Index = () => {
+    const devprodUrl =
+        process.env.NODE_ENV === "development"
+            ? "http://localhost:8888/.netlify/functions"
+            : "https://awesome-minsky-48a20a.netlify.app/.netlify/functions";
+
     const [email, setEmail] = useState("");
     const [travelerRole, setTravelerRole] = useState("");
     const [supervisorRole, setSupervisorRole] = useState("");
@@ -12,20 +17,16 @@ const Index = () => {
     const register = async (e) => {
         e.preventDefault();
 
-        await fetch(
-            "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/register",
-            //"http://localhost:8888/.netlify/functions/register",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email: email,
-                    role: `${travelerRole}${supervisorRole}`,
-                }),
-            }
-        )
+        await fetch(`${devprodUrl}/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: email,
+                role: `${travelerRole}${supervisorRole}`,
+            }),
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data === "Choose a role.") {
@@ -40,19 +41,15 @@ const Index = () => {
     const loginRequest = async (e) => {
         e.preventDefault();
 
-        await fetch(
-            "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/loginRequest",
-            //"http://localhost:8888/.netlify/functions/loginRequest",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    credential: credential,
-                }),
-            }
-        )
+        await fetch(`${devprodUrl}/loginRequest`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                credential: credential,
+            }),
+        })
             .then((res) => res.json())
             .then((data) => alert(data))
             .then(() => setLoginCodeSent(true));
@@ -61,19 +58,15 @@ const Index = () => {
     const login = async (e) => {
         e.preventDefault();
 
-        await fetch(
-            "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/login",
-            //"http://localhost:8888/.netlify/functions/login",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    code: code,
-                }),
-            }
-        )
+        await fetch(`${devprodUrl}/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                code: code,
+            }),
+        })
             .then((res) => res.json())
             .then((data) => {
                 if (data === "Wrong login code.") return alert(data);

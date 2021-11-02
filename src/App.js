@@ -13,7 +13,13 @@ import Rejected from "./components/rejected/Rejected";
 import Form from "./components/form/Form";
 
 const App = () => {
+    const devprodUrl =
+        process.env.NODE_ENV === "development"
+            ? "http://localhost:8888/.netlify/functions"
+            : "https://awesome-minsky-48a20a.netlify.app/.netlify/functions";
+
     const [user, setUser] = useState(null);
+    const [notifications, setNotifications] = useState([]);
 
     const getUser = async () => {
         const token = localStorage.getItem("token");
@@ -22,16 +28,12 @@ const App = () => {
             return console.log("No token.");
         }
 
-        await fetch(
-            "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/getUser",
-            //"http://localhost:8888/.netlify/functions/getUser",
-            {
-                method: "GET",
-                headers: {
-                    Authorization: token,
-                },
-            }
-        )
+        await fetch(`${devprodUrl}/getUser`, {
+            method: "GET",
+            headers: {
+                Authorization: token,
+            },
+        })
             .then((res) => res.json())
             .then((data) => setUser(data));
     };
@@ -54,16 +56,41 @@ const App = () => {
 
         var token = localStorage.getItem("token");
         if (token) logoutTokenExpired();
+
+        // eslint-disable-next-line
+    }, []);
+
+    const getNotifications = async () => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            return console.log("No token.");
+        }
+
+        await fetch(`${devprodUrl}/getNotifications`, {
+            method: "GET",
+            headers: {
+                Authorization: token,
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => setNotifications(data));
+    };
+
+    useEffect(() => {
+        getNotifications();
+
+        // eslint-disable-next-line
     }, []);
 
     return (
         <BrowserRouter>
             <>
-                <Navbar user={user} />
+                <Navbar user={user} notifications={notifications} />
                 <Switch>
                     <Route exact path="/">
                         {localStorage.getItem("token") ? (
-                            <Redirect to="/pending" />
+                            <Redirect to="/profile" />
                         ) : (
                             <Index />
                         )}
@@ -79,7 +106,11 @@ const App = () => {
                         {!localStorage.getItem("token") ? (
                             <Redirect to="/" />
                         ) : (
-                            <Notification />
+                            <Notification
+                                user={user}
+                                notifications={notifications}
+                                getNotifications={getNotifications}
+                            />
                         )}
                     </Route>
                     <Route exact path="/submit">

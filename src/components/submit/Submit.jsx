@@ -5,6 +5,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const Submit = (props) => {
+    const devprodUrl =
+        process.env.NODE_ENV === "development"
+            ? "http://localhost:8888/.netlify/functions"
+            : "https://awesome-minsky-48a20a.netlify.app/.netlify/functions";
+
     const today = new Date();
 
     const [loading, setLoading] = useState(false);
@@ -80,53 +85,49 @@ const Submit = (props) => {
         if (confirmed) {
             setLoading(true);
 
-            await fetch(
-                "https://awesome-minsky-48a20a.netlify.app/.netlify/functions/submitForm",
-                //"http://localhost:8888/.netlify/functions/submitForm",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        fullName: fullName,
-                        email: props.user && props.user.user.email,
-                        employeeId: employeeId,
-                        program: program,
-                        chargeCode: chargeCode,
-                        workStreetAddress: workStreetAddress,
-                        workCity: workCity,
-                        workState: workState,
-                        workZipcode: workZipcode,
-                        travelDaysAway: days
-                            .toLocaleString()
-                            .replaceAll(/[-]/g, ""),
-                        travelMethod: travelMethod,
-                        startDate: moment(startDate).format("L").toString(),
-                        endDate: moment(endDate).format("L").toString(),
-                        travelCity: travelCity,
-                        travelState: travelState,
-                        travelCountry: travelCountry,
-                        justification: justification,
-                        travelAdvanceCheckbox: travelAdvanceCheckbox,
-                        travelAdvanceAmount: travelAdvanceAmount,
-                        transportCost: transportCost,
-                        rentalCost: rentalCost,
-                        mileageCost: mileageCost,
-                        lodgingCost: lodgingCost,
-                        mealsCost: mealsCost,
-                        registrationFees: registrationFees,
-                        otherCost: otherCost,
-                        totalCostAmount: totalCostAmount,
-                        regulatoryNctsCode: regulatoryNctsCode,
-                        regulatoryNctsEmail: regulatoryNctsEmail,
-                        regulatoryForeignTravel: regulatoryForeignTravel,
-                        regulatoryCiBrief: regulatoryCiBrief,
-                        regulatoryItEquipment: regulatoryItEquipment,
-                        regulatoryVisa: regulatoryVisa,
-                    }),
-                }
-            )
+            await fetch(`${devprodUrl}/submitForm`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    fullName: fullName,
+                    email: props.user && props.user.email,
+                    employeeId: employeeId,
+                    program: program,
+                    chargeCode: chargeCode,
+                    workStreetAddress: workStreetAddress,
+                    workCity: workCity,
+                    workState: workState,
+                    workZipcode: workZipcode,
+                    travelDaysAway: days
+                        .toLocaleString()
+                        .replaceAll(/[-]/g, ""),
+                    travelMethod: travelMethod,
+                    startDate: moment(startDate).format("L").toString(),
+                    endDate: moment(endDate).format("L").toString(),
+                    travelCity: travelCity,
+                    travelState: travelState,
+                    travelCountry: travelCountry,
+                    justification: justification,
+                    travelAdvanceCheckbox: travelAdvanceCheckbox,
+                    travelAdvanceAmount: travelAdvanceAmount,
+                    transportCost: transportCost,
+                    rentalCost: rentalCost,
+                    mileageCost: mileageCost,
+                    lodgingCost: lodgingCost,
+                    mealsCost: mealsCost,
+                    registrationFees: registrationFees,
+                    otherCost: otherCost,
+                    totalCostAmount: totalCostAmount,
+                    regulatoryNctsCode: regulatoryNctsCode,
+                    regulatoryNctsEmail: regulatoryNctsEmail,
+                    regulatoryForeignTravel: regulatoryForeignTravel,
+                    regulatoryCiBrief: regulatoryCiBrief,
+                    regulatoryItEquipment: regulatoryItEquipment,
+                    regulatoryVisa: regulatoryVisa,
+                }),
+            })
                 .then((res) => res.json())
                 .then((data) => console.log(data));
 
@@ -158,7 +159,7 @@ const Submit = (props) => {
         window.scrollTo(0, 0);
     }, [showSection]);
 
-    if (props.user && props.user.user.role === "Supervisor") {
+    if (props.user && props.user.role === "Supervisor") {
         return (
             <div
                 style={{
@@ -168,7 +169,7 @@ const Submit = (props) => {
                     height: "100vh",
                 }}
             >
-                <p>You are a {props.user.user.role}. You can't submit forms.</p>
+                <p>You are a {props.user.role}. You can't submit forms.</p>
             </div>
         );
     }
@@ -182,6 +183,35 @@ const Submit = (props) => {
                             style={{ width: step }}
                             className="formStepCompleted"
                         ></div>
+                    </div>
+                    <div className="formStepCounter">
+                        <p>{step === "20%" && "Step 1 of 5"}</p>
+                        <p>{step === "40%" && "Step 2 of 5"}</p>
+                        <p>
+                            {step === "60%" &&
+                                regulatoryForeignTravel === "Foreign" &&
+                                "Step 3 of 5"}
+                        </p>
+                        <p>
+                            {step === "60%" &&
+                                regulatoryForeignTravel !== "Foreign" &&
+                                "Step 3 of 4"}
+                        </p>
+                        <p>
+                            {step === "80%" &&
+                                regulatoryForeignTravel === "Foreign" &&
+                                "Step 4 of 5"}
+                        </p>
+                        <p>
+                            {step === "100%" &&
+                                regulatoryForeignTravel === "Foreign" &&
+                                "Step 5 of 5"}
+                        </p>
+                        <p>
+                            {step === "100%" &&
+                                regulatoryForeignTravel !== "Foreign" &&
+                                "Step 4 of 4"}
+                        </p>
                     </div>
                     {showSection === "general" && (
                         <div className="formItem">
@@ -203,7 +233,7 @@ const Submit = (props) => {
                                 Email
                             </label>
                             <p className="formInput">
-                                {props.user && props.user.user.email}
+                                {props.user && props.user.email}
                             </p>
                             <label className="formLabel" htmlFor="employeeId">
                                 Employee ID
