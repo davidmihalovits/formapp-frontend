@@ -34,8 +34,10 @@ const Profile = (props) => {
                     <span style={{ fontWeight: "700" }}>
                         {props.user && props.user.email}
                     </span>
-                    {props.user && props.user.supervisorRole !== "" && (
-                        <span> as {props.user.supervisorRole}</span>
+                    {props.user && props.user.supervisorRole ? (
+                        <span> as Supervisor/{props.user.supervisorRole}</span>
+                    ) : (
+                        <span> as Traveler</span>
                     )}
                     .
                 </p>

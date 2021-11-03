@@ -54,6 +54,7 @@ const Form = (props) => {
     const [travelAdvanceMoreThanTotal, setTravelAdvanceMoreThanTotal] =
         useState(false);
     const [step, setStep] = useState("20%");
+    const [route, setRoute] = useState("");
 
     useEffect(() => {
         const calculateTotalCostAmount = () => {
@@ -333,6 +334,30 @@ const Form = (props) => {
         } else {
             return alert("Cancelled comment.");
         }
+    };
+
+    const routing = async () => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            return console.log("No token.");
+        }
+
+        await fetch(`${devprodUrl}/route`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: token,
+            },
+            body: JSON.stringify({
+                id: form._id,
+                routing: route,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => alert(data));
+
+        return window.location.reload();
     };
 
     if (editForm) {
@@ -1250,6 +1275,18 @@ const Form = (props) => {
             <div className="submittedform">
                 <div>
                     <div className="submittedformActivity">
+                        <h2 className="submittedformActivityTitle">Routing</h2>
+                        {form.approved === "Approved" && (
+                            <p className="submittedformActivityRouting">
+                                Form is already approved.
+                            </p>
+                        )}
+                        {(form.approved === "Rejected" || !form.approved) && (
+                            <p className="submittedformActivityRouting">
+                                Form is waiting for approval from {form.routing}
+                                .
+                            </p>
+                        )}
                         <h2 className="submittedformActivityTitle">Activity</h2>
                         {activity &&
                             activity.activity
@@ -1565,9 +1602,12 @@ const Form = (props) => {
                         </div>
                     </div>
                     {props.user &&
+                    form &&
                     props.user.role !== "Traveler" &&
+                    props.user.supervisorRole !== "TA" &&
                     props.user.email !== form.email &&
-                    form.approved !== "Approved" ? (
+                    form.approved !== "Approved" &&
+                    form.routing.includes(props.user.supervisorRole) ? (
                         <form
                             className="submittedformForm"
                             onSubmit={approveReject}
@@ -1642,6 +1682,119 @@ const Form = (props) => {
                             </button>
                         </form>
                     ) : null}
+                    {props.user &&
+                        props.user.supervisorRole === "TA" &&
+                        form.approved !== "Approved" &&
+                        form.approved !== "Rejected" &&
+                        props.user.email !== form.email && (
+                            <div className="submittedformRouting">
+                                <h2 className="submittedformRoutingTitle">
+                                    Routing
+                                </h2>
+                                <div className="submittedformRoutingCheckboxText">
+                                    <span
+                                        className={
+                                            route.includes("TM")
+                                                ? "submittedformRoutingCheckboxChecked"
+                                                : "submittedformRoutingCheckboxUnchecked"
+                                        }
+                                        onClick={() => {
+                                            if (route.includes("TM")) {
+                                                return setRoute(
+                                                    route.replace("TM ", "")
+                                                );
+                                            }
+                                            setRoute(route.concat("TM "));
+                                        }}
+                                    >
+                                        {route.includes("TM") && (
+                                            <span className="submittedformRoutingCheckboxCheckedCheckmark"></span>
+                                        )}
+                                    </span>
+                                    <p className="submittedformRoutingText">
+                                        TM
+                                    </p>
+                                </div>
+                                <div className="submittedformRoutingCheckboxText">
+                                    <span
+                                        className={
+                                            route.includes("PL")
+                                                ? "submittedformRoutingCheckboxChecked"
+                                                : "submittedformRoutingCheckboxUnchecked"
+                                        }
+                                        onClick={() => {
+                                            if (route.includes("PL ")) {
+                                                return setRoute(
+                                                    route.replace("PL ", "")
+                                                );
+                                            }
+                                            setRoute(route.concat("PL "));
+                                        }}
+                                    >
+                                        {route.includes("PL") && (
+                                            <span className="submittedformRoutingCheckboxCheckedCheckmark"></span>
+                                        )}
+                                    </span>
+                                    <p className="submittedformRoutingText">
+                                        PL
+                                    </p>
+                                </div>
+                                <div className="submittedformRoutingCheckboxText">
+                                    <span
+                                        className={
+                                            route.includes("PM")
+                                                ? "submittedformRoutingCheckboxChecked"
+                                                : "submittedformRoutingCheckboxUnchecked"
+                                        }
+                                        onClick={() => {
+                                            if (route.includes("PM")) {
+                                                return setRoute(
+                                                    route.replace("PM ", "")
+                                                );
+                                            }
+                                            setRoute(route.concat("PM "));
+                                        }}
+                                    >
+                                        {route.includes("PM") && (
+                                            <span className="submittedformRoutingCheckboxCheckedCheckmark"></span>
+                                        )}
+                                    </span>
+                                    <p className="submittedformRoutingText">
+                                        PM
+                                    </p>
+                                </div>
+                                <div className="submittedformRoutingCheckboxText">
+                                    <span
+                                        className={
+                                            route.includes("CO")
+                                                ? "submittedformRoutingCheckboxChecked"
+                                                : "submittedformRoutingCheckboxUnchecked"
+                                        }
+                                        onClick={() => {
+                                            if (route.includes("CO")) {
+                                                return setRoute(
+                                                    route.replace("CO ", "")
+                                                );
+                                            }
+                                            setRoute(route.concat("CO "));
+                                        }}
+                                    >
+                                        {route.includes("CO") && (
+                                            <span className="submittedformRoutingCheckboxCheckedCheckmark"></span>
+                                        )}
+                                    </span>
+                                    <p className="submittedformRoutingText">
+                                        CO
+                                    </p>
+                                </div>
+                                <button
+                                    className="submittedformRoutingButton"
+                                    onClick={() => routing()}
+                                >
+                                    Route
+                                </button>
+                            </div>
+                        )}
                 </div>
             </div>
         </div>

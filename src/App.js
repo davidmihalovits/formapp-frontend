@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import Navbar from "./components/navbar/Navbar";
 import Profile from "./components/profile/Profile";
+import MyForms from "./components/myForms/MyForms";
 import Notification from "./components/notification/Notification";
 import Submit from "./components/submit/Submit";
 import Index from "./components/index/Index";
@@ -100,6 +101,13 @@ const App = () => {
                             <Redirect to="/" />
                         ) : (
                             <Profile user={user} />
+                        )}
+                    </Route>
+                    <Route exact path="/myforms">
+                        {!localStorage.getItem("token") ? (
+                            <Redirect to="/" />
+                        ) : (
+                            <MyForms user={user} />
                         )}
                     </Route>
                     <Route exact path="/notification">

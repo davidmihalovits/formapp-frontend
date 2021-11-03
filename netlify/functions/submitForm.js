@@ -8,6 +8,7 @@ const submitForm = async (req, res) => {
     const counted = await Form.countDocuments();
 
     let newForm = await new Form({
+        creator: res.creator,
         formName: `${res.program}-${res.fullName.replace(/\s/g, "")}-${
             res.chargeCode
         }-${res.regulatoryNctsCode}-${res.startDate}-${counted + 1}`,
@@ -44,9 +45,13 @@ const submitForm = async (req, res) => {
         regulatoryCiBrief: res.regulatoryCiBrief,
         regulatoryItEquipment: res.regulatoryItEquipment,
         regulatoryVisa: res.regulatoryVisa,
+        routing: "TA",
     });
 
     await newForm.save();
+    await Form.populate(newForm, { path: "creator" }, function (err, book) {
+        console.log("populated new form");
+    });
 
     let newActivity = await new Activity({
         createdBy: res.email,
@@ -60,7 +65,7 @@ const submitForm = async (req, res) => {
         email: { $ne: res.email },
     });
     let newNotification = await new Notification({
-        notification: `New form "${newForm.formName}" has been submitted by ${res.email}. Waiting for approval.`,
+        notification: `New form "${newForm.formName}" has been submitted by ${res.email}.`,
         formId: newForm._id,
         formName: newForm.formName,
         read: [],

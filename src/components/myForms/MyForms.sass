@@ -1,0 +1,70 @@
+@import '../../App'
+
+.myformsContainer
+    margin: 20px 20px 100px 20px
+
+    .myforms
+        .myformsLink
+            text-decoration: none
+            color: black
+            
+            .myformsLinkForms
+                background: #f8f8f8
+                border-radius: 10px
+                margin: 20px auto 0 auto
+                padding: 30px 15px
+                max-width: 320px
+
+                .myformsLinkFormsName
+                    font-size: 18px
+                    font-weight: 500
+
+                .myformsLinkFormsApproved
+                    font-size: 14px
+                    font-weight: 500
+                    color: #28b834
+                    margin-top: 10px
+
+                .myformsLinkFormsRejected
+                    font-size: 14px
+                    font-weight: 500
+                    color: #dd1572
+                    margin-top: 20px
+
+                .myformsLinkFormsComment
+                    font-style: italic
+                    font-size: 14px
+                    font-weight: 500
+                    color: #888888
+
+                .myformsLinkFormsBy
+                    font-size: 12px
+                    font-weight: 500
+                    color: #b8b8b8
+
+                .myformsLinkFormsCreator
+                    text-align: right
+                    font-size: 14px
+                    margin-top: 30px
+
+                .myformsLinkFormsCreatedat
+                    text-align: right
+                    font-size: 14px
+                    color: #b8b8b8
+
+@media only screen and (min-width: 1100px)
+    .myformsContainer
+        margin: 120px 0
+
+        .myforms
+            max-width: 1100px
+            margin: 0 auto
+            display: grid
+            grid-template-columns: 1fr 1fr 1fr
+            gap: 40px
+
+            .myformsLink
+                .myformsLinkForms
+                    max-width: none
+                    width: 100%
+                    margin: 0

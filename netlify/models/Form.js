@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const FormSchema = mongoose.Schema(
     {
+        creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         formName: {
             type: String,
         },
@@ -111,6 +112,9 @@ const FormSchema = mongoose.Schema(
             type: String,
         },
         approvalBy: {
+            type: String,
+        },
+        routing: {
             type: String,
         },
     },

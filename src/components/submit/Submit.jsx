@@ -91,6 +91,7 @@ const Submit = (props) => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
+                    creator: props.user && props.user._id,
                     fullName: fullName,
                     email: props.user && props.user.email,
                     employeeId: employeeId,

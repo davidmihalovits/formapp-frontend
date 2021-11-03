@@ -98,6 +98,21 @@ const Navbar = (props) => {
                             Rejected
                         </p>
                     </Link>
+                    <Link
+                        to="/myforms"
+                        className="navbarLink"
+                        onClick={() => setHamburgerModal(false)}
+                    >
+                        <p
+                            className={
+                                location.pathname === "/myforms"
+                                    ? "navbarLinkItemActive"
+                                    : "navbarLinkItemInactive"
+                            }
+                        >
+                            My Forms
+                        </p>
+                    </Link>
                 </div>
             </div>
         );
@@ -190,6 +205,21 @@ const Navbar = (props) => {
                                     }
                                 >
                                     Rejected
+                                </p>
+                            </Link>
+                            <Link
+                                to="/myforms"
+                                className="navbarLink"
+                                onClick={() => setHamburgerModal(false)}
+                            >
+                                <p
+                                    className={
+                                        location.pathname === "/myforms"
+                                            ? "navbarLinkItemActive"
+                                            : "navbarLinkItemInactive"
+                                    }
+                                >
+                                    My Forms
                                 </p>
                             </Link>
                         </div>

@@ -1,4 +1,5 @@
 const Activity = require("../models/Activity");
+const Notification = require("../models/Notification");
 const mongoose = require("mongoose");
 
 const comment = async (req, res) => {
