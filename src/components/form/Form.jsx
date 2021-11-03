@@ -1683,7 +1683,6 @@ const Form = (props) => {
                         </form>
                     ) : null}
                     {props.user &&
-                        props.user.supervisorRole === "TA" &&
                         form.approved !== "Approved" &&
                         form.approved !== "Rejected" &&
                         props.user.email !== form.email && (
