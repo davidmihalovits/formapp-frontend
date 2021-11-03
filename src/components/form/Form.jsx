@@ -1684,7 +1684,6 @@ const Form = (props) => {
                     ) : null}
                     {props.user &&
                         form.approved !== "Approved" &&
-                        form.approved !== "Rejected" &&
                         props.user.email !== form.email && (
                             <div className="submittedformRouting">
                                 <h2 className="submittedformRoutingTitle">
