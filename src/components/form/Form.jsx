@@ -530,9 +530,24 @@ const Form = (props) => {
                                     <option value="TESS">TESS</option>
                                     <option value="SAMDA">SAMDA</option>
                                     <option value="LITES">LITES</option>
-                                    <option value="SSAIHQ">SSAIHQ</option>
-                                    <option value="TIDES">TIDES</option>
-                                    <option value="GEUSTAR">GEUSTAR</option>
+                                    <option
+                                        value="SSAIHQ"
+                                        onClick={() => setChargeCode("")}
+                                    >
+                                        SSAIHQ
+                                    </option>
+                                    <option
+                                        value="TIDES"
+                                        onClick={() => setChargeCode("")}
+                                    >
+                                        TIDES
+                                    </option>
+                                    <option
+                                        value="GEUSTAR"
+                                        onClick={() => setChargeCode("")}
+                                    >
+                                        GEUSTAR
+                                    </option>
                                 </select>
                                 <label
                                     className="formLabel"
