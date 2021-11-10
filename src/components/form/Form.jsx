@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Papa from "papaparse";
+import chargeCodesCsv from "../../assets/chargecodes.csv";
 
 const Form = (props) => {
     const devprodUrl =
@@ -61,6 +63,22 @@ const Form = (props) => {
     const [step, setStep] = useState("20%");
 
     const [route, setRoute] = useState("");
+
+    const [chargeCodes, setChargeCodes] = useState([]);
+
+    const getChargeCodes = async () => {
+        const response = await fetch(chargeCodesCsv);
+        const reader = response.body.getReader();
+        const result = await reader.read();
+        const decoder = new TextDecoder("utf-8");
+        const csv = decoder.decode(result.value);
+        const results = Papa.parse(csv, { header: true });
+        const data = results.data;
+        setChargeCodes(data);
+    };
+    useEffect(() => {
+        getChargeCodes();
+    }, [editForm]);
 
     useEffect(() => {
         const calculateTotalCostAmount = () => {
@@ -522,29 +540,139 @@ const Form = (props) => {
                                 >
                                     Charge Code
                                 </label>
-                                <select
-                                    id="chargeCode"
-                                    name="chargeCode"
-                                    type="text"
-                                    value={chargeCode}
-                                    onChange={(e) =>
-                                        setChargeCode(e.target.value)
-                                    }
-                                    className="formInput"
-                                    style={{ cursor: "pointer" }}
-                                >
-                                    <option value="ExampleChargeCode">
-                                        ExampleChargeCode
-                                    </option>
-                                </select>
-                                {/*<input
-                                    id="chargeCode"
-                                    name="chargeCode"
-                                    type="text"
-                                    value={chargeCode}
-                                    onChange={(e) => setChargeCode(e.target.value)}
-                                    className="formInput"
-                                />*/}
+                                {(program === "HBG" ||
+                                    program === "STARSS" ||
+                                    program === "ESES" ||
+                                    program === "TESS" ||
+                                    program === "SAMDA" ||
+                                    program === "LITES") && (
+                                    <select
+                                        id="chargeCode"
+                                        name="chargeCode"
+                                        type="text"
+                                        value={chargeCode}
+                                        onChange={(e) =>
+                                            setChargeCode(e.target.value)
+                                        }
+                                        className="formInput"
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        {chargeCodes
+                                            .filter(
+                                                (p) =>
+                                                    p.program === "HBG" &&
+                                                    program === "HBG"
+                                            )
+                                            .map((c, key) => {
+                                                return (
+                                                    <option
+                                                        value={c.chargeCode}
+                                                        key={key}
+                                                    >
+                                                        {c.chargeCode}
+                                                    </option>
+                                                );
+                                            })}
+                                        {chargeCodes
+                                            .filter(
+                                                (p) =>
+                                                    p.program ===
+                                                        "STARSS III" &&
+                                                    program === "STARSS"
+                                            )
+                                            .map((c, key) => {
+                                                return (
+                                                    <option
+                                                        value={c.chargeCode}
+                                                        key={key}
+                                                    >
+                                                        {c.chargeCode}
+                                                    </option>
+                                                );
+                                            })}
+                                        {chargeCodes
+                                            .filter(
+                                                (p) =>
+                                                    p.program === "ESES III" &&
+                                                    program === "ESES"
+                                            )
+                                            .map((c, key) => {
+                                                return (
+                                                    <option
+                                                        value={c.chargeCode}
+                                                        key={key}
+                                                    >
+                                                        {c.chargeCode}
+                                                    </option>
+                                                );
+                                            })}
+                                        {chargeCodes
+                                            .filter(
+                                                (p) =>
+                                                    p.program ===
+                                                        "TESS Bridge" &&
+                                                    program === "TESS"
+                                            )
+                                            .map((c, key) => {
+                                                return (
+                                                    <option
+                                                        value={c.chargeCode}
+                                                        key={key}
+                                                    >
+                                                        {c.chargeCode}
+                                                    </option>
+                                                );
+                                            })}
+                                        {chargeCodes
+                                            .filter(
+                                                (p) =>
+                                                    p.program === "SAMDA" &&
+                                                    program === "SAMDA"
+                                            )
+                                            .map((c, key) => {
+                                                return (
+                                                    <option
+                                                        value={c.chargeCode}
+                                                        key={key}
+                                                    >
+                                                        {c.chargeCode}
+                                                    </option>
+                                                );
+                                            })}
+                                        {chargeCodes
+                                            .filter(
+                                                (p) =>
+                                                    p.program ===
+                                                        "LITES - II" &&
+                                                    program === "LITES"
+                                            )
+                                            .map((c, key) => {
+                                                return (
+                                                    <option
+                                                        value={c.chargeCode}
+                                                        key={key}
+                                                    >
+                                                        {c.chargeCode}
+                                                    </option>
+                                                );
+                                            })}
+                                    </select>
+                                )}
+                                {(program === "SSAIHQ" ||
+                                    program === "TIDES" ||
+                                    program === "GEUSTAR") && (
+                                    <input
+                                        id="chargeCode"
+                                        name="chargeCode"
+                                        type="text"
+                                        value={chargeCode}
+                                        onChange={(e) =>
+                                            setChargeCode(e.target.value)
+                                        }
+                                        className="formInput"
+                                        placeholder="Type your charge code"
+                                    />
+                                )}
                                 <label className="formLabel" htmlFor="task">
                                     Task
                                 </label>
