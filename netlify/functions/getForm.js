@@ -1,5 +1,6 @@
-const Form = require("../models/Form");
 const mongoose = require("mongoose");
+const User = require("../models/User");
+const Form = require("../models/Form");
 const jwt = require("jsonwebtoken");
 
 const getForm = async (req, res, next) => {
@@ -21,7 +22,10 @@ const getForm = async (req, res, next) => {
         };
     }
 
-    const form = await Form.findOne({ _id: req.id });
+    const form = await Form.findOne({ _id: req.id }).populate({
+        path: "creator approvalBy activity.viewedBy activity.signedBy activity.editedBy activity.commentBy",
+        model: "users",
+    });
 
     return {
         statusCode: 200,

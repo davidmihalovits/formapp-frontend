@@ -62,7 +62,8 @@ const Rejected = (props) => {
                                             {f.comment && `"${f.comment}"`}
                                         </p>
                                         <p className="rejectedLinkFormsBy">
-                                            by {f.approvalBy}
+                                            by {f.approvalBy.email}(
+                                            {f.approvalBy.supervisorRole})
                                         </p>
                                         <p className="rejectedLinkFormsCreator">
                                             {f.email}

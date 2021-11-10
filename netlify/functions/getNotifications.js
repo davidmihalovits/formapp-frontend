@@ -21,23 +21,13 @@ const getNotifications = async (req, res, next) => {
         };
     }
 
-    const notificationForSupervisors = await Notification.find({
+    const notifications = await Notification.find({
         recipient: { $elemMatch: { email: verified.user.email } },
     }).sort({ createdAt: -1 });
 
-    if (
-        verified.user.role === "Supervisor" ||
-        verified.user.role === "TravelerSupervisor"
-    ) {
-        return {
-            statusCode: 200,
-            body: JSON.stringify(notificationForSupervisors),
-        };
-    }
-
     return {
         statusCode: 200,
-        body: JSON.stringify([]),
+        body: JSON.stringify(notifications),
     };
 };
 

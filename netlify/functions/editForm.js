@@ -1,5 +1,4 @@
 const Form = require("../models/Form");
-const Activity = require("../models/Activity");
 const mongoose = require("mongoose");
 
 const editForm = async (req, res) => {
@@ -11,6 +10,8 @@ const editForm = async (req, res) => {
             }-${res.regulatoryNctsCode}-${res.startDate}-${
                 res.formNameLastDigit
             }`,
+            travelPurposeDropdown: res.travelPurposeDropdown,
+            travelPurpose: res.travelPurpose,
             fullName: res.fullName,
             email: res.email,
             employeeId: res.employeeId,
@@ -24,10 +25,12 @@ const editForm = async (req, res) => {
             travelMethod: res.travelMethod,
             startDate: res.startDate,
             endDate: res.endDate,
-            travelCity: res.travelCity,
-            travelState: res.travelState,
-            travelCountry: res.travelCountry,
+            destinationStreetAddress: res.destinationStreetAddress,
+            destinationCity: res.destinationCity,
+            destinationState: res.destinationState,
+            destinationZipcode: res.destinationZipcode,
             justification: res.justification,
+            justificationType: res.justificationType,
             travelAdvanceCheckbox: res.travelAdvanceCheckbox,
             travelAdvanceAmount: res.travelAdvanceAmount,
             transportCost: res.transportCost,
@@ -47,12 +50,12 @@ const editForm = async (req, res) => {
         }
     );
 
-    await Activity.updateOne(
-        { form: res.id },
+    await Form.updateOne(
+        { _id: res.id },
         {
             $push: {
                 activity: {
-                    editedBy: res.email,
+                    editedBy: res.userId,
                     date: new Date(),
                 },
             },

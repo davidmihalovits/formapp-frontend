@@ -1,6 +1,5 @@
 const Form = require("../models/Form");
 const User = require("../models/User");
-const Activity = require("../models/Activity");
 const Notification = require("../models/Notification");
 const mongoose = require("mongoose");
 
@@ -12,11 +11,14 @@ const submitForm = async (req, res) => {
         formName: `${res.program}-${res.fullName.replace(/\s/g, "")}-${
             res.chargeCode
         }-${res.regulatoryNctsCode}-${res.startDate}-${counted + 1}`,
+        travelPurposeDropdown: res.travelPurposeDropdown,
+        travelPurpose: res.travelPurpose,
         fullName: res.fullName,
         email: res.email,
         employeeId: res.employeeId,
         program: res.program,
         chargeCode: res.chargeCode,
+        task: res.task,
         workStreetAddress: res.workStreetAddress,
         workCity: res.workCity,
         workState: res.workState,
@@ -25,10 +27,12 @@ const submitForm = async (req, res) => {
         travelMethod: res.travelMethod,
         startDate: res.startDate,
         endDate: res.endDate,
-        travelCity: res.travelCity,
-        travelState: res.travelState,
-        travelCountry: res.travelCountry,
+        destinationStreetAddress: res.destinationStreetAddress,
+        destinationCity: res.destinationCity,
+        destinationState: res.destinationState,
+        destinationZipcode: res.destinationZipcode,
         justification: res.justification,
+        justificationType: res.justificationType,
         travelAdvanceCheckbox: res.travelAdvanceCheckbox,
         travelAdvanceAmount: res.travelAdvanceAmount,
         transportCost: res.transportCost,
@@ -46,19 +50,11 @@ const submitForm = async (req, res) => {
         regulatoryItEquipment: res.regulatoryItEquipment,
         regulatoryVisa: res.regulatoryVisa,
         routing: "TA",
+        approved: "pending",
     });
 
     await newForm.save();
-    await Form.populate(newForm, { path: "creator" }, function (err, book) {
-        console.log("populated new form");
-    });
-
-    let newActivity = await new Activity({
-        createdBy: res.email,
-        form: newForm._id,
-        name: newForm.formName,
-    });
-    await newActivity.save();
+    await Form.populate(newForm, { path: "creator" });
 
     const everyoneExceptOnlyTravelers = await User.find({
         $or: [{ role: "Supervisor" }, { role: "TravelerSupervisor" }],

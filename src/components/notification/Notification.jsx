@@ -7,7 +7,7 @@ const Notification = (props) => {
             ? "http://localhost:8888/.netlify/functions"
             : "https://awesome-minsky-48a20a.netlify.app/.netlify/functions";
 
-    const readNotification = async (formId) => {
+    const readNotification = async (n) => {
         const token = localStorage.getItem("token");
 
         if (!token) {
@@ -20,12 +20,16 @@ const Notification = (props) => {
                 Authorization: token,
             },
             body: JSON.stringify({
-                formId: formId,
-                user: props.user && props.user.email,
+                formId: n.formId,
+                user: props.user && props.user,
+                id: n._id,
             }),
         })
             .then((res) => res.json())
-            .then((data) => props.getNotifications());
+            .then((data) => {
+                props.getNotifications();
+                console.log(data);
+            });
     };
 
     const userEmail = props.user && props.user.email;
@@ -42,7 +46,7 @@ const Notification = (props) => {
                                 ""
                             )}`}
                             className="notificationsLink"
-                            onClick={() => readNotification(n.formId)}
+                            onClick={() => readNotification(n)}
                         >
                             <div className="notifications">
                                 {!n.read.includes(userEmail) && (

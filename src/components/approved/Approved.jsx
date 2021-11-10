@@ -63,7 +63,8 @@ const Approved = () => {
                                                 {f.comment && `"${f.comment}"`}
                                             </p>
                                             <p className="approvedLinkFormsBy">
-                                                by {f.approvalBy}
+                                                by {f.approvalBy.email}(
+                                                {f.approvalBy.supervisorRole})
                                             </p>
                                             <p className="approvedLinkFormsCreator">
                                                 {f.email}

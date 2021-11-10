@@ -1,22 +1,26 @@
-const Activity = require("../models/Activity");
 const mongoose = require("mongoose");
+const User = require("../models/User");
+const Form = require("../models/Form");
 
 const viewForm = async (req, res) => {
-    const form = await Activity.findOne({
-        form: res._id,
+    const form = await Form.findOne({ _id: res._id }).populate({
+        path: "activity.viewedBy",
+        model: User,
     });
+    const viewed = await form.activity
+        .filter((a) => a.viewedBy)
+        .map((a) => a.viewedBy);
+    const viewedAlready = await viewed.map((e) => e.email);
 
-    const alreadyViewed = form.activity.map((v) => v.viewedBy);
-
-    if (alreadyViewed.includes(res.user)) {
+    if (viewedAlready.includes(res.userEmail)) {
         return {
             statusCode: 200,
             body: JSON.stringify(`You already viewed this form.`),
         };
     }
 
-    await Activity.updateOne(
-        { form: res._id },
+    await Form.updateOne(
+        { _id: res._id },
         {
             $push: {
                 activity: {

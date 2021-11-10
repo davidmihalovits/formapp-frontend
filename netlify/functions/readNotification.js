@@ -21,18 +21,18 @@ const readNotification = async (req, res, next) => {
         };
     }
 
-    /*const alreadyRead = await Notification.findOne({ formId: req.body.formId });
+    const alreadyRead = await Notification.findOne({ _id: req.body.id });
 
-    if (alreadyRead.read.includes(verified.user)) {
+    if (alreadyRead.read.includes(req.body.user.email)) {
         return {
             statusCode: 200,
             body: JSON.stringify("Already read this notification."),
         };
-    }*/
+    }
 
     await Notification.updateOne(
-        { formId: req.body.formId },
-        { read: req.body.user }
+        { _id: req.body.id },
+        { read: req.body.user.email }
     );
 
     return {

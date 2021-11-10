@@ -39,9 +39,7 @@ const Pending = () => {
             <div className="pending">
                 {forms &&
                     forms
-                        .filter(
-                            (form) => !form.approved || form.approved === ""
-                        )
+                        .filter((form) => form.approved === "pending")
                         .map((f, key) => {
                             return (
                                 <Link

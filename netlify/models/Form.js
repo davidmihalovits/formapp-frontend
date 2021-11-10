@@ -2,8 +2,14 @@ const mongoose = require("mongoose");
 
 const FormSchema = mongoose.Schema(
     {
-        creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        creator: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
         formName: {
+            type: String,
+        },
+        travelPurposeDropdown: {
+            type: String,
+        },
+        travelPurpose: {
             type: String,
         },
         fullName: {
@@ -19,6 +25,9 @@ const FormSchema = mongoose.Schema(
             type: String,
         },
         chargeCode: {
+            type: String,
+        },
+        task: {
             type: String,
         },
         workStreetAddress: {
@@ -45,16 +54,22 @@ const FormSchema = mongoose.Schema(
         endDate: {
             type: String,
         },
-        travelCity: {
+        destinationStreetAddress: {
             type: String,
         },
-        travelState: {
+        destinationCity: {
             type: String,
         },
-        travelCountry: {
+        destinationState: {
+            type: String,
+        },
+        destinationZipcode: {
             type: String,
         },
         justification: {
+            type: String,
+        },
+        justificationType: {
             type: String,
         },
         travelAdvanceCheckbox: {
@@ -111,14 +126,35 @@ const FormSchema = mongoose.Schema(
         comment: {
             type: String,
         },
-        approvalBy: {
-            type: String,
-        },
+        approvalBy: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
         routing: {
             type: String,
         },
+        activity: [
+            {
+                viewedBy: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "users",
+                },
+                signedBy: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "users",
+                },
+                editedBy: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "users",
+                },
+                commentBy: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "users",
+                },
+                approved: String,
+                comment: String,
+                date: Date,
+            },
+        ],
     },
     { timestamps: true }
 );
 
-module.exports = mongoose.model("Form", FormSchema);
+module.exports = mongoose.model("forms", FormSchema);

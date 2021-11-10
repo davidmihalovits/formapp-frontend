@@ -1,7 +1,8 @@
-const Form = require("../models/Form");
 const mongoose = require("mongoose");
+const User = require("../models/User");
+const Form = require("../models/Form");
+const Notification = require("../models/Notification");
 const jwt = require("jsonwebtoken");
-const Activity = require("../models/Activity");
 
 const approveReject = async (req, res, next) => {
     const token = req.auth.authorization;
@@ -24,25 +25,19 @@ const approveReject = async (req, res, next) => {
 
     await Form.updateOne(
         { _id: req.body.formDetails._id },
-        { approved: req.body.approved }
+        {
+            approved: req.body.approved,
+            comment: req.body.comment,
+            approvalBy: req.body.user._id,
+        }
     );
 
     await Form.updateOne(
         { _id: req.body.formDetails._id },
-        { comment: req.body.comment }
-    );
-
-    await Form.updateOne(
-        { _id: req.body.formDetails._id },
-        { approvalBy: verified.user.email }
-    );
-
-    await Activity.updateOne(
-        { form: req.body.formDetails._id },
         {
             $push: {
                 activity: {
-                    signedBy: req.body.email,
+                    signedBy: req.body.user._id,
                     approved: req.body.approved,
                     comment: req.body.comment,
                     date: new Date(),
@@ -50,6 +45,18 @@ const approveReject = async (req, res, next) => {
             },
         }
     );
+
+    const onlyForCreator = await User.find({
+        email: req.body.formDetails.email,
+    });
+    let newNotification = await new Notification({
+        notification: `${req.body.user.email} signed your form "${req.body.formDetails.formName}".`,
+        formId: req.body.formDetails._id,
+        formName: req.body.formDetails.formName,
+        read: [],
+        recipient: onlyForCreator,
+    });
+    await newNotification.save();
 
     return {
         statusCode: 200,
