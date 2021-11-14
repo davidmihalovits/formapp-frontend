@@ -2,6 +2,7 @@ const Form = require("../models/Form");
 const User = require("../models/User");
 const Notification = require("../models/Notification");
 const mongoose = require("mongoose");
+const moment = require("moment");
 
 const submitForm = async (req, res) => {
     const counted = await Form.countDocuments();
@@ -10,7 +11,9 @@ const submitForm = async (req, res) => {
         creator: res.creator,
         formName: `${res.program}-${res.fullName.replace(/\s/g, "")}-${
             res.chargeCode
-        }-${res.regulatoryNctsCode}-${res.startDate}-${counted + 1}`,
+        }-${res.regulatoryNctsCode}-${moment(res.startDate).format("L")}-${
+            counted + 1
+        }`,
         travelPurposeDropdown: res.travelPurposeDropdown,
         travelPurpose: res.travelPurpose,
         fullName: res.fullName,
@@ -49,7 +52,7 @@ const submitForm = async (req, res) => {
         regulatoryCiBrief: res.regulatoryCiBrief,
         regulatoryItEquipment: res.regulatoryItEquipment,
         regulatoryVisa: res.regulatoryVisa,
-        routing: "TA",
+        //routingPending: "TA",
         approved: "pending",
     });
 
@@ -71,7 +74,7 @@ const submitForm = async (req, res) => {
 
     return {
         statusCode: 200,
-        body: JSON.stringify(`Form for ${res.fullName} submitted.`),
+        body: JSON.stringify(`Form for ${newForm.email} submitted.`),
     };
 };
 

@@ -7,14 +7,18 @@ const Index = () => {
             ? "http://localhost:8888/.netlify/functions"
             : "https://awesome-minsky-48a20a.netlify.app/.netlify/functions";
 
-    const [email, setEmail] = useState("");
+    /*const [email, setEmail] = useState("");
     const [travelerRole, setTravelerRole] = useState("");
-    const [supervisorRole, setSupervisorRole] = useState("");
+    const [supervisorRole, setSupervisorRole] = useState("");*/
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const [credential, setCredential] = useState("");
     const [code, setCode] = useState("");
     const [loginCodeSent, setLoginCodeSent] = useState(false);
 
-    const register = async (e) => {
+    /*const register = async (e) => {
         e.preventDefault();
 
         await fetch(`${devprodUrl}/register`, {
@@ -36,10 +40,16 @@ const Index = () => {
                     return window.location.reload();
                 }
             });
-    };
+    };*/
 
     const loginRequest = async (e) => {
         e.preventDefault();
+
+        if (!credential) {
+            return setError(true);
+        }
+
+        setLoading(true);
 
         await fetch(`${devprodUrl}/loginRequest`, {
             method: "POST",
@@ -51,12 +61,30 @@ const Index = () => {
             }),
         })
             .then((res) => res.json())
-            .then((data) => alert(data))
-            .then(() => setLoginCodeSent(true));
+            .then((data) => {
+                console.log(data);
+                if (data === "User not found.") {
+                    setLoading(false);
+                    setError(false);
+                    return setErrorMessage(data);
+                }
+                if (data.includes("Login code sent to")) {
+                    setLoading(false);
+                    setError(false);
+                    setErrorMessage("");
+                    return setLoginCodeSent(true);
+                }
+            });
     };
 
     const login = async (e) => {
         e.preventDefault();
+
+        if (!code) {
+            return setError(true);
+        }
+
+        setLoading(true);
 
         await fetch(`${devprodUrl}/login`, {
             method: "POST",
@@ -65,13 +93,20 @@ const Index = () => {
             },
             body: JSON.stringify({
                 code: code,
+                credential: credential,
             }),
         })
             .then((res) => res.json())
             .then((data) => {
-                if (data === "Wrong login code.") return alert(data);
+                if (data === "Wrong login code.") {
+                    setLoading(false);
+                    setError(false);
+                    return setErrorMessage(data);
+                }
                 if (data.token) {
                     localStorage.setItem("token", data.token);
+                    setLoading(false);
+                    setErrorMessage("");
                     return window.location.reload();
                 }
             });
@@ -82,7 +117,6 @@ const Index = () => {
             <div className="index">
                 <div className="indexBox">
                     <h1 className="indexBoxTitle">Login</h1>
-
                     {loginCodeSent ? (
                         <>
                             <input
@@ -92,11 +126,26 @@ const Index = () => {
                                 value={code}
                                 onChange={(e) => setCode(e.target.value)}
                                 className="indexBoxInput"
-                                placeholder="Enter login code"
+                                placeholder="Enter your login code"
                             />
-                            <button className="indexBoxButton" onClick={login}>
-                                Login
+                            <button
+                                className="indexBoxButton"
+                                onClick={login}
+                                disabled={loading}
+                            >
+                                {loading ? "Loading..." : "Login"}
                             </button>
+                            <p className="indexBoxVerbage">
+                                Please check your email for the login code.
+                            </p>
+                            {error && !code && (
+                                <p className="indexBoxError">
+                                    Enter your login code.
+                                </p>
+                            )}
+                            {errorMessage && !error && (
+                                <p className="indexBoxError">{errorMessage}</p>
+                            )}
                         </>
                     ) : (
                         <>
@@ -107,18 +156,27 @@ const Index = () => {
                                 value={credential}
                                 onChange={(e) => setCredential(e.target.value)}
                                 className="indexBoxInput"
-                                placeholder="Your email address"
+                                placeholder="Enter your email address"
                             />
                             <button
                                 className="indexBoxButton"
                                 onClick={loginRequest}
+                                disabled={loading}
                             >
-                                Request login code
+                                {loading ? "Loading..." : "Request login code"}
                             </button>
+                            {error && !credential && (
+                                <p className="indexBoxError">
+                                    Wrong email address.
+                                </p>
+                            )}
+                            {errorMessage && !error && (
+                                <p className="indexBoxError">{errorMessage}</p>
+                            )}
                         </>
                     )}
                 </div>
-                <div className="indexBox">
+                {/*<div className="indexBox">
                     <h1 className="indexBoxTitle">Register</h1>
                     <input
                         id="email"
@@ -164,7 +222,7 @@ const Index = () => {
                     <button className="indexBoxButton" onClick={register}>
                         Register
                     </button>
-                </div>
+                </div>*/}
             </div>
         </div>
     );

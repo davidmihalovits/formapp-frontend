@@ -49,10 +49,10 @@ const FormSchema = mongoose.Schema(
             type: String,
         },
         startDate: {
-            type: String,
+            type: Date,
         },
         endDate: {
-            type: String,
+            type: Date,
         },
         destinationStreetAddress: {
             type: String,
@@ -127,8 +127,14 @@ const FormSchema = mongoose.Schema(
             type: String,
         },
         approvalBy: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
-        routing: {
-            type: String,
+        routingPending: {
+            type: Array,
+        },
+        routingApproved: {
+            type: Array,
+        },
+        routingRejected: {
+            type: Array,
         },
         activity: [
             {

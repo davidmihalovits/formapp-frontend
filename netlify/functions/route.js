@@ -21,13 +21,18 @@ const route = async (req, res, next) => {
         };
     }
 
-    await Form.updateOne({ _id: req.body.id }, { routing: req.body.routing });
+    await Form.updateOne(
+        { _id: req.body.id },
+        {
+            $push: {
+                routingPending: req.body.routingPending,
+            },
+        }
+    );
 
     return {
         statusCode: 200,
-        body: JSON.stringify(
-            `Routing of this form changed to ${req.body.routing}.`
-        ),
+        body: JSON.stringify(`Routed to ${req.body.routingPending}.`),
     };
 };
 

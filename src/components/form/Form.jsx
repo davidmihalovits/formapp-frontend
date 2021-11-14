@@ -12,8 +12,6 @@ const Form = (props) => {
             ? "http://localhost:8888/.netlify/functions"
             : "https://awesome-minsky-48a20a.netlify.app/.netlify/functions";
 
-    const today = new Date();
-
     const [form, setForm] = useState("");
     const [comment, setComment] = useState("");
     const [loading, setLoading] = useState(false);
@@ -188,8 +186,8 @@ const Form = (props) => {
 
         setRegulatoryForeignTravel(form.regulatoryForeignTravel);
         setTravelMethod(form.travelMethod);
-        setStartDate(today.setDate(today.getDate() + 30));
-        setEndDate(today.setDate(today.getDate() + 1));
+        setStartDate(new Date(form.startDate));
+        setEndDate(new Date(form.endDate));
         setDestinationStreetAddress(form.destinationStreetAddress);
         setDestinationCity(form.destinationCity);
         setDestinationState(form.destinationState);
@@ -294,8 +292,8 @@ const Form = (props) => {
                         ? ""
                         : days.toLocaleString().replaceAll(/[-]/g, ""),
                     travelMethod: travelMethod,
-                    startDate: moment(startDate).format("L").toString(),
-                    endDate: moment(endDate).format("L").toString(),
+                    startDate: startDate,
+                    endDate: endDate,
                     destinationStreetAddress: destinationStreetAddress,
                     destinationCity: destinationCity,
                     destinationState: destinationState,
@@ -374,7 +372,31 @@ const Form = (props) => {
             },
             body: JSON.stringify({
                 id: form._id,
-                routing: route,
+                routingPending: route,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => alert(data));
+
+        return window.location.reload();
+    };
+
+    const routeTo = async (r) => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            return console.log("No token.");
+        }
+
+        await fetch(`${devprodUrl}/route`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: token,
+            },
+            body: JSON.stringify({
+                id: form._id,
+                routingPending: r,
             }),
         })
             .then((res) => res.json())
@@ -742,7 +764,7 @@ const Form = (props) => {
                                                 form.regulatoryNctsCode
                                             );
                                             setRegulatoryNctsEmail(
-                                                form.regulatoryNctsCode
+                                                form.regulatoryNctsEmail
                                             );
                                         }}
                                     >
@@ -877,15 +899,9 @@ const Form = (props) => {
                                         onClick={() => {
                                             setIsVirtual(false);
                                             setStartDate(
-                                                today.setDate(
-                                                    today.getDate() + 30
-                                                )
+                                                new Date(form.startDate)
                                             );
-                                            setEndDate(
-                                                today.setDate(
-                                                    today.getDate() + 1
-                                                )
-                                            );
+                                            setEndDate(new Date(form.endDate));
                                             setRegulatoryForeignTravel(
                                                 form.regulatoryForeignTravel
                                             );
@@ -1743,8 +1759,113 @@ const Form = (props) => {
                     <div className="submittedformActivity">
                         <h2 className="submittedformActivityTitle">Routing</h2>
                         <div className="submittedformActivityRouting">
+                            {/*<p className="submittedformActivityRoutingText">
+                                Travel Admin
+                                <span
+                                    className="submittedformActivityRoutingCircle"
+                                    style={{
+                                        background:
+                                            form &&
+                                            form.routing.includes("TA") &&
+                                            "#FDD835",
+                                    }}
+                                ></span>
+                            </p>*/}
                             <p className="submittedformActivityRoutingText">
-                                Waiting for {form.routing}
+                                Task Monitor
+                                <span
+                                    className="submittedformActivityRoutingCircle"
+                                    style={{
+                                        background:
+                                            (form &&
+                                                form.routingPending.includes(
+                                                    "TM"
+                                                ) &&
+                                                "#FDD835") ||
+                                            (form &&
+                                                form.routingApproved.includes(
+                                                    "TM"
+                                                ) &&
+                                                "#28b834") ||
+                                            (form &&
+                                                form.routingRejected.includes(
+                                                    "TM"
+                                                ) &&
+                                                "#dd1572"),
+                                    }}
+                                ></span>
+                            </p>
+                            <p className="submittedformActivityRoutingText">
+                                Program Lead
+                                <span
+                                    className="submittedformActivityRoutingCircle"
+                                    style={{
+                                        background:
+                                            (form &&
+                                                form.routingPending.includes(
+                                                    "PL"
+                                                ) &&
+                                                "#FDD835") ||
+                                            (form &&
+                                                form.routingApproved.includes(
+                                                    "PL"
+                                                ) &&
+                                                "#28b834") ||
+                                            (form &&
+                                                form.routingRejected.includes(
+                                                    "PL"
+                                                ) &&
+                                                "#dd1572"),
+                                    }}
+                                ></span>
+                            </p>
+                            <p className="submittedformActivityRoutingText">
+                                Program Manager
+                                <span
+                                    className="submittedformActivityRoutingCircle"
+                                    style={{
+                                        background:
+                                            (form &&
+                                                form.routingPending.includes(
+                                                    "PM"
+                                                ) &&
+                                                "#FDD835") ||
+                                            (form &&
+                                                form.routingApproved.includes(
+                                                    "PM"
+                                                ) &&
+                                                "#28b834") ||
+                                            (form &&
+                                                form.routingRejected.includes(
+                                                    "PM"
+                                                ) &&
+                                                "#dd1572"),
+                                    }}
+                                ></span>
+                            </p>
+                            <p className="submittedformActivityRoutingText">
+                                Contracting Officer
+                                <span
+                                    className="submittedformActivityRoutingCircle"
+                                    style={{
+                                        background:
+                                            (form &&
+                                                form.routingPending.includes(
+                                                    "CO"
+                                                ) &&
+                                                "#FDD835") ||
+                                            (form &&
+                                                form.routingApproved.includes(
+                                                    "CO"
+                                                ) &&
+                                                "#28b834") ||
+                                            (form &&
+                                                form.routingRejected.includes(
+                                                    "CO"
+                                                ) &&
+                                                "#dd1572"),
+                                    }}
+                                ></span>
                             </p>
                         </div>
                         <h2 className="submittedformActivityTitle">Activity</h2>
@@ -1783,12 +1904,7 @@ const Form = (props) => {
                                                     <p className="submittedformActivityText">
                                                         Signed by:
                                                         <br />
-                                                        {f.signedBy.email}(
-                                                        {
-                                                            f.signedBy
-                                                                .supervisorRole
-                                                        }
-                                                        )
+                                                        {f.signedBy.email}
                                                     </p>
                                                     {f.approved ===
                                                         "Approved" && (
@@ -2014,7 +2130,7 @@ const Form = (props) => {
                                 Start Date:
                             </p>
                             <p className="submittedformDetailsInput">
-                                {form.startDate}
+                                {moment(form.startDate).format("L")}
                             </p>
                         </div>
                         <div className="submittedformDetails">
@@ -2022,12 +2138,12 @@ const Form = (props) => {
                                 End Date:
                             </p>
                             <p className="submittedformDetailsInput">
-                                {form.endDate}
+                                {moment(form.endDate).format("L")}
                             </p>
                         </div>
                         <div className="submittedformDetails">
                             <p className="submittedformDetailsTitle">
-                                Days Away:
+                                Number of nights at this location:
                             </p>
                             <p className="submittedformDetailsInput">
                                 {form.travelDaysAway}
@@ -2165,7 +2281,11 @@ const Form = (props) => {
                     props.user.role !== "Traveler" &&
                     props.user.supervisorRole !== "TA" &&
                     props.user.email !== form.email &&
-                    form.routing.includes(props.user.supervisorRole) ? (
+                    form.approved !== "Approved" &&
+                    (form.routingPending.includes(props.user.supervisorRole) ||
+                        form.routingRejected.includes(
+                            props.user.supervisorRole
+                        )) ? (
                         <form
                             className="submittedformForm"
                             onSubmit={approveReject}
@@ -2209,7 +2329,9 @@ const Form = (props) => {
                             </div>
                         </form>
                     ) : null}
-                    {props.user && props.user.email === form.email ? (
+                    {props.user &&
+                    props.user.email === form.email &&
+                    form.approved !== "Approved" ? (
                         <form
                             className="submittedformForm"
                             onSubmit={submitComment}
@@ -2238,12 +2360,38 @@ const Form = (props) => {
                             </button>
                         </form>
                     ) : null}
-                    {props.user && props.user.email !== form.email && (
-                        <div className="submittedformRouting">
-                            <h2 className="submittedformRoutingTitle">
-                                Routing
-                            </h2>
-                            <div className="submittedformRoutingCheckboxText">
+                    {props.user &&
+                        props.user.email !== form.email &&
+                        form.approved !== "Approved" && (
+                            <div className="submittedformRouting">
+                                <h2 className="submittedformRoutingTitle">
+                                    Routing
+                                </h2>
+                                <button
+                                    className="submittedformRoutingButton"
+                                    onClick={() => routeTo("TM")}
+                                >
+                                    Route to Task Monitor
+                                </button>
+                                <button
+                                    className="submittedformRoutingButton"
+                                    onClick={() => routeTo("PL")}
+                                >
+                                    Route to Program Lead
+                                </button>
+                                <button
+                                    className="submittedformRoutingButton"
+                                    onClick={() => routeTo("PM")}
+                                >
+                                    Route to Program Manager
+                                </button>
+                                <button
+                                    className="submittedformRoutingButton"
+                                    onClick={() => routeTo("CO")}
+                                >
+                                    Route to Contracting Officer
+                                </button>
+                                {/*<div className="submittedformRoutingCheckboxText">
                                 <span
                                     className={
                                         route.includes("TM")
@@ -2263,7 +2411,9 @@ const Form = (props) => {
                                         <span className="submittedformRoutingCheckboxCheckedCheckmark"></span>
                                     )}
                                 </span>
-                                <p className="submittedformRoutingText">TM</p>
+                                <p className="submittedformRoutingText">
+                                    Task Monitor
+                                </p>
                             </div>
                             <div className="submittedformRoutingCheckboxText">
                                 <span
@@ -2285,7 +2435,9 @@ const Form = (props) => {
                                         <span className="submittedformRoutingCheckboxCheckedCheckmark"></span>
                                     )}
                                 </span>
-                                <p className="submittedformRoutingText">PL</p>
+                                <p className="submittedformRoutingText">
+                                    Program Lead
+                                </p>
                             </div>
                             <div className="submittedformRoutingCheckboxText">
                                 <span
@@ -2307,7 +2459,9 @@ const Form = (props) => {
                                         <span className="submittedformRoutingCheckboxCheckedCheckmark"></span>
                                     )}
                                 </span>
-                                <p className="submittedformRoutingText">PM</p>
+                                <p className="submittedformRoutingText">
+                                    Program Manager
+                                </p>
                             </div>
                             <div className="submittedformRoutingCheckboxText">
                                 <span
@@ -2329,16 +2483,18 @@ const Form = (props) => {
                                         <span className="submittedformRoutingCheckboxCheckedCheckmark"></span>
                                     )}
                                 </span>
-                                <p className="submittedformRoutingText">CO</p>
+                                <p className="submittedformRoutingText">
+                                    Contracting Officer
+                                </p>
                             </div>
                             <button
                                 className="submittedformRoutingButton"
                                 onClick={() => routing()}
                             >
                                 Route
-                            </button>
-                        </div>
-                    )}
+                            </button>*/}
+                            </div>
+                        )}
                 </div>
             </div>
         </div>

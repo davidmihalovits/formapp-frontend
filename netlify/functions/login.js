@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
 const login = async (req, res) => {
-    const user = await User.findOne({ loginCode: res.code });
+    const user = await User.findOne({ email: res.credential });
 
-    if (user.loginCode !== res.code) {
+    if (!user || user.loginCode !== res.code) {
         return {
-            statusCode: 500,
+            statusCode: 200,
             body: JSON.stringify(`Wrong login code.`),
         };
     }

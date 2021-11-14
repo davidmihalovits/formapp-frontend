@@ -1,5 +1,6 @@
 const Form = require("../models/Form");
 const mongoose = require("mongoose");
+const moment = require("moment");
 
 const editForm = async (req, res) => {
     await Form.updateOne(
@@ -7,7 +8,7 @@ const editForm = async (req, res) => {
         {
             formName: `${res.program}-${res.fullName.replace(/\s/g, "")}-${
                 res.chargeCode
-            }-${res.regulatoryNctsCode}-${res.startDate}-${
+            }-${res.regulatoryNctsCode}-${moment(res.startDate).format("L")}-${
                 res.formNameLastDigit
             }`,
             travelPurposeDropdown: res.travelPurposeDropdown,

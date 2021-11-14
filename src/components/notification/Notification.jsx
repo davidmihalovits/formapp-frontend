@@ -41,10 +41,7 @@ const Notification = (props) => {
                     return (
                         <Link
                             key={key}
-                            to={`/pending/${n.formId}#${n.formName.replaceAll(
-                                /[. /]/g,
-                                ""
-                            )}`}
+                            to={`/pending/${n.formId}`}
                             className="notificationsLink"
                             onClick={() => readNotification(n)}
                         >

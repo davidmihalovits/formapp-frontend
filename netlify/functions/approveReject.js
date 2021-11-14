@@ -23,14 +23,16 @@ const approveReject = async (req, res, next) => {
         };
     }
 
-    await Form.updateOne(
-        { _id: req.body.formDetails._id },
-        {
-            approved: req.body.approved,
-            comment: req.body.comment,
-            approvalBy: req.body.user._id,
-        }
-    );
+    if (req.body.user.supervisorRole === "CO") {
+        await Form.updateOne(
+            { _id: req.body.formDetails._id },
+            {
+                approved: req.body.approved,
+                comment: req.body.comment,
+                approvalBy: req.body.user._id,
+            }
+        );
+    }
 
     await Form.updateOne(
         { _id: req.body.formDetails._id },
@@ -45,6 +47,35 @@ const approveReject = async (req, res, next) => {
             },
         }
     );
+
+    if (req.body.approved === "Approved") {
+        await Form.updateOne(
+            { _id: req.body.formDetails._id },
+            {
+                $push: {
+                    routingApproved: req.body.user.supervisorRole,
+                },
+                $pull: {
+                    routingPending: req.body.user.supervisorRole,
+                    routingRejected: req.body.user.supervisorRole,
+                },
+            }
+        );
+    }
+    if (req.body.approved === "Rejected") {
+        await Form.updateOne(
+            { _id: req.body.formDetails._id },
+            {
+                $push: {
+                    routingRejected: req.body.user.supervisorRole,
+                },
+                $pull: {
+                    routingPending: req.body.user.supervisorRole,
+                    routingApproved: req.body.user.supervisorRole,
+                },
+            }
+        );
+    }
 
     const onlyForCreator = await User.find({
         email: req.body.formDetails.email,

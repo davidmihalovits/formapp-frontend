@@ -44,9 +44,7 @@ const Rejected = (props) => {
                             return (
                                 <Link
                                     key={key}
-                                    to={`/rejected/${
-                                        f._id
-                                    }#${f.formName.replaceAll(/[. /]/g, "")}`}
+                                    to={`/rejected/${f._id}`}
                                     className="rejectedLink"
                                 >
                                     <div className="rejectedLinkForms">
@@ -62,7 +60,7 @@ const Rejected = (props) => {
                                             {f.comment && `"${f.comment}"`}
                                         </p>
                                         <p className="rejectedLinkFormsBy">
-                                            by {f.approvalBy.email}(
+                                            by {f.approvalBy.email} (
                                             {f.approvalBy.supervisorRole})
                                         </p>
                                         <p className="rejectedLinkFormsCreator">

@@ -25,10 +25,12 @@ const Submit = (props) => {
     const [program, setProgram] = useState("HBG");
     const [chargeCode, setChargeCode] = useState("");
     const [task, setTask] = useState("ExampleTask");
-    const [travelMethod, setTravelMethod] = useState("");
+    const [travelMethod, setTravelMethod] = useState("Air");
     const [isVirtual, setIsVirtual] = useState(false);
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
+    const [startDate, setStartDate] = useState(
+        today.setDate(today.getDate() + 30)
+    );
+    const [endDate, setEndDate] = useState(today.setDate(today.getDate() + 1));
     const [destinationStreetAddress, setDestinationStreetAddress] =
         useState("");
     const [destinationCity, setDestinationCity] = useState("");
@@ -132,12 +134,8 @@ const Submit = (props) => {
                         ? ""
                         : days.toLocaleString().replaceAll(/[-]/g, ""),
                     travelMethod: travelMethod,
-                    startDate: !startDate
-                        ? ""
-                        : moment(startDate).format("L").toString(),
-                    endDate: !endDate
-                        ? ""
-                        : moment(endDate).format("L").toString(),
+                    startDate: startDate,
+                    endDate: endDate,
                     destinationStreetAddress: destinationStreetAddress,
                     destinationCity: destinationCity,
                     destinationState: destinationState,
@@ -668,9 +666,8 @@ const Submit = (props) => {
                                     }
                                     onClick={() => {
                                         setIsVirtual(false);
-
                                         setStartDate(
-                                            today.setDate(today.getDate() + 30)
+                                            today.setDate(today.getDate() - 1)
                                         );
                                         setEndDate(
                                             today.setDate(today.getDate() + 1)
@@ -866,7 +863,7 @@ const Submit = (props) => {
                                         className="formLabel"
                                         htmlFor="travelDaysAway"
                                     >
-                                        Number of Nights at this location
+                                        Number of nights at this location
                                     </label>
                                     <p
                                         className="formInput"

@@ -44,9 +44,7 @@ const Approved = () => {
                             return (
                                 <Link
                                     key={key}
-                                    to={`/approved/${
-                                        f._id
-                                    }#${f.formName.replaceAll(/[. /]/g, "")}`}
+                                    to={`/approved/${f._id}`}
                                     className="approvedLink"
                                 >
                                     <div className="approvedLink" key={key}>
@@ -63,7 +61,7 @@ const Approved = () => {
                                                 {f.comment && `"${f.comment}"`}
                                             </p>
                                             <p className="approvedLinkFormsBy">
-                                                by {f.approvalBy.email}(
+                                                by {f.approvalBy.email} (
                                                 {f.approvalBy.supervisorRole})
                                             </p>
                                             <p className="approvedLinkFormsCreator">

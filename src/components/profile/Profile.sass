@@ -23,6 +23,39 @@
             border-top: 1px solid #e2e2e2
             margin: 60px 0
 
+        .profileCheckboxText
+            display: grid
+            grid-template-columns: 1fr auto
+            margin: 0 auto
+            max-width: 300px
+
+            .profileText
+                text-align: left
+
+            .profileCheckbox
+                background: #ebebeb
+                border-radius: 30px
+                width: 60px
+                display: grid
+                align-items: center
+                padding: 5px
+                cursor: pointer
+
+                .profileCheckboxCircleOff
+                    width: 18px
+                    height: 18px
+                    border-radius: 50%
+                    background: white
+                    transition: 0.7s
+
+                .profileCheckboxCircleOn
+                    width: 18px
+                    height: 18px
+                    border-radius: 50%
+                    background: #28b834
+                    transform: translateX(30px)
+                    transition: 0.7s
+
         .profileButtonRole
             display: block
             width: 240px

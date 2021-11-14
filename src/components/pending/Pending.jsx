@@ -44,31 +44,107 @@ const Pending = () => {
                             return (
                                 <Link
                                     key={key}
-                                    to={`/pending/${
-                                        f._id
-                                    }#${f.formName.replaceAll(/[. /]/g, "")}`}
+                                    to={`/pending/${f._id}`}
                                     className="pendingLink"
                                 >
                                     <div className="pendingLinkForms" form={f}>
                                         <p className="pendingLinkFormsName">
                                             {f.formName}
                                         </p>
-                                        {f.approved === "Approved" && (
-                                            <p className="pendingLinkFormsApproved">
-                                                Approved
-                                            </p>
-                                        )}
-                                        {f.approved === "Rejected" && (
-                                            <p className="pendingLinkFormsRejected">
-                                                Rejected
-                                            </p>
-                                        )}
-                                        <p className="pendingLinkFormsComment">
-                                            {f.comment && `"${f.comment}"`}
-                                        </p>
-                                        <p className="pendingLinkFormsBy">
-                                            {f.approvalBy}
-                                        </p>
+                                        <div className="pendingLinkFormsRouting">
+                                            <div className="pendingLinkFormsRoutingRoleCircle">
+                                                <div
+                                                    className="pendingLinkFormsRoutingCircle"
+                                                    style={{
+                                                        background:
+                                                            (f.routingPending.includes(
+                                                                "TM"
+                                                            ) &&
+                                                                "#FDD835") ||
+                                                            (f.routingApproved.includes(
+                                                                "TM"
+                                                            ) &&
+                                                                "#28b834") ||
+                                                            (f.routingRejected.includes(
+                                                                "TM"
+                                                            ) &&
+                                                                "#dd1572"),
+                                                    }}
+                                                ></div>
+                                                <p className="pendingLinkFormsRoutingRole">
+                                                    TM
+                                                </p>
+                                            </div>
+                                            <div className="pendingLinkFormsRoutingRoleCircle">
+                                                <div
+                                                    className="pendingLinkFormsRoutingCircle"
+                                                    style={{
+                                                        background:
+                                                            (f.routingPending.includes(
+                                                                "PL"
+                                                            ) &&
+                                                                "#FDD835") ||
+                                                            (f.routingApproved.includes(
+                                                                "PL"
+                                                            ) &&
+                                                                "#28b834") ||
+                                                            (f.routingRejected.includes(
+                                                                "PL"
+                                                            ) &&
+                                                                "#dd1572"),
+                                                    }}
+                                                ></div>
+                                                <p className="pendingLinkFormsRoutingRole">
+                                                    PL
+                                                </p>
+                                            </div>
+                                            <div className="pendingLinkFormsRoutingRoleCircle">
+                                                <div
+                                                    className="pendingLinkFormsRoutingCircle"
+                                                    style={{
+                                                        background:
+                                                            (f.routingPending.includes(
+                                                                "PM"
+                                                            ) &&
+                                                                "#FDD835") ||
+                                                            (f.routingApproved.includes(
+                                                                "PM"
+                                                            ) &&
+                                                                "#28b834") ||
+                                                            (f.routingRejected.includes(
+                                                                "PM"
+                                                            ) &&
+                                                                "#dd1572"),
+                                                    }}
+                                                ></div>
+                                                <p className="pendingLinkFormsRoutingRole">
+                                                    PM
+                                                </p>
+                                            </div>
+                                            <div className="pendingLinkFormsRoutingRoleCircle">
+                                                <div
+                                                    className="pendingLinkFormsRoutingCircle"
+                                                    style={{
+                                                        background:
+                                                            (f.routingPending.includes(
+                                                                "CO"
+                                                            ) &&
+                                                                "#FDD835") ||
+                                                            (f.routingApproved.includes(
+                                                                "CO"
+                                                            ) &&
+                                                                "#28b834") ||
+                                                            (f.routingRejected.includes(
+                                                                "CO"
+                                                            ) &&
+                                                                "#dd1572"),
+                                                    }}
+                                                ></div>
+                                                <p className="pendingLinkFormsRoutingRole">
+                                                    CO
+                                                </p>
+                                            </div>
+                                        </div>
                                         <p className="pendingLinkFormsCreator">
                                             {f.email}
                                         </p>

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import hamburger from "../../assets/hamburger.svg";
 import bell from "../../assets/bell.svg";
+import submit from "../../assets/submit.svg";
 
 const Navbar = (props) => {
     const [hamburgerModal, setHamburgerModal] = useState(false);
@@ -122,7 +123,11 @@ const Navbar = (props) => {
         return (
             <div className="navbarContainer">
                 <div className="navbar">
-                    <Link to="/profile" style={{ textDecoration: "none" }}>
+                    <Link
+                        to="/profile"
+                        style={{ textDecoration: "none" }}
+                        onClick={() => setHamburgerModal(false)}
+                    >
                         <div className="navbarProfileIcon">
                             {props.user &&
                                 props.user.email.substring(0, 2).toUpperCase()}
@@ -131,11 +136,23 @@ const Navbar = (props) => {
                     <Link
                         to="/notification"
                         className="navbarBellIconBadgeContainer"
+                        onClick={() => setHamburgerModal(false)}
                     >
                         <img className="navbarBellIcon" src={bell} alt="bell" />
                         {unreadNotifications.includes(false) && (
                             <span className="navbarBellIconBadge"></span>
                         )}
+                    </Link>
+                    <Link
+                        to="/submit"
+                        className="navbarBellIconBadgeContainer"
+                        onClick={() => setHamburgerModal(false)}
+                    >
+                        <img
+                            className="navbarBellIcon"
+                            src={submit}
+                            alt="submit"
+                        />
                     </Link>
                     <img
                         className="navbarHamburgerIcon"
@@ -145,23 +162,6 @@ const Navbar = (props) => {
                     />
                     {hamburgerModal && (
                         <div className="navbarHamburgerContainer">
-                            {props.user && props.user.role !== "Supervisor" && (
-                                <Link
-                                    to="/submit"
-                                    className="navbarLink"
-                                    onClick={() => setHamburgerModal(false)}
-                                >
-                                    <p
-                                        className={
-                                            location.pathname === "/submit"
-                                                ? "navbarLinkItemActive"
-                                                : "navbarLinkItemInactive"
-                                        }
-                                    >
-                                        Submit
-                                    </p>
-                                </Link>
-                            )}
                             <Link
                                 to="/pending"
                                 className="navbarLink"
