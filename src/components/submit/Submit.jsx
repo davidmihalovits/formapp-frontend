@@ -16,13 +16,24 @@ const Submit = (props) => {
     const today = new Date();
     let history = useHistory();
 
+    /*const places = async () => {
+        await fetch(`${devprodUrl}/places`, {
+            method: "GET",
+        })
+            .then((res) => res.json())
+            .then((data) => console.log(data));
+    };
+    useEffect(() => {
+        places();
+    }, []);*/
+
     const [loading, setLoading] = useState(false);
     const [showSection, setShowSection] = useState("general");
     const [travelPurpose, setTravelPurpose] = useState("");
     const [travelPurposeDropdown, setTravelPurposeDropdown] = useState("AMS");
     const [fullName, setFullName] = useState("");
     const [employeeId, setEmployeeId] = useState("");
-    const [program, setProgram] = useState("HBG");
+    const [program, setProgram] = useState("SAMDA");
     const [chargeCode, setChargeCode] = useState("");
     const [task, setTask] = useState("ExampleTask");
     const [travelMethod, setTravelMethod] = useState("Air");
@@ -435,7 +446,8 @@ const Submit = (props) => {
                                         .filter(
                                             (p) =>
                                                 p.program === "SAMDA" &&
-                                                program === "SAMDA"
+                                                program === "SAMDA" &&
+                                                p.chargeCode.includes("CY5")
                                         )
                                         .map((c, key) => {
                                             return (
@@ -691,9 +703,10 @@ const Submit = (props) => {
                                     }
                                     onClick={() => {
                                         setIsVirtual(true);
-                                        setStartDate("");
-                                        setEndDate("");
+                                        //setStartDate("");
+                                        //setEndDate("");
                                         setRegulatoryForeignTravel("Virtual");
+                                        setTravelMethod("None");
                                         setStep("100%");
                                     }}
                                 >
@@ -783,332 +796,282 @@ const Submit = (props) => {
                                     </div>
                                     <p className="formTravelTypeText">
                                         Over 50 miles away but in USA
-                                    </p>
-                                    <label
-                                        className="formLabel"
-                                        htmlFor="travelMethod"
-                                    >
-                                        Travel Method
-                                    </label>
-                                    <select
-                                        id="travelMethod"
-                                        name="travelMethod"
-                                        type="text"
-                                        value={travelMethod}
-                                        onChange={(e) =>
-                                            setTravelMethod(e.target.value)
-                                        }
-                                        className="formInput"
-                                        style={{ cursor: "pointer" }}
-                                    >
-                                        <option value="Air">Air</option>
-                                        <option value="Train">Train</option>
-                                        <option value="Bus">Bus</option>
-                                        <option value="Rental Car">
-                                            Rental Car
-                                        </option>
-                                        <option value="Personal Vehicle">
-                                            Personal Vehicle
-                                        </option>
-                                        <option value="Taxi/Uber">
-                                            Taxi/Uber
-                                        </option>
-                                    </select>
-                                    <label
-                                        className="formLabel"
-                                        htmlFor="startDate"
-                                    >
-                                        Start Date
-                                    </label>
-                                    <DatePicker
-                                        closeOnScroll={true}
-                                        selected={startDate}
-                                        onChange={(date) => {
-                                            setStartDate(date);
-                                        }}
-                                        minDate={new Date()}
-                                        showMonthDropdown
-                                        showYearDropdown
-                                        dropdownMode="select"
-                                        todayButton="Today"
-                                        dateFormat="MM/dd/yyyy"
-                                        calendarStartDay={1}
-                                        className="formInput"
-                                    />
-                                    <label
-                                        className="formLabel"
-                                        htmlFor="endDate"
-                                    >
-                                        End Date
-                                    </label>
-                                    <DatePicker
-                                        closeOnScroll={true}
-                                        selected={endDate}
-                                        onChange={(date) => setEndDate(date)}
-                                        showMonthDropdown
-                                        showYearDropdown
-                                        dropdownMode="select"
-                                        todayButton="Today"
-                                        dateFormat="MM/dd/yyyy"
-                                        calendarStartDay={1}
-                                        className="formInput"
-                                    />
-                                    {date1Hours >= date2Hours && (
-                                        <p className="formError">
-                                            End date must be higher than start
-                                            date.
-                                        </p>
-                                    )}
-                                    <label
-                                        className="formLabel"
-                                        htmlFor="travelDaysAway"
-                                    >
-                                        Number of nights at this location
-                                    </label>
-                                    <p
-                                        className="formInput"
-                                        style={{
-                                            height: "53.2px",
-                                            cursor: "not-allowed",
-                                        }}
-                                    >
-                                        {!isNaN(days) && date1Hours < date2Hours
-                                            ? days
-                                                  .toLocaleString()
-                                                  .replaceAll(/[-]/g, "")
-                                            : "-"}
-                                    </p>
-                                    <h3 className="formSublabel">
-                                        Origination Address
-                                    </h3>
-                                    <label
-                                        className="formLabel"
-                                        htmlFor="workStreetAddress"
-                                    >
-                                        Street Address
-                                    </label>
-                                    <p className="formInput">
-                                        {program === "STARSS"
-                                            ? "1 Enterprise Parkway, Suite 200"
-                                            : "10210 Greenbelt Rd., Ste 600"}
-                                    </p>
-                                    <label
-                                        className="formLabel"
-                                        htmlFor="workCity"
-                                    >
-                                        City
-                                    </label>
-                                    <p className="formInput">
-                                        {program === "STARSS"
-                                            ? "Hampton"
-                                            : "Lanham"}
-                                    </p>
-                                    <label
-                                        className="formLabel"
-                                        htmlFor="workState"
-                                    >
-                                        State
-                                    </label>
-                                    <p className="formInput">
-                                        {program === "STARSS"
-                                            ? "Virginia"
-                                            : "MD"}
-                                    </p>
-                                    <label
-                                        className="formLabel"
-                                        htmlFor="workZipcode"
-                                    >
-                                        Zipcode
-                                    </label>
-                                    <p className="formInput">
-                                        {program === "STARSS"
-                                            ? "23666"
-                                            : "20706"}
-                                    </p>
-                                    <h3 className="formSublabel">
-                                        Destination Address
-                                    </h3>
-                                    <label
-                                        className="formLabel"
-                                        htmlFor="destinationStreetAddress"
-                                    >
-                                        Street Address
-                                    </label>
-                                    <input
-                                        id="destinationStreetAddress"
-                                        name="destinationStreetAddress"
-                                        type="text"
-                                        value={destinationStreetAddress}
-                                        onChange={(e) =>
-                                            setDestinationStreetAddress(
-                                                e.target.value
-                                            )
-                                        }
-                                        className="formInput"
-                                    />
-                                    <label
-                                        className="formLabel"
-                                        htmlFor="destinationCity"
-                                    >
-                                        City
-                                    </label>
-                                    <input
-                                        id="destinationCity"
-                                        name="destinationCity"
-                                        type="text"
-                                        value={destinationCity}
-                                        onChange={(e) =>
-                                            setDestinationCity(e.target.value)
-                                        }
-                                        className="formInput"
-                                    />
-                                    <label
-                                        className="formLabel"
-                                        htmlFor="destinationState"
-                                    >
-                                        State
-                                    </label>
-                                    <input
-                                        id="destinationState"
-                                        name="destinationState"
-                                        type="text"
-                                        value={destinationState}
-                                        onChange={(e) =>
-                                            setDestinationState(e.target.value)
-                                        }
-                                        className="formInput"
-                                    />
-                                    <label
-                                        className="formLabel"
-                                        htmlFor="destinationZipcode"
-                                    >
-                                        Zipcode
-                                    </label>
-                                    <input
-                                        id="destinationZipcode"
-                                        name="destinationZipcode"
-                                        type="text"
-                                        value={destinationZipcode}
-                                        onChange={(e) =>
-                                            setDestinationZipcode(
-                                                e.target.value
-                                            )
-                                        }
-                                        className="formInput"
-                                    />
-                                    <h3 className="formSublabel">
-                                        Justification
-                                    </h3>
-                                    <div className="travelAdvanceCheckboxText">
-                                        <span
-                                            className={
-                                                justificationType ===
-                                                "Presenting"
-                                                    ? "travelAdvanceCheckboxChecked"
-                                                    : "travelAdvanceCheckboxUnchecked"
-                                            }
-                                            onClick={() =>
-                                                setJustificationType(
-                                                    "Presenting"
-                                                )
-                                            }
-                                        >
-                                            {justificationType ===
-                                                "Presenting" && (
-                                                <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                            )}
-                                        </span>
-                                        <p className="travelAdvanceText">
-                                            Presenting
-                                        </p>
-                                    </div>
-                                    <div className="travelAdvanceCheckboxText">
-                                        <span
-                                            className={
-                                                justificationType ===
-                                                "Poster Session"
-                                                    ? "travelAdvanceCheckboxChecked"
-                                                    : "travelAdvanceCheckboxUnchecked"
-                                            }
-                                            onClick={() =>
-                                                setJustificationType(
-                                                    "Poster Session"
-                                                )
-                                            }
-                                        >
-                                            {justificationType ===
-                                                "Poster Session" && (
-                                                <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                            )}
-                                        </span>
-                                        <p className="travelAdvanceText">
-                                            Poster Session
-                                        </p>
-                                    </div>
-                                    <div className="travelAdvanceCheckboxText">
-                                        <span
-                                            className={
-                                                justificationType ===
-                                                "Mission Support"
-                                                    ? "travelAdvanceCheckboxChecked"
-                                                    : "travelAdvanceCheckboxUnchecked"
-                                            }
-                                            onClick={() =>
-                                                setJustificationType(
-                                                    "Mission Support"
-                                                )
-                                            }
-                                        >
-                                            {justificationType ===
-                                                "Mission Support" && (
-                                                <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                            )}
-                                        </span>
-                                        <p className="travelAdvanceText">
-                                            Mission Support
-                                        </p>
-                                    </div>
-                                    <div className="travelAdvanceCheckboxText">
-                                        <span
-                                            className={
-                                                justificationType ===
-                                                "Chair Person"
-                                                    ? "travelAdvanceCheckboxChecked"
-                                                    : "travelAdvanceCheckboxUnchecked"
-                                            }
-                                            onClick={() =>
-                                                setJustificationType(
-                                                    "Chair Person"
-                                                )
-                                            }
-                                        >
-                                            {justificationType ===
-                                                "Chair Person" && (
-                                                <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                            )}
-                                        </span>
-                                        <p className="travelAdvanceText">
-                                            Chair Person
-                                        </p>
-                                    </div>
-                                    <label
-                                        className="formLabel"
-                                        htmlFor="justification"
-                                    >
-                                        Justification
-                                    </label>
-                                    <textarea
-                                        id="justification"
-                                        name="justification"
-                                        type="text"
-                                        value={justification}
-                                        onChange={(e) =>
-                                            setJustification(e.target.value)
-                                        }
-                                        className="formTextarea"
-                                    />
+                                    </p>{" "}
                                 </>
                             )}
+                            <label className="formLabel" htmlFor="travelMethod">
+                                Travel Method
+                            </label>
+                            <select
+                                id="travelMethod"
+                                name="travelMethod"
+                                type="text"
+                                value={travelMethod}
+                                onChange={(e) =>
+                                    setTravelMethod(e.target.value)
+                                }
+                                className="formInput"
+                                style={{ cursor: "pointer" }}
+                            >
+                                <option value="Air">Air</option>
+                                <option value="Train">Train</option>
+                                <option value="Bus">Bus</option>
+                                <option value="Rental Car">Rental Car</option>
+                                <option value="Personal Vehicle">
+                                    Personal Vehicle
+                                </option>
+                                <option value="Taxi/Uber">Taxi/Uber</option>
+                                <option value="None">None</option>
+                            </select>
+                            <label className="formLabel" htmlFor="startDate">
+                                Start Date
+                            </label>
+                            <DatePicker
+                                closeOnScroll={true}
+                                selected={startDate}
+                                onChange={(date) => {
+                                    setStartDate(date);
+                                }}
+                                minDate={new Date()}
+                                showMonthDropdown
+                                showYearDropdown
+                                dropdownMode="select"
+                                todayButton="Today"
+                                dateFormat="MM/dd/yyyy"
+                                calendarStartDay={1}
+                                className="formInput"
+                            />
+                            <label className="formLabel" htmlFor="endDate">
+                                End Date
+                            </label>
+                            <DatePicker
+                                closeOnScroll={true}
+                                selected={endDate}
+                                onChange={(date) => setEndDate(date)}
+                                showMonthDropdown
+                                showYearDropdown
+                                dropdownMode="select"
+                                todayButton="Today"
+                                dateFormat="MM/dd/yyyy"
+                                calendarStartDay={1}
+                                className="formInput"
+                            />
+                            {date1Hours >= date2Hours && (
+                                <p className="formError">
+                                    End date must be higher than start date.
+                                </p>
+                            )}
+                            <label
+                                className="formLabel"
+                                htmlFor="travelDaysAway"
+                            >
+                                Number of nights at this location
+                            </label>
+                            <p
+                                className="formInput"
+                                style={{
+                                    height: "53.2px",
+                                    cursor: "not-allowed",
+                                }}
+                            >
+                                {!isNaN(days) && date1Hours < date2Hours
+                                    ? days
+                                          .toLocaleString()
+                                          .replaceAll(/[-]/g, "")
+                                    : "-"}
+                            </p>
+                            <h3 className="formSublabel">
+                                Origination Address
+                            </h3>
+                            <label
+                                className="formLabel"
+                                htmlFor="workStreetAddress"
+                            >
+                                Street Address
+                            </label>
+                            <p className="formInput">
+                                {program === "STARSS"
+                                    ? "1 Enterprise Parkway, Suite 200"
+                                    : "10210 Greenbelt Rd., Ste 600"}
+                            </p>
+                            <label className="formLabel" htmlFor="workCity">
+                                City
+                            </label>
+                            <p className="formInput">
+                                {program === "STARSS" ? "Hampton" : "Lanham"}
+                            </p>
+                            <label className="formLabel" htmlFor="workState">
+                                State
+                            </label>
+                            <p className="formInput">
+                                {program === "STARSS" ? "Virginia" : "MD"}
+                            </p>
+                            <label className="formLabel" htmlFor="workZipcode">
+                                Zipcode
+                            </label>
+                            <p className="formInput">
+                                {program === "STARSS" ? "23666" : "20706"}
+                            </p>
+                            <h3 className="formSublabel">
+                                Destination Address
+                            </h3>
+                            <label
+                                className="formLabel"
+                                htmlFor="destinationStreetAddress"
+                            >
+                                Street Address
+                            </label>
+                            <input
+                                id="destinationStreetAddress"
+                                name="destinationStreetAddress"
+                                type="text"
+                                value={destinationStreetAddress}
+                                onChange={(e) =>
+                                    setDestinationStreetAddress(e.target.value)
+                                }
+                                className="formInput"
+                            />
+                            <label
+                                className="formLabel"
+                                htmlFor="destinationCity"
+                            >
+                                City
+                            </label>
+                            <input
+                                id="destinationCity"
+                                name="destinationCity"
+                                type="text"
+                                value={destinationCity}
+                                onChange={(e) =>
+                                    setDestinationCity(e.target.value)
+                                }
+                                className="formInput"
+                            />
+                            <label
+                                className="formLabel"
+                                htmlFor="destinationState"
+                            >
+                                State
+                            </label>
+                            <input
+                                id="destinationState"
+                                name="destinationState"
+                                type="text"
+                                value={destinationState}
+                                onChange={(e) =>
+                                    setDestinationState(e.target.value)
+                                }
+                                className="formInput"
+                            />
+                            <label
+                                className="formLabel"
+                                htmlFor="destinationZipcode"
+                            >
+                                Zipcode
+                            </label>
+                            <input
+                                id="destinationZipcode"
+                                name="destinationZipcode"
+                                type="text"
+                                value={destinationZipcode}
+                                onChange={(e) =>
+                                    setDestinationZipcode(e.target.value)
+                                }
+                                className="formInput"
+                            />
+                            <h3 className="formSublabel">Justification</h3>
+                            <div className="travelAdvanceCheckboxText">
+                                <span
+                                    className={
+                                        justificationType === "Presenting"
+                                            ? "travelAdvanceCheckboxChecked"
+                                            : "travelAdvanceCheckboxUnchecked"
+                                    }
+                                    onClick={() =>
+                                        setJustificationType("Presenting")
+                                    }
+                                >
+                                    {justificationType === "Presenting" && (
+                                        <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                    )}
+                                </span>
+                                <p className="travelAdvanceText">Presenting</p>
+                            </div>
+                            <div className="travelAdvanceCheckboxText">
+                                <span
+                                    className={
+                                        justificationType === "Poster Session"
+                                            ? "travelAdvanceCheckboxChecked"
+                                            : "travelAdvanceCheckboxUnchecked"
+                                    }
+                                    onClick={() =>
+                                        setJustificationType("Poster Session")
+                                    }
+                                >
+                                    {justificationType === "Poster Session" && (
+                                        <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                    )}
+                                </span>
+                                <p className="travelAdvanceText">
+                                    Poster Session
+                                </p>
+                            </div>
+                            <div className="travelAdvanceCheckboxText">
+                                <span
+                                    className={
+                                        justificationType === "Mission Support"
+                                            ? "travelAdvanceCheckboxChecked"
+                                            : "travelAdvanceCheckboxUnchecked"
+                                    }
+                                    onClick={() =>
+                                        setJustificationType("Mission Support")
+                                    }
+                                >
+                                    {justificationType ===
+                                        "Mission Support" && (
+                                        <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                    )}
+                                </span>
+                                <p className="travelAdvanceText">
+                                    Mission Support
+                                </p>
+                            </div>
+                            <div className="travelAdvanceCheckboxText">
+                                <span
+                                    className={
+                                        justificationType === "Chair Person"
+                                            ? "travelAdvanceCheckboxChecked"
+                                            : "travelAdvanceCheckboxUnchecked"
+                                    }
+                                    onClick={() =>
+                                        setJustificationType("Chair Person")
+                                    }
+                                >
+                                    {justificationType === "Chair Person" && (
+                                        <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                    )}
+                                </span>
+                                <p className="travelAdvanceText">
+                                    Chair Person
+                                </p>
+                            </div>
+                            <label
+                                className="formLabel"
+                                htmlFor="justification"
+                            >
+                                Justification
+                            </label>
+                            <textarea
+                                id="justification"
+                                name="justification"
+                                type="text"
+                                value={justification}
+                                onChange={(e) =>
+                                    setJustification(e.target.value)
+                                }
+                                className="formTextarea"
+                            />
+
                             {regulatoryForeignTravel === "Foreign" && (
                                 <div className="formVerbage">
                                     <ul>

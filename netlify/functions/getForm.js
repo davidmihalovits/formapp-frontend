@@ -23,7 +23,7 @@ const getForm = async (req, res, next) => {
     }
 
     const form = await Form.findOne({ _id: req.id }).populate({
-        path: "creator approvalBy activity.viewedBy activity.signedBy activity.editedBy activity.commentBy",
+        path: "creator approvalBy activity.viewedBy activity.signedBy activity.editedBy activity.commentBy activity.routedBy",
         model: "users",
     });
 

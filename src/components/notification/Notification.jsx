@@ -1,5 +1,6 @@
 import "./Notification.sass";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 const Notification = (props) => {
     const devprodUrl =
@@ -51,6 +52,11 @@ const Notification = (props) => {
                                 )}
                                 <p className="notificationsText">
                                     {n.notification}
+                                </p>
+                                <p className="notificationsDate">
+                                    {moment(n.createdAt).format(
+                                        "MMMM Do YYYY, h:mm:ss a"
+                                    )}
                                 </p>
                             </div>
                         </Link>

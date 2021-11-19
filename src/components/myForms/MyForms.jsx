@@ -162,8 +162,12 @@ const MyForms = (props) => {
                                         {f.comment && `"${f.comment}"`}
                                     </p>
                                     <p className="myformsLinkFormsBy">
-                                        {f.approvalBy.email} (
-                                        {f.approvalBy.supervisorRole})
+                                        {f.approvalBy && f.approvalBy.email}{" "}
+                                        {f.approvalBy && (
+                                            <span>
+                                                ({f.approvalBy.supervisorRole})
+                                            </span>
+                                        )}
                                     </p>
                                     <p className="myformsLinkFormsCreator">
                                         {f.email}

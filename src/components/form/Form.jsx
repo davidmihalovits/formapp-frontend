@@ -55,12 +55,13 @@ const Form = (props) => {
     );
     const [regulatoryCiBrief, setRegulatoryCiBrief] = useState(false);
     const [regulatoryItEquipment, setRegulatoryItEquipment] = useState(false);
-    const [regulatoryVisa, setRegulatoryVisa] = useState("Not required");
+    const [regulatoryVisa, setRegulatoryVisa] = useState("");
     const [travelAdvanceMoreThanTotal, setTravelAdvanceMoreThanTotal] =
         useState(false);
     const [step, setStep] = useState("20%");
 
-    const [route, setRoute] = useState("");
+    //const [route, setRoute] = useState("");
+    const [messageToCO, setMessageToCO] = useState("");
 
     const [chargeCodes, setChargeCodes] = useState([]);
 
@@ -357,7 +358,7 @@ const Form = (props) => {
         }
     };
 
-    const routing = async () => {
+    /*const routing = async () => {
         const token = localStorage.getItem("token");
 
         if (!token) {
@@ -379,7 +380,7 @@ const Form = (props) => {
             .then((data) => alert(data));
 
         return window.location.reload();
-    };
+    };*/
 
     const routeTo = async (r) => {
         const token = localStorage.getItem("token");
@@ -397,6 +398,8 @@ const Form = (props) => {
             body: JSON.stringify({
                 id: form._id,
                 routingPending: r,
+                routedBy: props.user,
+                messageToCO: messageToCO,
             }),
         })
             .then((res) => res.json())
@@ -649,7 +652,8 @@ const Form = (props) => {
                                             .filter(
                                                 (p) =>
                                                     p.program === "SAMDA" &&
-                                                    program === "SAMDA"
+                                                    program === "SAMDA" &&
+                                                    p.chargeCode.includes("CY5")
                                             )
                                             .map((c, key) => {
                                                 return (
@@ -905,6 +909,7 @@ const Form = (props) => {
                                             setRegulatoryForeignTravel(
                                                 form.regulatoryForeignTravel
                                             );
+                                            setTravelMethod(form.travelMethod);
                                             setStep("60%");
                                         }}
                                     >
@@ -923,11 +928,12 @@ const Form = (props) => {
                                         }
                                         onClick={() => {
                                             setIsVirtual(true);
-                                            setStartDate("");
-                                            setEndDate("");
+                                            //setStartDate("");
+                                            //setEndDate("");
                                             setRegulatoryForeignTravel(
                                                 "Virtual"
                                             );
+                                            setTravelMethod("None");
                                             setStep("100%");
                                         }}
                                     >
@@ -1018,338 +1024,308 @@ const Form = (props) => {
                                         <p className="formTravelTypeText">
                                             Over 50 miles away but in USA
                                         </p>
-                                        <label
-                                            className="formLabel"
-                                            htmlFor="travelMethod"
-                                        >
-                                            Travel Method
-                                        </label>
-                                        <select
-                                            id="travelMethod"
-                                            name="travelMethod"
-                                            type="text"
-                                            value={travelMethod}
-                                            onChange={(e) =>
-                                                setTravelMethod(e.target.value)
-                                            }
-                                            className="formInput"
-                                            style={{ cursor: "pointer" }}
-                                        >
-                                            <option value="Air">Air</option>
-                                            <option value="Train">Train</option>
-                                            <option value="Bus">Bus</option>
-                                            <option value="Rental Car">
-                                                Rental Car
-                                            </option>
-                                            <option value="Personal Vehicle">
-                                                Personal Vehicle
-                                            </option>
-                                            <option value="Taxi/Uber">
-                                                Taxi/Uber
-                                            </option>
-                                        </select>
-                                        <label
-                                            className="formLabel"
-                                            htmlFor="startDate"
-                                        >
-                                            Start Date
-                                        </label>
-                                        <DatePicker
-                                            closeOnScroll={true}
-                                            selected={startDate}
-                                            onChange={(date) => {
-                                                setStartDate(date);
-                                            }}
-                                            minDate={new Date()}
-                                            showMonthDropdown
-                                            showYearDropdown
-                                            dropdownMode="select"
-                                            todayButton="Today"
-                                            dateFormat="MM/dd/yyyy"
-                                            calendarStartDay={1}
-                                            className="formInput"
-                                        />
-                                        <label
-                                            className="formLabel"
-                                            htmlFor="endDate"
-                                        >
-                                            End Date
-                                        </label>
-                                        <DatePicker
-                                            closeOnScroll={true}
-                                            selected={endDate}
-                                            onChange={(date) =>
-                                                setEndDate(date)
-                                            }
-                                            showMonthDropdown
-                                            showYearDropdown
-                                            dropdownMode="select"
-                                            todayButton="Today"
-                                            dateFormat="MM/dd/yyyy"
-                                            calendarStartDay={1}
-                                            className="formInput"
-                                        />
-                                        {date1Hours >= date2Hours && (
-                                            <p className="formError">
-                                                End date must be higher than
-                                                start date.
-                                            </p>
-                                        )}
-                                        <label
-                                            className="formLabel"
-                                            htmlFor="travelDaysAway"
-                                        >
-                                            Number of Nights at this location
-                                        </label>
-                                        <p
-                                            className="formInput"
-                                            style={{
-                                                height: "53.2px",
-                                                cursor: "not-allowed",
-                                            }}
-                                        >
-                                            {!isNaN(days) &&
-                                            date1Hours < date2Hours
-                                                ? days
-                                                      .toLocaleString()
-                                                      .replaceAll(/[-]/g, "")
-                                                : "-"}
-                                        </p>
-                                        <h2 className="formSublabel">
-                                            Origination Address
-                                        </h2>
-                                        <label
-                                            className="formLabel"
-                                            htmlFor="workStreetAddress"
-                                        >
-                                            Street Address
-                                        </label>
-                                        <p className="formInput">
-                                            {program === "STARSS"
-                                                ? "1 Enterprise Parkway, Suite 200"
-                                                : "10210 Greenbelt Rd., Ste 600"}
-                                        </p>
-                                        <label
-                                            className="formLabel"
-                                            htmlFor="workCity"
-                                        >
-                                            City
-                                        </label>
-                                        <p className="formInput">
-                                            {program === "STARSS"
-                                                ? "Hampton"
-                                                : "Lanham"}
-                                        </p>
-                                        <label
-                                            className="formLabel"
-                                            htmlFor="workState"
-                                        >
-                                            State
-                                        </label>
-                                        <p className="formInput">
-                                            {program === "STARSS"
-                                                ? "Virginia"
-                                                : "MD"}
-                                        </p>
-                                        <label
-                                            className="formLabel"
-                                            htmlFor="workZipcode"
-                                        >
-                                            Zipcode
-                                        </label>
-                                        <p className="formInput">
-                                            {program === "STARSS"
-                                                ? "23666"
-                                                : "20706"}
-                                        </p>
-                                        <h3 className="formSublabel">
-                                            Destination Address
-                                        </h3>
-                                        <label
-                                            className="formLabel"
-                                            htmlFor="destinationStreetAddress"
-                                        >
-                                            Street Address
-                                        </label>
-                                        <input
-                                            id="destinationStreetAddress"
-                                            name="destinationStreetAddress"
-                                            type="text"
-                                            value={destinationStreetAddress}
-                                            onChange={(e) =>
-                                                setDestinationStreetAddress(
-                                                    e.target.value
-                                                )
-                                            }
-                                            className="formInput"
-                                        />
-                                        <label
-                                            className="formLabel"
-                                            htmlFor="destinationCity"
-                                        >
-                                            City
-                                        </label>
-                                        <input
-                                            id="destinationCity"
-                                            name="destinationCity"
-                                            type="text"
-                                            value={destinationCity}
-                                            onChange={(e) =>
-                                                setDestinationCity(
-                                                    e.target.value
-                                                )
-                                            }
-                                            className="formInput"
-                                        />
-                                        <label
-                                            className="formLabel"
-                                            htmlFor="destinationState"
-                                        >
-                                            State
-                                        </label>
-                                        <input
-                                            id="destinationState"
-                                            name="destinationState"
-                                            type="text"
-                                            value={destinationState}
-                                            onChange={(e) =>
-                                                setDestinationState(
-                                                    e.target.value
-                                                )
-                                            }
-                                            className="formInput"
-                                        />
-                                        <label
-                                            className="formLabel"
-                                            htmlFor="destinationZipcode"
-                                        >
-                                            Zipcode
-                                        </label>
-                                        <input
-                                            id="destinationZipcode"
-                                            name="destinationZipcode"
-                                            type="text"
-                                            value={destinationZipcode}
-                                            onChange={(e) =>
-                                                setDestinationZipcode(
-                                                    e.target.value
-                                                )
-                                            }
-                                            className="formInput"
-                                        />
-                                        <h3 className="formSublabel">
-                                            Justification
-                                        </h3>
-                                        <div className="travelAdvanceCheckboxText">
-                                            <span
-                                                className={
-                                                    justificationType ===
-                                                    "Presenting"
-                                                        ? "travelAdvanceCheckboxChecked"
-                                                        : "travelAdvanceCheckboxUnchecked"
-                                                }
-                                                onClick={() =>
-                                                    setJustificationType(
-                                                        "Presenting"
-                                                    )
-                                                }
-                                            >
-                                                {justificationType ===
-                                                    "Presenting" && (
-                                                    <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                                )}
-                                            </span>
-                                            <p className="travelAdvanceText">
-                                                Presenting
-                                            </p>
-                                        </div>
-                                        <div className="travelAdvanceCheckboxText">
-                                            <span
-                                                className={
-                                                    justificationType ===
-                                                    "Poster Session"
-                                                        ? "travelAdvanceCheckboxChecked"
-                                                        : "travelAdvanceCheckboxUnchecked"
-                                                }
-                                                onClick={() =>
-                                                    setJustificationType(
-                                                        "Poster Session"
-                                                    )
-                                                }
-                                            >
-                                                {justificationType ===
-                                                    "Poster Session" && (
-                                                    <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                                )}
-                                            </span>
-                                            <p className="travelAdvanceText">
-                                                Poster Session
-                                            </p>
-                                        </div>
-                                        <div className="travelAdvanceCheckboxText">
-                                            <span
-                                                className={
-                                                    justificationType ===
-                                                    "Mission Support"
-                                                        ? "travelAdvanceCheckboxChecked"
-                                                        : "travelAdvanceCheckboxUnchecked"
-                                                }
-                                                onClick={() =>
-                                                    setJustificationType(
-                                                        "Mission Support"
-                                                    )
-                                                }
-                                            >
-                                                {justificationType ===
-                                                    "Mission Support" && (
-                                                    <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                                )}
-                                            </span>
-                                            <p className="travelAdvanceText">
-                                                Mission Support
-                                            </p>
-                                        </div>
-                                        <div className="travelAdvanceCheckboxText">
-                                            <span
-                                                className={
-                                                    justificationType ===
-                                                    "Chair Person"
-                                                        ? "travelAdvanceCheckboxChecked"
-                                                        : "travelAdvanceCheckboxUnchecked"
-                                                }
-                                                onClick={() =>
-                                                    setJustificationType(
-                                                        "Chair Person"
-                                                    )
-                                                }
-                                            >
-                                                {justificationType ===
-                                                    "Chair Person" && (
-                                                    <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
-                                                )}
-                                            </span>
-                                            <p className="travelAdvanceText">
-                                                Chair Person
-                                            </p>
-                                        </div>
-                                        <label
-                                            className="formLabel"
-                                            htmlFor="justification"
-                                        >
-                                            Justification
-                                        </label>
-                                        <textarea
-                                            id="justification"
-                                            name="justification"
-                                            type="text"
-                                            value={justification}
-                                            onChange={(e) =>
-                                                setJustification(e.target.value)
-                                            }
-                                            className="formTextarea"
-                                        />
                                     </>
                                 )}
+                                <label
+                                    className="formLabel"
+                                    htmlFor="travelMethod"
+                                >
+                                    Travel Method
+                                </label>
+                                <select
+                                    id="travelMethod"
+                                    name="travelMethod"
+                                    type="text"
+                                    value={travelMethod}
+                                    onChange={(e) =>
+                                        setTravelMethod(e.target.value)
+                                    }
+                                    className="formInput"
+                                    style={{ cursor: "pointer" }}
+                                >
+                                    <option value="Air">Air</option>
+                                    <option value="Train">Train</option>
+                                    <option value="Bus">Bus</option>
+                                    <option value="Rental Car">
+                                        Rental Car
+                                    </option>
+                                    <option value="Personal Vehicle">
+                                        Personal Vehicle
+                                    </option>
+                                    <option value="Taxi/Uber">Taxi/Uber</option>
+                                    <option value="None">None</option>
+                                </select>
+                                <label
+                                    className="formLabel"
+                                    htmlFor="startDate"
+                                >
+                                    Start Date
+                                </label>
+                                <DatePicker
+                                    closeOnScroll={true}
+                                    selected={startDate}
+                                    onChange={(date) => {
+                                        setStartDate(date);
+                                    }}
+                                    minDate={new Date()}
+                                    showMonthDropdown
+                                    showYearDropdown
+                                    dropdownMode="select"
+                                    todayButton="Today"
+                                    dateFormat="MM/dd/yyyy"
+                                    calendarStartDay={1}
+                                    className="formInput"
+                                />
+                                <label className="formLabel" htmlFor="endDate">
+                                    End Date
+                                </label>
+                                <DatePicker
+                                    closeOnScroll={true}
+                                    selected={endDate}
+                                    onChange={(date) => setEndDate(date)}
+                                    showMonthDropdown
+                                    showYearDropdown
+                                    dropdownMode="select"
+                                    todayButton="Today"
+                                    dateFormat="MM/dd/yyyy"
+                                    calendarStartDay={1}
+                                    className="formInput"
+                                />
+                                {date1Hours >= date2Hours && (
+                                    <p className="formError">
+                                        End date must be higher than start date.
+                                    </p>
+                                )}
+                                <label
+                                    className="formLabel"
+                                    htmlFor="travelDaysAway"
+                                >
+                                    Number of Nights at this location
+                                </label>
+                                <p
+                                    className="formInput"
+                                    style={{
+                                        height: "53.2px",
+                                        cursor: "not-allowed",
+                                    }}
+                                >
+                                    {!isNaN(days) && date1Hours < date2Hours
+                                        ? days
+                                              .toLocaleString()
+                                              .replaceAll(/[-]/g, "")
+                                        : "-"}
+                                </p>
+                                <h2 className="formSublabel">
+                                    Origination Address
+                                </h2>
+                                <label
+                                    className="formLabel"
+                                    htmlFor="workStreetAddress"
+                                >
+                                    Street Address
+                                </label>
+                                <p className="formInput">
+                                    {program === "STARSS"
+                                        ? "1 Enterprise Parkway, Suite 200"
+                                        : "10210 Greenbelt Rd., Ste 600"}
+                                </p>
+                                <label className="formLabel" htmlFor="workCity">
+                                    City
+                                </label>
+                                <p className="formInput">
+                                    {program === "STARSS"
+                                        ? "Hampton"
+                                        : "Lanham"}
+                                </p>
+                                <label
+                                    className="formLabel"
+                                    htmlFor="workState"
+                                >
+                                    State
+                                </label>
+                                <p className="formInput">
+                                    {program === "STARSS" ? "Virginia" : "MD"}
+                                </p>
+                                <label
+                                    className="formLabel"
+                                    htmlFor="workZipcode"
+                                >
+                                    Zipcode
+                                </label>
+                                <p className="formInput">
+                                    {program === "STARSS" ? "23666" : "20706"}
+                                </p>
+                                <h3 className="formSublabel">
+                                    Destination Address
+                                </h3>
+                                <label
+                                    className="formLabel"
+                                    htmlFor="destinationStreetAddress"
+                                >
+                                    Street Address
+                                </label>
+                                <input
+                                    id="destinationStreetAddress"
+                                    name="destinationStreetAddress"
+                                    type="text"
+                                    value={destinationStreetAddress}
+                                    onChange={(e) =>
+                                        setDestinationStreetAddress(
+                                            e.target.value
+                                        )
+                                    }
+                                    className="formInput"
+                                />
+                                <label
+                                    className="formLabel"
+                                    htmlFor="destinationCity"
+                                >
+                                    City
+                                </label>
+                                <input
+                                    id="destinationCity"
+                                    name="destinationCity"
+                                    type="text"
+                                    value={destinationCity}
+                                    onChange={(e) =>
+                                        setDestinationCity(e.target.value)
+                                    }
+                                    className="formInput"
+                                />
+                                <label
+                                    className="formLabel"
+                                    htmlFor="destinationState"
+                                >
+                                    State
+                                </label>
+                                <input
+                                    id="destinationState"
+                                    name="destinationState"
+                                    type="text"
+                                    value={destinationState}
+                                    onChange={(e) =>
+                                        setDestinationState(e.target.value)
+                                    }
+                                    className="formInput"
+                                />
+                                <label
+                                    className="formLabel"
+                                    htmlFor="destinationZipcode"
+                                >
+                                    Zipcode
+                                </label>
+                                <input
+                                    id="destinationZipcode"
+                                    name="destinationZipcode"
+                                    type="text"
+                                    value={destinationZipcode}
+                                    onChange={(e) =>
+                                        setDestinationZipcode(e.target.value)
+                                    }
+                                    className="formInput"
+                                />
+                                <h3 className="formSublabel">Justification</h3>
+                                <div className="travelAdvanceCheckboxText">
+                                    <span
+                                        className={
+                                            justificationType === "Presenting"
+                                                ? "travelAdvanceCheckboxChecked"
+                                                : "travelAdvanceCheckboxUnchecked"
+                                        }
+                                        onClick={() =>
+                                            setJustificationType("Presenting")
+                                        }
+                                    >
+                                        {justificationType === "Presenting" && (
+                                            <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                        )}
+                                    </span>
+                                    <p className="travelAdvanceText">
+                                        Presenting
+                                    </p>
+                                </div>
+                                <div className="travelAdvanceCheckboxText">
+                                    <span
+                                        className={
+                                            justificationType ===
+                                            "Poster Session"
+                                                ? "travelAdvanceCheckboxChecked"
+                                                : "travelAdvanceCheckboxUnchecked"
+                                        }
+                                        onClick={() =>
+                                            setJustificationType(
+                                                "Poster Session"
+                                            )
+                                        }
+                                    >
+                                        {justificationType ===
+                                            "Poster Session" && (
+                                            <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                        )}
+                                    </span>
+                                    <p className="travelAdvanceText">
+                                        Poster Session
+                                    </p>
+                                </div>
+                                <div className="travelAdvanceCheckboxText">
+                                    <span
+                                        className={
+                                            justificationType ===
+                                            "Mission Support"
+                                                ? "travelAdvanceCheckboxChecked"
+                                                : "travelAdvanceCheckboxUnchecked"
+                                        }
+                                        onClick={() =>
+                                            setJustificationType(
+                                                "Mission Support"
+                                            )
+                                        }
+                                    >
+                                        {justificationType ===
+                                            "Mission Support" && (
+                                            <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                        )}
+                                    </span>
+                                    <p className="travelAdvanceText">
+                                        Mission Support
+                                    </p>
+                                </div>
+                                <div className="travelAdvanceCheckboxText">
+                                    <span
+                                        className={
+                                            justificationType === "Chair Person"
+                                                ? "travelAdvanceCheckboxChecked"
+                                                : "travelAdvanceCheckboxUnchecked"
+                                        }
+                                        onClick={() =>
+                                            setJustificationType("Chair Person")
+                                        }
+                                    >
+                                        {justificationType ===
+                                            "Chair Person" && (
+                                            <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
+                                        )}
+                                    </span>
+                                    <p className="travelAdvanceText">
+                                        Chair Person
+                                    </p>
+                                </div>
+                                <label
+                                    className="formLabel"
+                                    htmlFor="justification"
+                                >
+                                    Justification
+                                </label>
+                                <textarea
+                                    id="justification"
+                                    name="justification"
+                                    type="text"
+                                    value={justification}
+                                    onChange={(e) =>
+                                        setJustification(e.target.value)
+                                    }
+                                    className="formTextarea"
+                                />
                                 {regulatoryForeignTravel === "Foreign" && (
                                     <div className="formVerbage">
                                         <ul>
@@ -1759,18 +1735,6 @@ const Form = (props) => {
                     <div className="submittedformActivity">
                         <h2 className="submittedformActivityTitle">Routing</h2>
                         <div className="submittedformActivityRouting">
-                            {/*<p className="submittedformActivityRoutingText">
-                                Travel Admin
-                                <span
-                                    className="submittedformActivityRoutingCircle"
-                                    style={{
-                                        background:
-                                            form &&
-                                            form.routing.includes("TA") &&
-                                            "#FDD835",
-                                    }}
-                                ></span>
-                            </p>*/}
                             <p className="submittedformActivityRoutingText">
                                 Task Monitor
                                 <span
@@ -1796,7 +1760,7 @@ const Form = (props) => {
                                 ></span>
                             </p>
                             <p className="submittedformActivityRoutingText">
-                                Program Lead
+                                Group/Project Lead
                                 <span
                                     className="submittedformActivityRoutingCircle"
                                     style={{
@@ -1868,6 +1832,13 @@ const Form = (props) => {
                                 ></span>
                             </p>
                         </div>
+                        {props.user &&
+                            props.user.supervisorRole === "CO" &&
+                            form.messageToCO && (
+                                <p className="submittedformActivityMessageToCO">
+                                    "{form.messageToCO}"
+                                </p>
+                            )}
                         <h2 className="submittedformActivityTitle">Activity</h2>
                         <div
                             className="submittedformActivityList"
@@ -1879,6 +1850,9 @@ const Form = (props) => {
                                 Created by:
                                 <br />
                                 {form && form.creator.email}
+                                {form && form.creator.supervisorRole && (
+                                    <span>({form.creator.supervisorRole})</span>
+                                )}
                             </p>
                             <p className="submittedformActivityText">
                                 {moment(form.createdAt).format(
@@ -1904,7 +1878,12 @@ const Form = (props) => {
                                                     <p className="submittedformActivityText">
                                                         Signed by:
                                                         <br />
-                                                        {f.signedBy.email}
+                                                        {f.signedBy.email}(
+                                                        {
+                                                            f.signedBy
+                                                                .supervisorRole
+                                                        }
+                                                        )
                                                     </p>
                                                     {f.approved ===
                                                         "Approved" && (
@@ -1939,6 +1918,17 @@ const Form = (props) => {
                                                         Viewed by:
                                                         <br />
                                                         {f.viewedBy.email}
+                                                        {f.viewedBy
+                                                            .supervisorRole && (
+                                                            <span>
+                                                                (
+                                                                {
+                                                                    f.viewedBy
+                                                                        .supervisorRole
+                                                                }
+                                                                )
+                                                            </span>
+                                                        )}
                                                     </p>
                                                     <p className="submittedformActivityText">
                                                         {moment(f.date).format(
@@ -1958,6 +1948,17 @@ const Form = (props) => {
                                                         Edited by:
                                                         <br />
                                                         {f.editedBy.email}
+                                                        {f.editedBy
+                                                            .supervisorRole && (
+                                                            <span>
+                                                                (
+                                                                {
+                                                                    f.editedBy
+                                                                        .supervisorRole
+                                                                }
+                                                                )
+                                                            </span>
+                                                        )}
                                                     </p>
                                                     <p className="submittedformActivityText">
                                                         {moment(f.date).format(
@@ -1977,9 +1978,46 @@ const Form = (props) => {
                                                         Comment by:
                                                         <br />
                                                         {f.commentBy.email}
+                                                        {f.commentBy
+                                                            .supervisorRole && (
+                                                            <span>
+                                                                (
+                                                                {
+                                                                    f.commentBy
+                                                                        .supervisorRole
+                                                                }
+                                                                )
+                                                            </span>
+                                                        )}
                                                     </p>
                                                     <p className="submittedformActivityComment">
                                                         {f.comment}
+                                                    </p>
+                                                    <p className="submittedformActivityText">
+                                                        {moment(f.date).format(
+                                                            "MMMM Do YYYY, h:mm:ss a"
+                                                        )}
+                                                    </p>
+                                                </div>
+                                            )}
+                                            {f.routedTo && (
+                                                <div
+                                                    style={{
+                                                        borderBottom:
+                                                            "1px solid #ebebeb",
+                                                    }}
+                                                >
+                                                    <p className="submittedformActivityText">
+                                                        Routed by:
+                                                        <br />
+                                                        {f.routedBy.email}(
+                                                        {
+                                                            f.routedBy
+                                                                .supervisorRole
+                                                        }
+                                                        )
+                                                        <br />
+                                                        routed to {f.routedTo}
                                                     </p>
                                                     <p className="submittedformActivityText">
                                                         {moment(f.date).format(
@@ -1993,18 +2031,6 @@ const Form = (props) => {
                                 })
                             //.reverse()
                         }
-                        {/*<div className="submittedformActivityList">
-                            <p className="submittedformActivityText">
-                                Created by:
-                                <br />
-                                {form && form.creator.email}
-                            </p>
-                            <p className="submittedformActivityText">
-                                {moment(form.createdAt).format(
-                                    "MMMM Do YYYY, h:mm:ss a"
-                                )}
-                            </p>
-                                </div>*/}
                     </div>
                 </div>
                 <div>
@@ -2360,38 +2386,67 @@ const Form = (props) => {
                             </button>
                         </form>
                     ) : null}
-                    {props.user &&
-                        props.user.email !== form.email &&
-                        form.approved !== "Approved" && (
-                            <div className="submittedformRouting">
-                                <h2 className="submittedformRoutingTitle">
-                                    Routing
-                                </h2>
-                                <button
-                                    className="submittedformRoutingButton"
-                                    onClick={() => routeTo("TM")}
-                                >
-                                    Route to Task Monitor
-                                </button>
-                                <button
-                                    className="submittedformRoutingButton"
-                                    onClick={() => routeTo("PL")}
-                                >
-                                    Route to Program Lead
-                                </button>
-                                <button
-                                    className="submittedformRoutingButton"
-                                    onClick={() => routeTo("PM")}
-                                >
-                                    Route to Program Manager
-                                </button>
-                                <button
-                                    className="submittedformRoutingButton"
-                                    onClick={() => routeTo("CO")}
-                                >
-                                    Route to Contracting Officer
-                                </button>
-                                {/*<div className="submittedformRoutingCheckboxText">
+                    {props.user && props.user.email !== form.email && (
+                        <div className="submittedformRouting">
+                            <h2 className="submittedformRoutingTitle">
+                                Routing
+                            </h2>
+                            <button
+                                className="submittedformRoutingButton"
+                                onClick={() => routeTo("TM")}
+                            >
+                                Route to Task Monitor
+                            </button>
+                            <button
+                                className="submittedformRoutingButton"
+                                onClick={() => routeTo("PL")}
+                            >
+                                Route to Group/Project Lead
+                            </button>
+                            <button
+                                className="submittedformRoutingButton"
+                                onClick={() => routeTo("PM")}
+                            >
+                                Route to Program Manager
+                            </button>
+                            {props.user.supervisorRole === "TA" && (
+                                <>
+                                    <textarea
+                                        id="messageToCO"
+                                        name="messageToCO"
+                                        type="text"
+                                        value={messageToCO}
+                                        onChange={(e) =>
+                                            setMessageToCO(e.target.value)
+                                        }
+                                        className="submittedformRoutingTextarea"
+                                        placeholder="Message to CO"
+                                    />
+                                    <button
+                                        className="submittedformRoutingButton"
+                                        onClick={() => routeTo("CO")}
+                                    >
+                                        Route to Contracting Officer
+                                    </button>
+                                    <div className="submittedformRoutingToCoButtons">
+                                        <button
+                                            className="submittedformRoutingToCoButton"
+                                            onClick={() => routeTo("notify")}
+                                        >
+                                            CO Notify
+                                        </button>
+                                        <button
+                                            className="submittedformRoutingToCoButton"
+                                            onClick={() =>
+                                                routeTo("concurrence")
+                                            }
+                                        >
+                                            CO Concurrence
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                            {/*<div className="submittedformRoutingCheckboxText">
                                 <span
                                     className={
                                         route.includes("TM")
@@ -2436,7 +2491,7 @@ const Form = (props) => {
                                     )}
                                 </span>
                                 <p className="submittedformRoutingText">
-                                    Program Lead
+                                    Group/Project Lead
                                 </p>
                             </div>
                             <div className="submittedformRoutingCheckboxText">
@@ -2493,8 +2548,8 @@ const Form = (props) => {
                             >
                                 Route
                             </button>*/}
-                            </div>
-                        )}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

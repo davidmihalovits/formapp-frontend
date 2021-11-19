@@ -136,6 +136,15 @@ const FormSchema = mongoose.Schema(
         routingRejected: {
             type: Array,
         },
+        messageToCO: {
+            type: String,
+        },
+        COnotify: {
+            type: Boolean,
+        },
+        COconcurrence: {
+            type: Boolean,
+        },
         activity: [
             {
                 viewedBy: {
@@ -154,6 +163,11 @@ const FormSchema = mongoose.Schema(
                     type: mongoose.Schema.Types.ObjectId,
                     ref: "users",
                 },
+                routedBy: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "users",
+                },
+                routedTo: String,
                 approved: String,
                 comment: String,
                 date: Date,

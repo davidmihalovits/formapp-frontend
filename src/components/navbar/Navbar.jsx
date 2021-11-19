@@ -54,6 +54,40 @@ const Navbar = (props) => {
                             </p>
                         </Link>
                     )}
+                    {props.user && props.user.supervisorRole === "CO" && (
+                        <>
+                            <Link
+                                to="/notify"
+                                className="navbarLink"
+                                onClick={() => setHamburgerModal(false)}
+                            >
+                                <p
+                                    className={
+                                        location.pathname === "/notify"
+                                            ? "navbarLinkItemActive"
+                                            : "navbarLinkItemInactive"
+                                    }
+                                >
+                                    Notify
+                                </p>
+                            </Link>
+                            <Link
+                                to="/concurrence"
+                                className="navbarLink"
+                                onClick={() => setHamburgerModal(false)}
+                            >
+                                <p
+                                    className={
+                                        location.pathname === "/concurrence"
+                                            ? "navbarLinkItemActive"
+                                            : "navbarLinkItemInactive"
+                                    }
+                                >
+                                    Concurrence
+                                </p>
+                            </Link>
+                        </>
+                    )}
                     <Link
                         to="/pending"
                         className="navbarLink"
@@ -99,21 +133,23 @@ const Navbar = (props) => {
                             Rejected
                         </p>
                     </Link>
-                    <Link
-                        to="/myforms"
-                        className="navbarLink"
-                        onClick={() => setHamburgerModal(false)}
-                    >
-                        <p
-                            className={
-                                location.pathname === "/myforms"
-                                    ? "navbarLinkItemActive"
-                                    : "navbarLinkItemInactive"
-                            }
+                    {props.user && props.user.role !== "Supervisor" && (
+                        <Link
+                            to="/myforms"
+                            className="navbarLink"
+                            onClick={() => setHamburgerModal(false)}
                         >
-                            My Forms
-                        </p>
-                    </Link>
+                            <p
+                                className={
+                                    location.pathname === "/myforms"
+                                        ? "navbarLinkItemActive"
+                                        : "navbarLinkItemInactive"
+                                }
+                            >
+                                My Forms
+                            </p>
+                        </Link>
+                    )}
                 </div>
             </div>
         );
@@ -143,17 +179,19 @@ const Navbar = (props) => {
                             <span className="navbarBellIconBadge"></span>
                         )}
                     </Link>
-                    <Link
-                        to="/submit"
-                        className="navbarBellIconBadgeContainer"
-                        onClick={() => setHamburgerModal(false)}
-                    >
-                        <img
-                            className="navbarBellIcon"
-                            src={submit}
-                            alt="submit"
-                        />
-                    </Link>
+                    {props.user && props.user.role !== "Supervisor" && (
+                        <Link
+                            to="/submit"
+                            className="navbarBellIconBadgeContainer"
+                            onClick={() => setHamburgerModal(false)}
+                        >
+                            <img
+                                className="navbarBellIcon"
+                                src={submit}
+                                alt="submit"
+                            />
+                        </Link>
+                    )}
                     <img
                         className="navbarHamburgerIcon"
                         src={hamburger}
@@ -162,6 +200,41 @@ const Navbar = (props) => {
                     />
                     {hamburgerModal && (
                         <div className="navbarHamburgerContainer">
+                            {props.user && props.user.supervisorRole === "CO" && (
+                                <>
+                                    <Link
+                                        to="/notify"
+                                        className="navbarLink"
+                                        onClick={() => setHamburgerModal(false)}
+                                    >
+                                        <p
+                                            className={
+                                                location.pathname === "/notify"
+                                                    ? "navbarLinkItemActive"
+                                                    : "navbarLinkItemInactive"
+                                            }
+                                        >
+                                            Notify
+                                        </p>
+                                    </Link>
+                                    <Link
+                                        to="/concurrence"
+                                        className="navbarLink"
+                                        onClick={() => setHamburgerModal(false)}
+                                    >
+                                        <p
+                                            className={
+                                                location.pathname ===
+                                                "/concurrence"
+                                                    ? "navbarLinkItemActive"
+                                                    : "navbarLinkItemInactive"
+                                            }
+                                        >
+                                            Concurrence
+                                        </p>
+                                    </Link>
+                                </>
+                            )}
                             <Link
                                 to="/pending"
                                 className="navbarLink"
@@ -207,21 +280,23 @@ const Navbar = (props) => {
                                     Rejected
                                 </p>
                             </Link>
-                            <Link
-                                to="/myforms"
-                                className="navbarLink"
-                                onClick={() => setHamburgerModal(false)}
-                            >
-                                <p
-                                    className={
-                                        location.pathname === "/myforms"
-                                            ? "navbarLinkItemActive"
-                                            : "navbarLinkItemInactive"
-                                    }
+                            {props.user && props.user.role !== "Supervisor" && (
+                                <Link
+                                    to="/myforms"
+                                    className="navbarLink"
+                                    onClick={() => setHamburgerModal(false)}
                                 >
-                                    My Forms
-                                </p>
-                            </Link>
+                                    <p
+                                        className={
+                                            location.pathname === "/myforms"
+                                                ? "navbarLinkItemActive"
+                                                : "navbarLinkItemInactive"
+                                        }
+                                    >
+                                        My Forms
+                                    </p>
+                                </Link>
+                            )}
                         </div>
                     )}
                 </div>

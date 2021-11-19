@@ -21,11 +21,60 @@ const route = async (req, res, next) => {
         };
     }
 
+    if (req.body.routingPending === "notify") {
+        await Form.updateOne(
+            { _id: req.body.id },
+            {
+                COnotify: true,
+            }
+        );
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify(`Routed to CO ${req.body.routingPending}.`),
+        };
+    }
+    if (req.body.routingPending === "concurrence") {
+        await Form.updateOne(
+            { _id: req.body.id },
+            {
+                COconcurrence: true,
+            }
+        );
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify(`Routed to CO ${req.body.routingPending}.`),
+        };
+    }
+
     await Form.updateOne(
         { _id: req.body.id },
         {
             $push: {
                 routingPending: req.body.routingPending,
+            },
+        }
+    );
+
+    if (req.body.routingPending === "CO" && req.body.messageToCO) {
+        await Form.updateOne(
+            { _id: req.body.id },
+            {
+                messageToCO: req.body.messageToCO,
+            }
+        );
+    }
+
+    await Form.updateOne(
+        { _id: req.body.id },
+        {
+            $push: {
+                activity: {
+                    routedTo: req.body.routingPending,
+                    routedBy: req.body.routedBy._id,
+                    date: new Date(),
+                },
             },
         }
     );

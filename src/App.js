@@ -9,7 +9,9 @@ import Notification from "./components/notification/Notification";
 import Submit from "./components/submit/Submit";
 import Index from "./components/index/Index";
 import Pending from "./components/pending/Pending";
+import COconcurrence from "./components/pending/COconcurrence";
 import Approved from "./components/approved/Approved";
+import COnotify from "./components/approved/COnotify";
 import Rejected from "./components/rejected/Rejected";
 import Form from "./components/form/Form";
 
@@ -135,6 +137,13 @@ const App = () => {
                             <Pending />
                         )}
                     </Route>
+                    <Route exact path="/concurrence">
+                        {!localStorage.getItem("token") ? (
+                            <Redirect to="/" />
+                        ) : (
+                            <COconcurrence />
+                        )}
+                    </Route>
                     <Route exact path="/pending/:id">
                         {!localStorage.getItem("token") ? (
                             <Redirect to="/" />
@@ -153,6 +162,13 @@ const App = () => {
                             <Redirect to="/" />
                         ) : (
                             <Approved />
+                        )}
+                    </Route>
+                    <Route exact path="/notify">
+                        {!localStorage.getItem("token") ? (
+                            <Redirect to="/" />
+                        ) : (
+                            <COnotify />
                         )}
                     </Route>
                     <Route exact path="/approved/:id">
