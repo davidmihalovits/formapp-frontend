@@ -534,8 +534,8 @@ const Form = (props) => {
                                         }
                                     }}
                                     className="formInput"
-                                    placeholder="1 - 9999"
-                                    maxLength="4"
+                                    placeholder="1 - 999999"
+                                    maxLength="6"
                                 />
                                 <label className="formLabel" htmlFor="program">
                                     Program
