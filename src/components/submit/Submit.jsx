@@ -221,7 +221,7 @@ const Submit = (props) => {
         <div className="formContainer">
             <form className="form" onSubmit={submit} noValidate>
                 <div className="formItems">
-                    <div className="formStep">
+                    {/*<div className="formStep">
                         <div
                             style={{ width: step }}
                             className="formStepCompleted"
@@ -248,6 +248,12 @@ const Submit = (props) => {
                                 "Step 4 of 5"}
                         </p>
                         <p>
+                            {step === "80%" &&
+                                regulatoryForeignTravel !== "Foreign" &&
+                                !isVirtual &&
+                                "Step 3 of 4"}
+                        </p>
+                        <p>
                             {step === "100%" &&
                                 regulatoryForeignTravel === "Foreign" &&
                                 "Step 5 of 5"}
@@ -259,7 +265,7 @@ const Submit = (props) => {
                                 "Step 4 of 4"}
                         </p>
                         <p>{step === "100%" && isVirtual && "Step 3 of 3"}</p>
-                    </div>
+                    </div>*/}
                     {showSection === "general" && (
                         <div className="formItem">
                             <h2 className="formSubtitle">
@@ -643,8 +649,8 @@ const Submit = (props) => {
                                 onClick={() => {
                                     setShowSection("travel");
                                     setStep("60%");
-                                    setIsVirtual(false);
-                                    setRegulatoryForeignTravel("Foreign");
+                                    //setIsVirtual(false);
+                                    //setRegulatoryForeignTravel("Foreign");
                                 }}
                                 type="button"
                                 className="formButton"
@@ -727,11 +733,12 @@ const Submit = (props) => {
                                                     ? "travelAdvanceCheckboxChecked"
                                                     : "travelAdvanceCheckboxUnchecked"
                                             }
-                                            onClick={() =>
+                                            onClick={() => {
                                                 setRegulatoryForeignTravel(
                                                     "Foreign"
-                                                )
-                                            }
+                                                );
+                                                setStep("60%");
+                                            }}
                                         >
                                             {regulatoryForeignTravel ===
                                                 "Foreign" && (
@@ -753,11 +760,12 @@ const Submit = (props) => {
                                                     ? "travelAdvanceCheckboxChecked"
                                                     : "travelAdvanceCheckboxUnchecked"
                                             }
-                                            onClick={() =>
+                                            onClick={() => {
                                                 setRegulatoryForeignTravel(
                                                     "Local"
-                                                )
-                                            }
+                                                );
+                                                setStep("80%");
+                                            }}
                                         >
                                             {regulatoryForeignTravel ===
                                                 "Local" && (
@@ -779,11 +787,12 @@ const Submit = (props) => {
                                                     ? "travelAdvanceCheckboxChecked"
                                                     : "travelAdvanceCheckboxUnchecked"
                                             }
-                                            onClick={() =>
+                                            onClick={() => {
                                                 setRegulatoryForeignTravel(
                                                     "Domestic"
-                                                )
-                                            }
+                                                );
+                                                setStep("80%");
+                                            }}
                                         >
                                             {regulatoryForeignTravel ===
                                                 "Domestic" && (

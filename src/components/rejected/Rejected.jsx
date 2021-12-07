@@ -51,18 +51,20 @@ const Rejected = (props) => {
                                         <p className="rejectedLinkFormsName">
                                             {f.formName}
                                         </p>
-                                        {f.approved === "Rejected" && (
-                                            <p className="rejectedLinkFormsRejected">
-                                                Rejected
+                                        <div>
+                                            {f.approved === "Rejected" && (
+                                                <p className="rejectedLinkFormsRejected">
+                                                    Rejected
+                                                </p>
+                                            )}
+                                            <p className="rejectedLinkFormsComment">
+                                                {f.comment && `"${f.comment}"`}
                                             </p>
-                                        )}
-                                        <p className="rejectedLinkFormsComment">
-                                            {f.comment && `"${f.comment}"`}
-                                        </p>
-                                        <p className="rejectedLinkFormsBy">
-                                            by {f.approvalBy.email} (
-                                            {f.approvalBy.supervisorRole})
-                                        </p>
+                                            <p className="rejectedLinkFormsBy">
+                                                by {f.approvalBy.email} (
+                                                {f.approvalBy.supervisorRole})
+                                            </p>
+                                        </div>
                                         <p className="rejectedLinkFormsCreator">
                                             {f.email}
                                         </p>

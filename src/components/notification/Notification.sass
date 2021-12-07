@@ -5,7 +5,7 @@
 
     .notificationsLink
         text-decoration: none
-        color: black
+        color: $smoke-black
 
         .notifications
             background: #f8f8f8
@@ -42,5 +42,18 @@
             .notifications
                 max-width: none
                 margin: 0
+                height: 320px
+                display: grid
+                grid-template-rows: auto 1fr auto
+                position: relative
+
+                .notificationsDate
+                    align-self: end
+                    margin-top: 0
+
+                .notificationsBadge
+                    position: absolute
+                    right: 0
+                    margin: 15px
                 
             

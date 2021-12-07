@@ -1,14 +1,13 @@
 @import '../../App'
     
 .navbarContainer
-    background: white
+    background: rgba(#fff,.95)
     padding: 14px 20px
     position: fixed
     bottom: 0
     left: 0
     width: 100%
     z-index: 100
-    border-top: 1px solid #e2e2e2
 
     .navbar
         display: grid
@@ -44,7 +43,7 @@
         .navbarProfileIcon
             width: 35px
             height: 35px
-            background-color: black
+            background-color: $smoke-black
             color: white
             border-radius: 50%
             display: grid
@@ -54,31 +53,32 @@
             text-decoration: none
 
         .navbarHamburgerContainer
-            position: absolute
-            background: white
+            position: fixed
+            background: rgba(#fff,.95)
             z-index: 10
-            box-shadow: rgba(0, 0, 0, 0.2) 0px 13px 15px
             right: 0
             bottom: 0
-            margin-bottom: 60px
-            padding: 40px 
-            border-radius: 10px
+            top: 0
+            padding: 30px 
+            margin-bottom: 63px
+            display: grid
+            align-items: end
 
             .navbarLink
                 text-decoration: none
                 line-height: 50px
 
                 .navbarLinkItemActive
-                    color: $primary-color
+                    color: $smoke-black
                     font-size: 20px
 
                 .navbarLinkItemInactive
-                    color: black
+                    color: $smoke-black
                     font-size: 20px
 
 @media only screen and (min-width: 1100px)
     .navbarContainer
-        background: white
+        background: rgba(#fff,.95)
         padding: 24px 0
         position: fixed
         top: 0
@@ -86,46 +86,79 @@
         bottom: auto
         width: 100%
         z-index: 200
-        border-bottom: 1px solid #e2e2e2
 
         .navbar
             display: grid
-            grid-template-columns: repeat(auto-fit, minmax(0, auto))
-            justify-content: center
+            grid-template-columns: auto 1fr
             align-items: center
-            gap: 30px
+            gap: 0
             width: 1100px
             margin: 0 auto
 
-            .navbarBellIconBadgeContainer
-                position: relative
+            .navbarLeft
+                display: grid
+                grid-template-columns: auto auto auto
+                justify-content: start
+                align-items: center
+                gap: 30px
 
-                .navbarBellIcon
-                    width: 30px
-                    height: 30px
-                    display: block
-
-                .navbarBellIconBadge
+                .navbarLeftProfileIcon
+                    width: 35px
+                    height: 35px
+                    background-color: $smoke-black
+                    color: white
                     border-radius: 50%
-                    width: 15px
-                    height: 15px
-                    background-color:#dd1572
-                    margin: 0 0 0 auto
-                    position: absolute
-                    top: 0
-                    right: 0
+                    display: grid
+                    align-content: center
+                    justify-content: center
+                    font-size: 14px
+                    text-decoration: none
 
-            .navbarLink
-                text-decoration: none
-                line-height: auto
+                .navbarLeftBellIconBadgeContainer
+                    position: relative
 
-                .navbarLinkItemActive
-                    color: $primary-color
-                    font-size: 20px
+                    .navbarLeftBellIcon
+                        width: 35px
+                        height: 35px
+                        display: block
 
-                .navbarLinkItemInactive
-                    color: black
-                    font-size: 20px
+                    .navbarLeftBellIconBadge
+                        border-radius: 50%
+                        width: 15px
+                        height: 15px
+                        background-color:#dd1572
+                        margin: 0 0 0 auto
+                        position: absolute
+                        top: 0
+                        right: 0
+
+                .navbarLeftLink
+                    text-decoration: none
+                    line-height: auto
+
+                    .navbarLeftSubmitIcon
+                        width: 35px
+                        height: 35px
+                        display: block
+
+            .navbarRight
+                display: grid
+                grid-template-columns: repeat(auto-fit, minmax(0, auto))
+                align-items: center
+                justify-content: end
+                gap: 30px
+                
+                .navbarLink
+                    text-decoration: none
+                    line-height: auto
+
+                    .navbarLinkItemActive
+                        color: $primary-color
+                        font-size: 20px
+
+                    .navbarLinkItemInactive
+                        color: $smoke-black
+                        font-size: 20px
 
 
         

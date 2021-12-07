@@ -32,21 +32,16 @@ const Profile = (props) => {
     return (
         <div className="profileContainer">
             <div className="profile">
-                <p className="profileText">
-                    Logged in as{" "}
-                    <span style={{ fontWeight: "700" }}>
-                        {props.user && props.user.email}
-                    </span>
-                    {props.user && props.user.supervisorRole ? (
-                        <span>
-                            {" "}
-                            as {props.user.role}/{props.user.supervisorRole}
-                        </span>
-                    ) : (
-                        <span> as {props.user && props.user.role}</span>
-                    )}
-                    .
-                </p>
+                <p className="profileText">{props.user && props.user.email}</p>
+                {props.user && props.user.supervisorRole ? (
+                    <p className="profileText">
+                        {props.user.role}/{props.user.supervisorRole}
+                    </p>
+                ) : (
+                    <p className="profileText">
+                        {props.user && props.user.role}
+                    </p>
+                )}
                 <button
                     className="profileButton"
                     onClick={() => {
@@ -78,38 +73,53 @@ const Profile = (props) => {
                         <p className="profileText">Pick a role:</p>
                         <button
                             className="profileButtonRole"
-                            style={{ background: "#90CAF9" }}
+                            style={{
+                                background: "#90CAF9",
+                                border: "1px solid #90CAF9",
+                            }}
                             onClick={() => pickSupervisorRole("TA")}
                         >
-                            TA
+                            Travel Advisor
                         </button>
                         <button
                             className="profileButtonRole"
-                            style={{ background: "#FF8A65" }}
+                            style={{
+                                background: "#FF8A65",
+                                border: "1px solid #FF8A65",
+                            }}
                             onClick={() => pickSupervisorRole("TM")}
                         >
-                            TM
+                            Task Monitor
                         </button>
                         <button
                             className="profileButtonRole"
-                            style={{ background: "#2196F3" }}
+                            style={{
+                                background: "#2196F3",
+                                border: "1px solid #2196F3",
+                            }}
                             onClick={() => pickSupervisorRole("PL")}
                         >
-                            PL
+                            Group/Project Lead
                         </button>
                         <button
                             className="profileButtonRole"
-                            style={{ background: "#1565C0" }}
+                            style={{
+                                background: "#1565C0",
+                                border: "1px solid #1565C0",
+                            }}
                             onClick={() => pickSupervisorRole("PM")}
                         >
-                            PM
+                            Program Manager
                         </button>
                         <button
                             className="profileButtonRole"
-                            style={{ background: "#FF5722" }}
+                            style={{
+                                background: "#FF5722",
+                                border: "1px solid #FF5722",
+                            }}
                             onClick={() => pickSupervisorRole("CO")}
                         >
-                            CO
+                            Contracting Officer
                         </button>
                     </>
                 )}

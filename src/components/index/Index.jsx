@@ -12,7 +12,6 @@ const Index = () => {
     const [supervisorRole, setSupervisorRole] = useState("");*/
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [credential, setCredential] = useState("");
     const [code, setCode] = useState("");
@@ -45,10 +44,7 @@ const Index = () => {
     const loginRequest = async (e) => {
         e.preventDefault();
 
-        if (!credential) {
-            return setError(true);
-        }
-
+        setErrorMessage("");
         setLoading(true);
 
         await fetch(`${devprodUrl}/loginRequest`, {
@@ -65,12 +61,10 @@ const Index = () => {
                 console.log(data);
                 if (data === "User not found.") {
                     setLoading(false);
-                    setError(false);
                     return setErrorMessage(data);
                 }
                 if (data.includes("Login code sent to")) {
                     setLoading(false);
-                    setError(false);
                     setErrorMessage("");
                     return setLoginCodeSent(true);
                 }
@@ -80,10 +74,7 @@ const Index = () => {
     const login = async (e) => {
         e.preventDefault();
 
-        if (!code) {
-            return setError(true);
-        }
-
+        setErrorMessage("");
         setLoading(true);
 
         await fetch(`${devprodUrl}/login`, {
@@ -100,7 +91,6 @@ const Index = () => {
             .then((data) => {
                 if (data === "Wrong login code.") {
                     setLoading(false);
-                    setError(false);
                     return setErrorMessage(data);
                 }
                 if (data.token) {
@@ -116,7 +106,7 @@ const Index = () => {
         <div className="indexContainer">
             <div className="index">
                 <div className="indexBox">
-                    <h1 className="indexBoxTitle">Login</h1>
+                    {/*<h1 className="indexBoxTitle">Login</h1>*/}
                     {loginCodeSent ? (
                         <>
                             <input
@@ -126,24 +116,19 @@ const Index = () => {
                                 value={code}
                                 onChange={(e) => setCode(e.target.value)}
                                 className="indexBoxInput"
-                                placeholder="Enter your login code"
+                                placeholder="Login code"
                             />
                             <button
                                 className="indexBoxButton"
                                 onClick={login}
-                                disabled={loading}
+                                disabled={loading || !code}
                             >
                                 {loading ? "Loading..." : "Login"}
                             </button>
                             <p className="indexBoxVerbage">
                                 Please check your email for the login code.
                             </p>
-                            {error && !code && (
-                                <p className="indexBoxError">
-                                    Enter your login code.
-                                </p>
-                            )}
-                            {errorMessage && !error && (
+                            {errorMessage && (
                                 <p className="indexBoxError">{errorMessage}</p>
                             )}
                         </>
@@ -156,21 +141,16 @@ const Index = () => {
                                 value={credential}
                                 onChange={(e) => setCredential(e.target.value)}
                                 className="indexBoxInput"
-                                placeholder="Enter your email address"
+                                placeholder="Email address"
                             />
                             <button
                                 className="indexBoxButton"
                                 onClick={loginRequest}
-                                disabled={loading}
+                                disabled={loading || !credential}
                             >
                                 {loading ? "Loading..." : "Request login code"}
                             </button>
-                            {error && !credential && (
-                                <p className="indexBoxError">
-                                    Wrong email address.
-                                </p>
-                            )}
-                            {errorMessage && !error && (
+                            {errorMessage && (
                                 <p className="indexBoxError">{errorMessage}</p>
                             )}
                         </>

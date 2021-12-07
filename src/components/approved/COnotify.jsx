@@ -55,18 +55,25 @@ const COnotify = () => {
                                             <p className="approvedLinkFormsName">
                                                 {f.formName}
                                             </p>
-                                            {f.approved === "Approved" && (
-                                                <p className="approvedLinkFormsApproved">
-                                                    Approved
+                                            <div>
+                                                {f.approved === "Approved" && (
+                                                    <p className="approvedLinkFormsApproved">
+                                                        Approved
+                                                    </p>
+                                                )}
+                                                <p className="approvedLinkFormsComment">
+                                                    {f.comment &&
+                                                        `"${f.comment}"`}
                                                 </p>
-                                            )}
-                                            <p className="approvedLinkFormsComment">
-                                                {f.comment && `"${f.comment}"`}
-                                            </p>
-                                            <p className="approvedLinkFormsBy">
-                                                by {f.approvalBy.email} (
-                                                {f.approvalBy.supervisorRole})
-                                            </p>
+                                                <p className="approvedLinkFormsBy">
+                                                    by {f.approvalBy.email} (
+                                                    {
+                                                        f.approvalBy
+                                                            .supervisorRole
+                                                    }
+                                                    )
+                                                </p>
+                                            </div>
                                             <p className="approvedLinkFormsCreator">
                                                 {f.email}
                                             </p>

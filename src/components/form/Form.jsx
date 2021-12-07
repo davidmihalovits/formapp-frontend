@@ -413,7 +413,7 @@ const Form = (props) => {
             <div className="formContainer">
                 <form className="form" onSubmit={submitEdit} noValidate>
                     <div className="formItems">
-                        <div className="formStep">
+                        {/*<div className="formStep">
                             <div
                                 style={{ width: step }}
                                 className="formStepCompleted"
@@ -455,7 +455,7 @@ const Form = (props) => {
                             <p>
                                 {step === "100%" && isVirtual && "Step 3 of 3"}
                             </p>
-                        </div>
+                        </div>*/}
                         {showSection === "general" && (
                             <div className="formItem">
                                 <h2 className="formSubtitle">
@@ -863,10 +863,10 @@ const Form = (props) => {
                                     onClick={() => {
                                         setShowSection("travel");
                                         setStep("60%");
-                                        setIsVirtual(false);
-                                        setRegulatoryForeignTravel(
-                                            form.regulatoryForeignTravel
-                                        );
+                                        //setIsVirtual(false);
+                                        //setRegulatoryForeignTravel(
+                                        //    form.regulatoryForeignTravel
+                                        //);
                                     }}
                                     type="button"
                                     className="formButton"
@@ -1840,12 +1840,7 @@ const Form = (props) => {
                                 </p>
                             )}
                         <h2 className="submittedformActivityTitle">Activity</h2>
-                        <div
-                            className="submittedformActivityList"
-                            style={{
-                                borderBottom: "1px solid #ebebeb",
-                            }}
-                        >
+                        <div className="submittedformActivityList">
                             <p className="submittedformActivityText">
                                 Created by:
                                 <br />
@@ -1869,12 +1864,7 @@ const Form = (props) => {
                                             key={key}
                                         >
                                             {f.signedBy && (
-                                                <div
-                                                    style={{
-                                                        borderBottom:
-                                                            "1px solid #ebebeb",
-                                                    }}
-                                                >
+                                                <div>
                                                     <p className="submittedformActivityText">
                                                         Signed by:
                                                         <br />
@@ -1908,12 +1898,7 @@ const Form = (props) => {
                                                 </div>
                                             )}
                                             {f.viewedBy && (
-                                                <div
-                                                    style={{
-                                                        borderBottom:
-                                                            "1px solid #ebebeb",
-                                                    }}
-                                                >
+                                                <div>
                                                     <p className="submittedformActivityText">
                                                         Viewed by:
                                                         <br />
@@ -1938,12 +1923,7 @@ const Form = (props) => {
                                                 </div>
                                             )}
                                             {f.editedBy && (
-                                                <div
-                                                    style={{
-                                                        borderBottom:
-                                                            "1px solid #ebebeb",
-                                                    }}
-                                                >
+                                                <div>
                                                     <p className="submittedformActivityText">
                                                         Edited by:
                                                         <br />
@@ -1968,12 +1948,7 @@ const Form = (props) => {
                                                 </div>
                                             )}
                                             {f.commentBy && (
-                                                <div
-                                                    style={{
-                                                        borderBottom:
-                                                            "1px solid #ebebeb",
-                                                    }}
-                                                >
+                                                <div>
                                                     <p className="submittedformActivityText">
                                                         Comment by:
                                                         <br />
@@ -2001,12 +1976,7 @@ const Form = (props) => {
                                                 </div>
                                             )}
                                             {f.routedTo && (
-                                                <div
-                                                    style={{
-                                                        borderBottom:
-                                                            "1px solid #ebebeb",
-                                                    }}
-                                                >
+                                                <div>
                                                     <p className="submittedformActivityText">
                                                         Routed by:
                                                         <br />
@@ -2033,7 +2003,7 @@ const Form = (props) => {
                         }
                     </div>
                 </div>
-                <div>
+                <div className="submittedformItemsContainer">
                     {props.user &&
                     props.user.email === form.email &&
                     form.approved !== "Approved" ? (
@@ -2302,6 +2272,8 @@ const Form = (props) => {
                             </p>
                         </div>
                     </div>
+                </div>
+                <div className="submittedformFormContainer">
                     {props.user &&
                     form &&
                     props.user.role !== "Traveler" &&
@@ -2388,9 +2360,6 @@ const Form = (props) => {
                     ) : null}
                     {props.user && props.user.email !== form.email && (
                         <div className="submittedformRouting">
-                            <h2 className="submittedformRoutingTitle">
-                                Routing
-                            </h2>
                             <button
                                 className="submittedformRoutingButton"
                                 onClick={() => routeTo("TM")}
@@ -2433,7 +2402,7 @@ const Form = (props) => {
                                             className="submittedformRoutingToCoButton"
                                             onClick={() => routeTo("notify")}
                                         >
-                                            CO Notify
+                                            Notify
                                         </button>
                                         <button
                                             className="submittedformRoutingToCoButton"
@@ -2441,7 +2410,7 @@ const Form = (props) => {
                                                 routeTo("concurrence")
                                             }
                                         >
-                                            CO Concurrence
+                                            Concurrence
                                         </button>
                                     </div>
                                 </>

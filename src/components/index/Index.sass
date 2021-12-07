@@ -3,11 +3,8 @@
 .indexContainer
     .index
         .indexBox
-            background: #fafafa
-            border-radius: 10px
-            width: 270px
-            margin: 50px auto 0 auto
-            padding: 20px
+            width: 240px
+            margin: 150px auto 0 auto
 
             .indexBoxTitle
                 font-size: 28px
@@ -17,9 +14,14 @@
             .indexBoxInput
                 width: 100%
                 outline: none
-                border: 1px solid black
+                border: 1px solid $smoke-black
                 padding: 8px
                 border-radius: 4px
+                color: $smoke-black
+                font-size: 16px
+
+                &:focus
+                    border: 1px solid $primary-color
 
             .indexBoxRadioText
                 display: grid
@@ -31,7 +33,7 @@
                     width: 25px
                     height: 25px
                     border-radius: 4px
-                    border: 1px solid black
+                    border: 1px solid $smoke-black
                     cursor: pointer
                     position: relative
                     margin-right: 10px
@@ -67,12 +69,12 @@
                     cursor: not-allowed
 
             .indexBoxVerbage
-                font-size: 16px
+                font-size: 14px
                 margin-top: 15px
-                line-height: 24px
+                color: $smoke-black
 
             .indexBoxError
-                font-size: 16px
+                font-size: 14px
                 margin-top: 15px
-                line-height: 24px
                 color: #dd1572
+                text-align: center
