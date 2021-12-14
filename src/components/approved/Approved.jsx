@@ -49,19 +49,36 @@ const Approved = () => {
                                 >
                                     <div className="approvedLink" key={key}>
                                         <div className="approvedLinkForms">
+                                            <div className="approvedLinkFormsTag">
+                                                Approved
+                                            </div>
                                             <p className="approvedLinkFormsName">
                                                 {f.formName}
                                             </p>
                                             <div>
                                                 {f.approved === "Approved" && (
                                                     <p className="approvedLinkFormsApproved">
-                                                        Approved
+                                                        <span
+                                                            style={{
+                                                                fontWeight:
+                                                                    "700",
+                                                            }}
+                                                        >
+                                                            Approved
+                                                        </span>{" "}
+                                                        <span
+                                                            style={{
+                                                                fontWeight:
+                                                                    "300",
+                                                                fontStyle:
+                                                                    "italic",
+                                                            }}
+                                                        >
+                                                            {f.comment &&
+                                                                `"${f.comment}"`}
+                                                        </span>
                                                     </p>
                                                 )}
-                                                <p className="approvedLinkFormsComment">
-                                                    {f.comment &&
-                                                        `"${f.comment}"`}
-                                                </p>
                                                 <p className="approvedLinkFormsBy">
                                                     by {f.approvalBy.email} (
                                                     {

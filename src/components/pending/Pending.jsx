@@ -48,10 +48,14 @@ const Pending = () => {
                                     className="pendingLink"
                                 >
                                     <div className="pendingLinkForms" form={f}>
+                                        <div className="pendingLinkFormsTag">
+                                            Pending
+                                        </div>
                                         <p className="pendingLinkFormsName">
                                             {f.formName}
                                         </p>
                                         <div className="pendingLinkFormsRouting">
+                                            <div className="pendingLinkFormsRoutingLine"></div>
                                             <div className="pendingLinkFormsRoutingRoleCircle">
                                                 <div
                                                     className="pendingLinkFormsRoutingCircle"
@@ -60,7 +64,7 @@ const Pending = () => {
                                                             (f.routingPending.includes(
                                                                 "TM"
                                                             ) &&
-                                                                "#FDD835") ||
+                                                                "#cfac0f") ||
                                                             (f.routingApproved.includes(
                                                                 "TM"
                                                             ) &&
@@ -83,7 +87,7 @@ const Pending = () => {
                                                             (f.routingPending.includes(
                                                                 "PL"
                                                             ) &&
-                                                                "#FDD835") ||
+                                                                "#cfac0f") ||
                                                             (f.routingApproved.includes(
                                                                 "PL"
                                                             ) &&
@@ -106,7 +110,7 @@ const Pending = () => {
                                                             (f.routingPending.includes(
                                                                 "PM"
                                                             ) &&
-                                                                "#FDD835") ||
+                                                                "#cfac0f") ||
                                                             (f.routingApproved.includes(
                                                                 "PM"
                                                             ) &&
@@ -129,7 +133,7 @@ const Pending = () => {
                                                             (f.routingPending.includes(
                                                                 "CO"
                                                             ) &&
-                                                                "#FDD835") ||
+                                                                "#cfac0f") ||
                                                             (f.routingApproved.includes(
                                                                 "CO"
                                                             ) &&

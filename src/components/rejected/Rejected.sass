@@ -9,11 +9,23 @@
             color: black
             
             .rejectedLinkForms
-                background: #FFEBEE
+                background: white
                 border-radius: 10px
+                box-shadow: rgba(226, 226, 226, 0.6) 0px 1px 12px 2px
                 margin: 20px auto 0 auto
                 padding: 30px 15px
                 max-width: 320px
+                position: relative
+
+                .rejectedLinkFormsTag
+                    position: absolute
+                    top: 0
+                    left: 0
+                    font-size: 12px
+                    padding: 3px 10px
+                    color: white
+                    background: #dd1572
+                    border-bottom-right-radius: 4px
 
                 .rejectedLinkFormsName
                     font-size: 18px
@@ -29,22 +41,20 @@
                     font-style: italic
                     font-size: 14px
                     font-weight: 500
-                    color: #888888
+                    color: #a0a0a0
 
                 .rejectedLinkFormsBy
                     font-size: 12px
                     font-weight: 500
-                    color: #b8b8b8
+                    color: $smoke-black
 
                 .rejectedLinkFormsCreator
-                    text-align: right
                     font-size: 14px
                     margin-top: 30px
 
                 .rejectedLinkFormsCreatedat
-                    text-align: right
                     font-size: 14px
-                    color: #b8b8b8
+                    color: $smoke-black
 
 @media only screen and (min-width: 1100px)
     .rejectedContainer
@@ -55,20 +65,14 @@
             margin: 0 auto
             display: grid
             grid-template-columns: 1fr 1fr 1fr
-            gap: 40px
+            gap: 60px
 
             .rejectedLink
                 .rejectedLinkForms
                     max-width: none
                     width: 100%
                     margin: 0
-                    height: 320px
+                    height: 280px
                     display: grid
-                    grid-template-rows: 1fr 1fr auto auto
-
-                    .rejectedLinkFormsRejected
-                        margin: 0
-
-                    .rejectedLinkFormsCreator
-                        margin: 0
+                    grid-template-rows: 1fr auto auto auto
 

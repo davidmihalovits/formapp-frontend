@@ -9,17 +9,37 @@
             color: black
             
             .myformsLinkForms
-                background: #f8f8f8
+                background: white
                 border-radius: 10px
+                box-shadow: rgba(226, 226, 226, 0.6) 0px 1px 12px 2px
                 margin: 20px auto 0 auto
                 padding: 30px 15px
                 max-width: 320px
+                position: relative
+
+                .myformsLinkFormsTag
+                    position: absolute
+                    top: 0
+                    left: 0
+                    font-size: 12px
+                    padding: 3px 10px
+                    color: white
+                    border-bottom-right-radius: 4px
 
                 .myformsLinkFormsRouting
                     margin-top: 30px
                     display: grid
                     grid-template-columns: auto auto auto auto
                     justify-content: space-between
+                    position: relative
+
+                    .myformsLinkFormsRoutingLine
+                        position: absolute
+                        background: #ebebeb
+                        width: 100%
+                        height: 1px
+                        top: 14px
+                        left: 0
 
                     .myformsLinkFormsRoutingRoleCircle
                         display: grid
@@ -27,23 +47,27 @@
                         justify-items: center
 
                         .myformsLinkFormsRoutingCircle
-                            width: 18px
-                            height: 18px
+                            width: 30px
+                            height: 30px
                             background: #ebebeb
                             border-radius: 50%
+                            border: 8px solid white
+                            z-index: 2
 
                         .myformsLinkFormsRoutingRole
                             margin-top: 5px
+                            color: $smoke-black
 
                 .myformsLinkFormsName
                     font-size: 18px
                     font-weight: 500
+                    color: $smoke-black
 
                 .myformsLinkFormsApproved
                     font-size: 14px
                     font-weight: 500
                     color: #28b834
-                    margin-top: 10px
+                    margin-top: 20px
 
                 .myformsLinkFormsRejected
                     font-size: 14px
@@ -55,22 +79,21 @@
                     font-style: italic
                     font-size: 14px
                     font-weight: 500
-                    color: #888888
+                    color: $smoke-black
 
                 .myformsLinkFormsBy
                     font-size: 12px
                     font-weight: 500
-                    color: #b8b8b8
+                    color: $smoke-black
 
                 .myformsLinkFormsCreator
-                    text-align: right
                     font-size: 14px
                     margin-top: 30px
+                    color: $smoke-black
 
                 .myformsLinkFormsCreatedat
-                    text-align: right
                     font-size: 14px
-                    color: #b8b8b8
+                    color: $smoke-black
 
 @media only screen and (min-width: 1100px)
     .myformsContainer
@@ -81,7 +104,7 @@
             margin: 0 auto
             display: grid
             grid-template-columns: 1fr 1fr 1fr
-            gap: 40px
+            gap: 60px
 
             .myformsLink
                 .myformsLinkForms
@@ -90,11 +113,23 @@
                     margin: 0
                     height: 320px
                     display: grid
-                    grid-template-rows: 1fr auto 1fr auto
+                    grid-template-rows: 1fr 1fr 1fr 
 
                     .myformsLinkFormsRouting
                         margin: 0
 
-                    .myformsLinkFormsCreator
-                        margin: 0
+                    .myformsLinkFormsBottom
                         align-self: end
+
+                        .myformsLinkFormsApproved
+                            margin: 0
+
+                        .myformsLinkFormsRejected
+                            margin: 0
+
+                        .myformsLinkFormsRouting
+                            margin: 0
+
+                        .myformsLinkFormsCreator
+                            margin: 0
+                            align-self: end

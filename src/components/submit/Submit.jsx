@@ -221,13 +221,13 @@ const Submit = (props) => {
         <div className="formContainer">
             <form className="form" onSubmit={submit} noValidate>
                 <div className="formItems">
-                    {/*<div className="formStep">
+                    <div className="formStep">
                         <div
                             style={{ width: step }}
                             className="formStepCompleted"
                         ></div>
                     </div>
-                    <div className="formStepCounter">
+                    {/*<div className="formStepCounter">
                         <p>{step === "20%" && "Step 1 of 5"}</p>
                         <p>{step === "40%" && "Step 2 of 5"}</p>
                         <p>
@@ -649,8 +649,8 @@ const Submit = (props) => {
                                 onClick={() => {
                                     setShowSection("travel");
                                     setStep("60%");
-                                    //setIsVirtual(false);
-                                    //setRegulatoryForeignTravel("Foreign");
+                                    setIsVirtual(false);
+                                    setRegulatoryForeignTravel("Foreign");
                                 }}
                                 type="button"
                                 className="formButton"
@@ -1310,6 +1310,9 @@ const Submit = (props) => {
                                         onClick={() => {
                                             setShowSection("travel");
                                             setStep("60%");
+                                            setRegulatoryForeignTravel(
+                                                "Foreign"
+                                            );
                                         }}
                                         type="button"
                                         className="formButtonBack"

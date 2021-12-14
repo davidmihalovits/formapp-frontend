@@ -52,6 +52,9 @@ const COnotify = () => {
                                 >
                                     <div className="approvedLink" key={key}>
                                         <div className="approvedLinkForms">
+                                            <div className="approvedLinkFormsTag">
+                                                Approved
+                                            </div>
                                             <p className="approvedLinkFormsName">
                                                 {f.formName}
                                             </p>

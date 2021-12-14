@@ -51,10 +51,29 @@ const MyForms = (props) => {
                                 className="myformsLink"
                             >
                                 <div className="myformsLinkForms" form={f}>
+                                    <div
+                                        className="myformsLinkFormsTag"
+                                        style={{
+                                            background:
+                                                (f.approved === "pending" &&
+                                                    "#cfac0f") ||
+                                                (f.approved === "Approved" &&
+                                                    "#28b834") ||
+                                                (f.approved === "Rejected" &&
+                                                    "#dd1572"),
+                                        }}
+                                    >
+                                        {f.approved === "pending" && "Pending"}
+                                        {f.approved === "Approved" &&
+                                            "Approved"}
+                                        {f.approved === "Rejected" &&
+                                            "Rejected"}
+                                    </div>
                                     <p className="myformsLinkFormsName">
                                         {f.formName}
                                     </p>
                                     <div className="myformsLinkFormsRouting">
+                                        <div className="myformsLinkFormsRoutingLine"></div>
                                         <div className="myformsLinkFormsRoutingRoleCircle">
                                             <div
                                                 className="myformsLinkFormsRoutingCircle"
@@ -63,7 +82,7 @@ const MyForms = (props) => {
                                                         (f.routingPending.includes(
                                                             "TM"
                                                         ) &&
-                                                            "#FDD835") ||
+                                                            "#cfac0f") ||
                                                         (f.routingApproved.includes(
                                                             "TM"
                                                         ) &&
@@ -86,7 +105,7 @@ const MyForms = (props) => {
                                                         (f.routingPending.includes(
                                                             "PL"
                                                         ) &&
-                                                            "#FDD835") ||
+                                                            "#cfac0f") ||
                                                         (f.routingApproved.includes(
                                                             "PL"
                                                         ) &&
@@ -109,7 +128,7 @@ const MyForms = (props) => {
                                                         (f.routingPending.includes(
                                                             "PM"
                                                         ) &&
-                                                            "#FDD835") ||
+                                                            "#cfac0f") ||
                                                         (f.routingApproved.includes(
                                                             "PM"
                                                         ) &&
@@ -132,7 +151,7 @@ const MyForms = (props) => {
                                                         (f.routingPending.includes(
                                                             "CO"
                                                         ) &&
-                                                            "#FDD835") ||
+                                                            "#cfac0f") ||
                                                         (f.routingApproved.includes(
                                                             "CO"
                                                         ) &&
@@ -148,35 +167,66 @@ const MyForms = (props) => {
                                             </p>
                                         </div>
                                     </div>
-                                    {f.approved === "Approved" && (
-                                        <p className="myformsLinkFormsApproved">
-                                            Approved
-                                        </p>
-                                    )}
-                                    {f.approved === "Rejected" && (
-                                        <p className="myformsLinkFormsRejected">
-                                            Rejected
-                                        </p>
-                                    )}
-                                    <p className="myformsLinkFormsComment">
-                                        {f.comment && `"${f.comment}"`}
-                                    </p>
-                                    <p className="myformsLinkFormsBy">
-                                        {f.approvalBy && f.approvalBy.email}{" "}
-                                        {f.approvalBy && (
-                                            <span>
-                                                ({f.approvalBy.supervisorRole})
-                                            </span>
+                                    <div className="myformsLinkFormsBottom">
+                                        {f.approved === "Approved" && (
+                                            <p className="myformsLinkFormsApproved">
+                                                <span
+                                                    style={{
+                                                        fontWeight: "700",
+                                                    }}
+                                                >
+                                                    Approved
+                                                </span>{" "}
+                                                <span
+                                                    style={{
+                                                        fontWeight: "300",
+                                                        fontStyle: "italic",
+                                                    }}
+                                                >
+                                                    {f.comment &&
+                                                        `"${f.comment}"`}
+                                                </span>
+                                            </p>
                                         )}
-                                    </p>
-                                    <p className="myformsLinkFormsCreator">
-                                        {f.email}
-                                    </p>
-                                    <p className="myformsLinkFormsCreatedat">
-                                        {moment(f.createdAt).format(
-                                            "MMMM Do YYYY, h:mm:ss a"
+                                        {f.approved === "Rejected" && (
+                                            <p className="myformsLinkFormsRejected">
+                                                <span
+                                                    style={{
+                                                        fontWeight: "700",
+                                                    }}
+                                                >
+                                                    Rejected
+                                                </span>{" "}
+                                                <span
+                                                    style={{
+                                                        fontWeight: "300",
+                                                        fontStyle: "italic",
+                                                    }}
+                                                >
+                                                    {f.comment &&
+                                                        `"${f.comment}"`}
+                                                </span>
+                                            </p>
                                         )}
-                                    </p>
+                                        <p className="myformsLinkFormsBy">
+                                            {f.approvalBy && f.approvalBy.email}{" "}
+                                            {f.approvalBy && (
+                                                <span>
+                                                    (
+                                                    {
+                                                        f.approvalBy
+                                                            .supervisorRole
+                                                    }
+                                                    )
+                                                </span>
+                                            )}
+                                        </p>
+                                        <p className="myformsLinkFormsCreatedat">
+                                            {moment(f.createdAt).format(
+                                                "MMMM Do YYYY, h:mm:ss a"
+                                            )}
+                                        </p>
+                                    </div>
                                 </div>
                             </Link>
                         );

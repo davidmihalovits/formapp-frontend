@@ -35,7 +35,16 @@ const Profile = (props) => {
                 <p className="profileText">{props.user && props.user.email}</p>
                 {props.user && props.user.supervisorRole ? (
                     <p className="profileText">
-                        {props.user.role}/{props.user.supervisorRole}
+                        {props.user.role}
+                        <br />
+                        {props.user.supervisorRole === "TA" && "Travel Advisor"}
+                        {props.user.supervisorRole === "TM" && "Task Monitor"}
+                        {props.user.supervisorRole === "PL" &&
+                            "Group/Project Lead"}
+                        {props.user.supervisorRole === "PM" &&
+                            "Program Manager"}
+                        {props.user.supervisorRole === "CO" &&
+                            "Contracting Officer"}
                     </p>
                 ) : (
                     <p className="profileText">

@@ -89,7 +89,7 @@
 
         .navbar
             display: grid
-            grid-template-columns: auto 1fr
+            grid-template-columns: 1fr auto
             align-items: center
             gap: 0
             width: 1100px
@@ -100,7 +100,11 @@
                 grid-template-columns: auto auto auto
                 justify-content: start
                 align-items: center
-                gap: 30px
+                gap: 15px
+
+                .navbarLeftProfile
+                    font-size: 17px
+                    color: $smoke-black
 
                 .navbarLeftProfileIcon
                     width: 35px
@@ -118,8 +122,8 @@
                     position: relative
 
                     .navbarLeftBellIcon
-                        width: 35px
-                        height: 35px
+                        width: 28px
+                        height: 28px
                         display: block
 
                     .navbarLeftBellIconBadge
@@ -136,17 +140,23 @@
                     text-decoration: none
                     line-height: auto
 
-                    .navbarLeftSubmitIcon
-                        width: 35px
-                        height: 35px
-                        display: block
+                    .navbarLeftLinkSubmit
+                        background: $primary-color
+                        border: 1px solid $primary-color
+                        outline: none
+                        border-radius: 4px
+                        color: white
+                        font-size: 17px
+                        height: 42px
+                        width: 150px
+                        cursor: pointer
 
             .navbarRight
                 display: grid
                 grid-template-columns: repeat(auto-fit, minmax(0, auto))
                 align-items: center
-                justify-content: end
-                gap: 30px
+                justify-content: start
+                gap: 15px
                 
                 .navbarLink
                     text-decoration: none
@@ -154,11 +164,11 @@
 
                     .navbarLinkItemActive
                         color: $primary-color
-                        font-size: 20px
+                        font-size: 17px
 
                     .navbarLinkItemInactive
                         color: $smoke-black
-                        font-size: 20px
+                        font-size: 17px
 
 
         

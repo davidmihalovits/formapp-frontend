@@ -22,67 +22,6 @@ const Navbar = (props) => {
         return (
             <div className="navbarContainer">
                 <div className="navbar">
-                    <div className="navbarLeft">
-                        <Link to="/profile" style={{ textDecoration: "none" }}>
-                            <div
-                                className="navbarLeftProfileIcon"
-                                style={{
-                                    background:
-                                        (props.user &&
-                                            props.user.supervisorRole ===
-                                                "TA" &&
-                                            "#90CAF9") ||
-                                        (props.user &&
-                                            props.user.supervisorRole ===
-                                                "TM" &&
-                                            "#FF8A65") ||
-                                        (props.user &&
-                                            props.user.supervisorRole ===
-                                                "PL" &&
-                                            "#2196F3") ||
-                                        (props.user &&
-                                            props.user.supervisorRole ===
-                                                "PM" &&
-                                            "#1565C0") ||
-                                        (props.user &&
-                                            props.user.supervisorRole ===
-                                                "CO" &&
-                                            "#FF5722"),
-                                }}
-                            >
-                                {props.user &&
-                                    props.user.email
-                                        .substring(0, 2)
-                                        .toUpperCase()}
-                            </div>
-                        </Link>
-                        <Link
-                            to="/notification"
-                            className="navbarLeftBellIconBadgeContainer"
-                        >
-                            <img
-                                className="navbarLeftBellIcon"
-                                src={bell}
-                                alt="bell"
-                            />
-                            {unreadNotifications.includes(false) && (
-                                <span className="navbarLeftBellIconBadge"></span>
-                            )}
-                        </Link>
-                        {props.user && props.user.role !== "Supervisor" && (
-                            <Link
-                                to="/submit"
-                                className="navbarLeftLink"
-                                onClick={() => setHamburgerModal(false)}
-                            >
-                                <img
-                                    className="navbarLeftSubmitIcon"
-                                    src={submit}
-                                    alt="submit"
-                                />
-                            </Link>
-                        )}
-                    </div>
                     <div className="navbarRight">
                         {props.user && props.user.supervisorRole === "CO" && (
                             <Link
@@ -180,6 +119,70 @@ const Navbar = (props) => {
                                 </p>
                             </Link>
                         )}
+                    </div>
+                    <div className="navbarLeft">
+                        {props.user && props.user.role !== "Supervisor" && (
+                            <Link
+                                to="/submit"
+                                className="navbarLeftLink"
+                                onClick={() => setHamburgerModal(false)}
+                            >
+                                <button className="navbarLeftLinkSubmit">
+                                    Submit
+                                </button>
+                            </Link>
+                        )}
+                        <Link
+                            to="/notification"
+                            className="navbarLeftBellIconBadgeContainer"
+                        >
+                            <img
+                                className="navbarLeftBellIcon"
+                                src={bell}
+                                alt="bell"
+                            />
+                            {unreadNotifications.includes(false) && (
+                                <span className="navbarLeftBellIconBadge"></span>
+                            )}
+                        </Link>
+                        <Link to="/profile" style={{ textDecoration: "none" }}>
+                            {/*<div
+                                className="navbarLeftProfileIcon"
+                                style={{
+                                    background:
+                                        (props.user &&
+                                            props.user.supervisorRole ===
+                                                "TA" &&
+                                            "#90CAF9") ||
+                                        (props.user &&
+                                            props.user.supervisorRole ===
+                                                "TM" &&
+                                            "#FF8A65") ||
+                                        (props.user &&
+                                            props.user.supervisorRole ===
+                                                "PL" &&
+                                            "#2196F3") ||
+                                        (props.user &&
+                                            props.user.supervisorRole ===
+                                                "PM" &&
+                                            "#1565C0") ||
+                                        (props.user &&
+                                            props.user.supervisorRole ===
+                                                "CO" &&
+                                            "#FF5722"),
+                                }}
+                            >
+                                {props.user &&
+                                    props.user.email
+                                        .substring(0, 2)
+                                        .toUpperCase()}
+                            </div>*/}
+                            {props.user && (
+                                <p className="navbarLeftProfile">
+                                    {props.user.email}
+                                </p>
+                            )}
+                        </Link>
                     </div>
                 </div>
             </div>

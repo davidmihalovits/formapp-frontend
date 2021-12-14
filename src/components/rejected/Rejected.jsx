@@ -48,18 +48,33 @@ const Rejected = (props) => {
                                     className="rejectedLink"
                                 >
                                     <div className="rejectedLinkForms">
+                                        <div className="rejectedLinkFormsTag">
+                                            Rejected
+                                        </div>
                                         <p className="rejectedLinkFormsName">
                                             {f.formName}
                                         </p>
                                         <div>
                                             {f.approved === "Rejected" && (
                                                 <p className="rejectedLinkFormsRejected">
-                                                    Rejected
+                                                    <span
+                                                        style={{
+                                                            fontWeight: "700",
+                                                        }}
+                                                    >
+                                                        Rejected
+                                                    </span>{" "}
+                                                    <span
+                                                        style={{
+                                                            fontWeight: "300",
+                                                            fontStyle: "italic",
+                                                        }}
+                                                    >
+                                                        {f.comment &&
+                                                            `"${f.comment}"`}
+                                                    </span>
                                                 </p>
                                             )}
-                                            <p className="rejectedLinkFormsComment">
-                                                {f.comment && `"${f.comment}"`}
-                                            </p>
                                             <p className="rejectedLinkFormsBy">
                                                 by {f.approvalBy.email} (
                                                 {f.approvalBy.supervisorRole})
