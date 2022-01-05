@@ -56,7 +56,7 @@ const MyForms = (props) => {
                                         style={{
                                             background:
                                                 (f.approved === "pending" &&
-                                                    "#cfac0f") ||
+                                                    "#FFCA28") ||
                                                 (f.approved === "Approved" &&
                                                     "#28b834") ||
                                                 (f.approved === "Rejected" &&
@@ -82,7 +82,7 @@ const MyForms = (props) => {
                                                         (f.routingPending.includes(
                                                             "TM"
                                                         ) &&
-                                                            "#cfac0f") ||
+                                                            "#FFCA28") ||
                                                         (f.routingApproved.includes(
                                                             "TM"
                                                         ) &&
@@ -105,7 +105,7 @@ const MyForms = (props) => {
                                                         (f.routingPending.includes(
                                                             "PL"
                                                         ) &&
-                                                            "#cfac0f") ||
+                                                            "#FFCA28") ||
                                                         (f.routingApproved.includes(
                                                             "PL"
                                                         ) &&
@@ -128,7 +128,7 @@ const MyForms = (props) => {
                                                         (f.routingPending.includes(
                                                             "PM"
                                                         ) &&
-                                                            "#cfac0f") ||
+                                                            "#FFCA28") ||
                                                         (f.routingApproved.includes(
                                                             "PM"
                                                         ) &&
@@ -151,7 +151,7 @@ const MyForms = (props) => {
                                                         (f.routingPending.includes(
                                                             "CO"
                                                         ) &&
-                                                            "#cfac0f") ||
+                                                            "#FFCA28") ||
                                                         (f.routingApproved.includes(
                                                             "CO"
                                                         ) &&

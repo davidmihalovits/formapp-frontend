@@ -64,7 +64,7 @@ const Pending = () => {
                                                             (f.routingPending.includes(
                                                                 "TM"
                                                             ) &&
-                                                                "#cfac0f") ||
+                                                                "#FFCA28") ||
                                                             (f.routingApproved.includes(
                                                                 "TM"
                                                             ) &&
@@ -87,7 +87,7 @@ const Pending = () => {
                                                             (f.routingPending.includes(
                                                                 "PL"
                                                             ) &&
-                                                                "#cfac0f") ||
+                                                                "#FFCA28") ||
                                                             (f.routingApproved.includes(
                                                                 "PL"
                                                             ) &&
@@ -110,7 +110,7 @@ const Pending = () => {
                                                             (f.routingPending.includes(
                                                                 "PM"
                                                             ) &&
-                                                                "#cfac0f") ||
+                                                                "#FFCA28") ||
                                                             (f.routingApproved.includes(
                                                                 "PM"
                                                             ) &&
@@ -133,7 +133,7 @@ const Pending = () => {
                                                             (f.routingPending.includes(
                                                                 "CO"
                                                             ) &&
-                                                                "#cfac0f") ||
+                                                                "#FFCA28") ||
                                                             (f.routingApproved.includes(
                                                                 "CO"
                                                             ) &&

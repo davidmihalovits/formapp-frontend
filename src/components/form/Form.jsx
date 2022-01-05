@@ -1745,7 +1745,7 @@ const Form = (props) => {
                                                 form.routingPending.includes(
                                                     "TM"
                                                 ) &&
-                                                "#FDD835") ||
+                                                "#FFCA28") ||
                                             (form &&
                                                 form.routingApproved.includes(
                                                     "TM"
@@ -1769,7 +1769,7 @@ const Form = (props) => {
                                                 form.routingPending.includes(
                                                     "PL"
                                                 ) &&
-                                                "#FDD835") ||
+                                                "#FFCA28") ||
                                             (form &&
                                                 form.routingApproved.includes(
                                                     "PL"
@@ -1793,7 +1793,7 @@ const Form = (props) => {
                                                 form.routingPending.includes(
                                                     "PM"
                                                 ) &&
-                                                "#FDD835") ||
+                                                "#FFCA28") ||
                                             (form &&
                                                 form.routingApproved.includes(
                                                     "PM"
@@ -1817,7 +1817,7 @@ const Form = (props) => {
                                                 form.routingPending.includes(
                                                     "CO"
                                                 ) &&
-                                                "#FDD835") ||
+                                                "#FFCA28") ||
                                             (form &&
                                                 form.routingApproved.includes(
                                                     "CO"

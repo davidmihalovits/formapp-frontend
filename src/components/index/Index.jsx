@@ -171,7 +171,7 @@ const Index = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="indexBoxInput"
-                        placeholder="Your email address"
+                        placeholder="Email address"
                     />
                     <div className="indexBoxRadioText">
                         <div
