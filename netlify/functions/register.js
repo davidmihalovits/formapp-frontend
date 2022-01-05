@@ -7,7 +7,7 @@ const register = async (req, res) => {
     if (user) {
         return {
             statusCode: 500,
-            body: JSON.stringify(`User ${res.email} already registered.`),
+            body: JSON.stringify(`User already registered.`),
         };
     }
 

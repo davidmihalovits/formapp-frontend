@@ -7,9 +7,8 @@ const Index = () => {
             ? "http://localhost:8888/.netlify/functions"
             : "https://awesome-minsky-48a20a.netlify.app/.netlify/functions";
 
-    /*const [email, setEmail] = useState("");
-    const [travelerRole, setTravelerRole] = useState("");
-    const [supervisorRole, setSupervisorRole] = useState("");*/
+    const [email, setEmail] = useState("");
+    const [role, setRole] = useState("");
 
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -17,8 +16,11 @@ const Index = () => {
     const [code, setCode] = useState("");
     const [loginCodeSent, setLoginCodeSent] = useState(false);
 
-    /*const register = async (e) => {
+    const register = async (e) => {
         e.preventDefault();
+
+        setErrorMessage("");
+        setLoading(true);
 
         await fetch(`${devprodUrl}/register`, {
             method: "POST",
@@ -27,19 +29,21 @@ const Index = () => {
             },
             body: JSON.stringify({
                 email: email,
-                role: `${travelerRole}${supervisorRole}`,
+                role: role,
             }),
         })
             .then((res) => res.json())
             .then((data) => {
-                if (data === "Choose a role.") {
-                    return alert(data);
+                if (data === "User already registered.") {
+                    setLoading(false);
+                    return setErrorMessage("User already registered.");
                 } else {
+                    setLoading(false);
                     alert(data);
                     return window.location.reload();
                 }
             });
-    };*/
+    };
 
     const loginRequest = async (e) => {
         e.preventDefault();
@@ -106,7 +110,7 @@ const Index = () => {
         <div className="indexContainer">
             <div className="index">
                 <div className="indexBox">
-                    {/*<h1 className="indexBoxTitle">Login</h1>*/}
+                    <h1 className="indexBoxTitle">Login</h1>
                     {loginCodeSent ? (
                         <>
                             <input
@@ -123,12 +127,12 @@ const Index = () => {
                                 onClick={login}
                                 disabled={loading || !code}
                             >
-                                {loading ? "Loading..." : "Login"}
+                                {loading && code ? "Loading..." : "Login"}
                             </button>
                             <p className="indexBoxVerbage">
                                 Please check your email for the login code.
                             </p>
-                            {errorMessage && (
+                            {errorMessage && code && (
                                 <p className="indexBoxError">{errorMessage}</p>
                             )}
                         </>
@@ -148,15 +152,17 @@ const Index = () => {
                                 onClick={loginRequest}
                                 disabled={loading || !credential}
                             >
-                                {loading ? "Loading..." : "Request login code"}
+                                {loading && credential
+                                    ? "Loading..."
+                                    : "Request login code"}
                             </button>
-                            {errorMessage && (
+                            {errorMessage && credential && (
                                 <p className="indexBoxError">{errorMessage}</p>
                             )}
                         </>
                     )}
                 </div>
-                {/*<div className="indexBox">
+                <div className="indexBox">
                     <h1 className="indexBoxTitle">Register</h1>
                     <input
                         id="email"
@@ -171,13 +177,20 @@ const Index = () => {
                         <div
                             className="indexBoxRadio"
                             onClick={() => {
-                                if (travelerRole === "Traveler") {
-                                    return setTravelerRole("");
+                                if (role === "Supervisor") {
+                                    return setRole("TravelerSupervisor");
                                 }
-                                setTravelerRole("Traveler");
+                                if (role === "Traveler") {
+                                    return setRole("");
+                                }
+                                if (role === "TravelerSupervisor") {
+                                    return setRole("Supervisor");
+                                }
+                                return setRole("Traveler");
                             }}
                         >
-                            {travelerRole && (
+                            {(role === "Traveler" ||
+                                role === "TravelerSupervisor") && (
                                 <span className="indexBoxRadioCheckmark"></span>
                             )}
                         </div>
@@ -187,22 +200,36 @@ const Index = () => {
                         <div
                             className="indexBoxRadio"
                             onClick={() => {
-                                if (supervisorRole === "Supervisor") {
-                                    return setSupervisorRole("");
+                                if (role === "Traveler") {
+                                    return setRole("TravelerSupervisor");
                                 }
-                                setSupervisorRole("Supervisor");
+                                if (role === "Supervisor") {
+                                    return setRole("");
+                                }
+                                if (role === "TravelerSupervisor") {
+                                    return setRole("Traveler");
+                                }
+                                return setRole("Supervisor");
                             }}
                         >
-                            {supervisorRole && (
+                            {(role === "Supervisor" ||
+                                role === "TravelerSupervisor") && (
                                 <span className="indexBoxRadioCheckmark"></span>
                             )}
                         </div>
                         <p className="indexBoxText">Supervisor</p>
                     </div>
-                    <button className="indexBoxButton" onClick={register}>
-                        Register
+                    <button
+                        className="indexBoxButton"
+                        onClick={register}
+                        disabled={loading || !email || !role}
+                    >
+                        {loading && email && role ? "Loading..." : "Register"}
                     </button>
-                </div>*/}
+                    {errorMessage && email && role && (
+                        <p className="indexBoxError">{errorMessage}</p>
+                    )}
+                </div>
             </div>
         </div>
     );
