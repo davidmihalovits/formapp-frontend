@@ -7,6 +7,8 @@ import Profile from "./components/profile/Profile";
 import MyForms from "./components/myForms/MyForms";
 import Notification from "./components/notification/Notification";
 import Submit from "./components/submit/Submit";
+import SubmitFormTravel from "./components/submitFormTravel/SubmitFormTravel";
+import SubmitFormWork from "./components/submitFormWork/SubmitFormWork";
 import Index from "./components/index/Index";
 import Pending from "./components/pending/Pending";
 import COconcurrence from "./components/pending/COconcurrence";
@@ -127,7 +129,21 @@ const App = () => {
                         {!localStorage.getItem("token") ? (
                             <Redirect to="/" />
                         ) : (
-                            <Submit user={user} />
+                            <Submit />
+                        )}
+                    </Route>
+                    <Route exact path="/submit/travel">
+                        {!localStorage.getItem("token") ? (
+                            <Redirect to="/" />
+                        ) : (
+                            <SubmitFormTravel user={user} />
+                        )}
+                    </Route>
+                    <Route exact path="/submit/work">
+                        {!localStorage.getItem("token") ? (
+                            <Redirect to="/" />
+                        ) : (
+                            <SubmitFormWork user={user} />
                         )}
                     </Route>
                     <Route exact path="/pending">

@@ -60,7 +60,6 @@ const Form = (props) => {
         useState(false);
     const [step, setStep] = useState("20%");
 
-    //const [route, setRoute] = useState("");
     const [messageToCO, setMessageToCO] = useState("");
 
     const [chargeCodes, setChargeCodes] = useState([]);
@@ -182,8 +181,8 @@ const Form = (props) => {
         setWorkState(form.workState);
         setWorkZipcode(form.workZipcode);*/
 
-        //setRegulatoryNctsCode(form.regulatoryNctsCode);
-        //setRegulatoryNctsEmail(form.regulatoryNctsEmail);
+        setRegulatoryNctsCode(form.regulatoryNctsCode);
+        setRegulatoryNctsEmail(form.regulatoryNctsEmail);
 
         setRegulatoryForeignTravel(form.regulatoryForeignTravel);
         setTravelMethod(form.travelMethod);
@@ -212,6 +211,10 @@ const Form = (props) => {
         setRegulatoryVisa(form.regulatoryVisa);
 
         // eslint-disable-next-line
+
+        if (form.regulatoryNctsCode || form.regulatoryNctsEmail) {
+            setIsNcts(true);
+        }
     }, [form]);
 
     useEffect(() => {
@@ -1228,15 +1231,43 @@ const Form = (props) => {
                                 <div className="travelAdvanceCheckboxText">
                                     <span
                                         className={
-                                            justificationType === "Presenting"
+                                            justificationType.includes(
+                                                "Presenting"
+                                            )
                                                 ? "travelAdvanceCheckboxChecked"
                                                 : "travelAdvanceCheckboxUnchecked"
                                         }
-                                        onClick={() =>
-                                            setJustificationType("Presenting")
-                                        }
+                                        onClick={() => {
+                                            if (
+                                                !justificationType.includes(
+                                                    "Presenting"
+                                                )
+                                            ) {
+                                                return setJustificationType(
+                                                    justificationType +
+                                                        "Presenting"
+                                                );
+                                            }
+                                            if (
+                                                justificationType.includes(
+                                                    "Presenting"
+                                                )
+                                            ) {
+                                                return setJustificationType(
+                                                    justificationType.replace(
+                                                        "Presenting",
+                                                        ""
+                                                    )
+                                                );
+                                            }
+                                            return setJustificationType(
+                                                "Presenting"
+                                            );
+                                        }}
                                     >
-                                        {justificationType === "Presenting" && (
+                                        {justificationType.includes(
+                                            "Presenting"
+                                        ) && (
                                             <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                         )}
                                     </span>
@@ -1247,19 +1278,43 @@ const Form = (props) => {
                                 <div className="travelAdvanceCheckboxText">
                                     <span
                                         className={
-                                            justificationType ===
-                                            "Poster Session"
+                                            justificationType.includes(
+                                                "PosterSession"
+                                            )
                                                 ? "travelAdvanceCheckboxChecked"
                                                 : "travelAdvanceCheckboxUnchecked"
                                         }
-                                        onClick={() =>
-                                            setJustificationType(
-                                                "Poster Session"
-                                            )
-                                        }
+                                        onClick={() => {
+                                            if (
+                                                !justificationType.includes(
+                                                    "PosterSession"
+                                                )
+                                            ) {
+                                                return setJustificationType(
+                                                    justificationType +
+                                                        "PosterSession"
+                                                );
+                                            }
+                                            if (
+                                                justificationType.includes(
+                                                    "PosterSession"
+                                                )
+                                            ) {
+                                                return setJustificationType(
+                                                    justificationType.replace(
+                                                        "PosterSession",
+                                                        ""
+                                                    )
+                                                );
+                                            }
+                                            return setJustificationType(
+                                                "PosterSession"
+                                            );
+                                        }}
                                     >
-                                        {justificationType ===
-                                            "Poster Session" && (
+                                        {justificationType.includes(
+                                            "PosterSession"
+                                        ) && (
                                             <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                         )}
                                     </span>
@@ -1270,19 +1325,43 @@ const Form = (props) => {
                                 <div className="travelAdvanceCheckboxText">
                                     <span
                                         className={
-                                            justificationType ===
-                                            "Mission Support"
+                                            justificationType.includes(
+                                                "MissionSupport"
+                                            )
                                                 ? "travelAdvanceCheckboxChecked"
                                                 : "travelAdvanceCheckboxUnchecked"
                                         }
-                                        onClick={() =>
-                                            setJustificationType(
-                                                "Mission Support"
-                                            )
-                                        }
+                                        onClick={() => {
+                                            if (
+                                                !justificationType.includes(
+                                                    "MissionSupport"
+                                                )
+                                            ) {
+                                                return setJustificationType(
+                                                    justificationType +
+                                                        "MissionSupport"
+                                                );
+                                            }
+                                            if (
+                                                justificationType.includes(
+                                                    "MissionSupport"
+                                                )
+                                            ) {
+                                                return setJustificationType(
+                                                    justificationType.replace(
+                                                        "MissionSupport",
+                                                        ""
+                                                    )
+                                                );
+                                            }
+                                            return setJustificationType(
+                                                "MissionSupport"
+                                            );
+                                        }}
                                     >
-                                        {justificationType ===
-                                            "Mission Support" && (
+                                        {justificationType.includes(
+                                            "MissionSupport"
+                                        ) && (
                                             <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                         )}
                                     </span>
@@ -1293,16 +1372,43 @@ const Form = (props) => {
                                 <div className="travelAdvanceCheckboxText">
                                     <span
                                         className={
-                                            justificationType === "Chair Person"
+                                            justificationType.includes(
+                                                "ChairPerson"
+                                            )
                                                 ? "travelAdvanceCheckboxChecked"
                                                 : "travelAdvanceCheckboxUnchecked"
                                         }
-                                        onClick={() =>
-                                            setJustificationType("Chair Person")
-                                        }
+                                        onClick={() => {
+                                            if (
+                                                !justificationType.includes(
+                                                    "ChairPerson"
+                                                )
+                                            ) {
+                                                return setJustificationType(
+                                                    justificationType +
+                                                        "ChairPerson"
+                                                );
+                                            }
+                                            if (
+                                                justificationType.includes(
+                                                    "ChairPerson"
+                                                )
+                                            ) {
+                                                return setJustificationType(
+                                                    justificationType.replace(
+                                                        "ChairPerson",
+                                                        ""
+                                                    )
+                                                );
+                                            }
+                                            return setJustificationType(
+                                                "ChairPerson"
+                                            );
+                                        }}
                                     >
-                                        {justificationType ===
-                                            "Chair Person" && (
+                                        {justificationType.includes(
+                                            "ChairPerson"
+                                        ) && (
                                             <span className="travelAdvanceCheckboxCheckedCheckmark"></span>
                                         )}
                                     </span>
@@ -1355,7 +1461,7 @@ const Form = (props) => {
                                             </li>
                                             <li className="formVerbageLi">
                                                 Register travel with the U.S.
-                                                State Department’s Smart
+                                                State Department'’'s Smart
                                                 Traveler Enrollment Program
                                                 (STEP).
                                             </li>
