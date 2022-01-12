@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const User = require("../models/User");
 const Form = require("../models/Form");
 const jwt = require("jsonwebtoken");
 
@@ -24,7 +25,7 @@ const getForms = async (req, res, next) => {
     const forms = await Form.find()
         .populate({
             path: "approvalBy",
-            model: "users",
+            model: User,
         })
         .sort({ updatedAt: -1 });
 
@@ -33,7 +34,7 @@ const getForms = async (req, res, next) => {
     })
         .populate({
             path: "approvalBy",
-            model: "users",
+            model: User,
         })
         .sort({ updatedAt: -1 });
 
