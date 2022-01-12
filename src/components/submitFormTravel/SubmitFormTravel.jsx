@@ -36,7 +36,7 @@ const SubmitFormTravel = (props) => {
     const [employeeId, setEmployeeId] = useState("");
     const [program, setProgram] = useState("SAMDA");
     const [chargeCode, setChargeCode] = useState("");
-    const [task, setTask] = useState("ExampleTask");
+    const [task, setTask] = useState("GMAO");
     const [travelMethod, setTravelMethod] = useState("Air");
     const [isVirtual, setIsVirtual] = useState(false);
     const [startDate, setStartDate] = useState(
@@ -457,7 +457,8 @@ const SubmitFormTravel = (props) => {
                                 className="formInput"
                                 style={{ cursor: "pointer" }}
                             >
-                                <option value="ExampleTask">ExampleTask</option>
+                                <option value="GMAO">GMAO</option>
+                                <option value="SAS">SAS</option>
                             </select>
                             <button
                                 onClick={() => {

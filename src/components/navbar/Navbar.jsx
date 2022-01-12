@@ -3,7 +3,10 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import hamburger from "../../assets/hamburger.svg";
 import bell from "../../assets/bell.svg";
+import settings from "../../assets/settings.svg";
 import submit from "../../assets/submit.svg";
+import submit2 from "../../assets/submit2.svg";
+import stats from "../../assets/stats.svg";
 
 const Navbar = (props) => {
     const [hamburgerModal, setHamburgerModal] = useState(false);
@@ -128,10 +131,26 @@ const Navbar = (props) => {
                                 onClick={() => setHamburgerModal(false)}
                             >
                                 <button className="navbarLeftLinkSubmit">
-                                    Submit
+                                    <img
+                                        src={submit2}
+                                        className="navbarLeftLinkSubmitIcon"
+                                        alt="submit"
+                                    />
+                                    Forms
                                 </button>
                             </Link>
                         )}
+                        <Link
+                            to="/stats"
+                            style={{ textDecoration: "none" }}
+                            onClick={() => setHamburgerModal(false)}
+                        >
+                            <img
+                                className="navbarLeftSettingsIcon"
+                                src={stats}
+                                alt="stats"
+                            />
+                        </Link>
                         <Link
                             to="/notification"
                             className="navbarLeftBellIconBadgeContainer"
@@ -146,37 +165,6 @@ const Navbar = (props) => {
                             )}
                         </Link>
                         <Link to="/profile" style={{ textDecoration: "none" }}>
-                            {/*<div
-                                className="navbarLeftProfileIcon"
-                                style={{
-                                    background:
-                                        (props.user &&
-                                            props.user.supervisorRole ===
-                                                "TA" &&
-                                            "#90CAF9") ||
-                                        (props.user &&
-                                            props.user.supervisorRole ===
-                                                "TM" &&
-                                            "#FF8A65") ||
-                                        (props.user &&
-                                            props.user.supervisorRole ===
-                                                "PL" &&
-                                            "#2196F3") ||
-                                        (props.user &&
-                                            props.user.supervisorRole ===
-                                                "PM" &&
-                                            "#1565C0") ||
-                                        (props.user &&
-                                            props.user.supervisorRole ===
-                                                "CO" &&
-                                            "#FF5722"),
-                                }}
-                            >
-                                {props.user &&
-                                    props.user.email
-                                        .substring(0, 2)
-                                        .toUpperCase()}
-                            </div>*/}
                             {props.user && (
                                 <p className="navbarLeftProfile">
                                     {props.user.email}
@@ -198,7 +186,7 @@ const Navbar = (props) => {
                         style={{ textDecoration: "none" }}
                         onClick={() => setHamburgerModal(false)}
                     >
-                        <div
+                        {/*<div
                             className="navbarProfileIcon"
                             style={{
                                 background:
@@ -221,7 +209,23 @@ const Navbar = (props) => {
                         >
                             {props.user &&
                                 props.user.email.substring(0, 2).toUpperCase()}
-                        </div>
+                            </div>*/}
+                        <img
+                            className="navbarSettingsIcon"
+                            src={settings}
+                            alt="settings"
+                        />
+                    </Link>
+                    <Link
+                        to="/stats"
+                        style={{ textDecoration: "none" }}
+                        onClick={() => setHamburgerModal(false)}
+                    >
+                        <img
+                            className="navbarSettingsIcon"
+                            src={stats}
+                            alt="stats"
+                        />
                     </Link>
                     <Link
                         to="/notification"

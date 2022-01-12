@@ -6,6 +6,7 @@ import Navbar from "./components/navbar/Navbar";
 import Profile from "./components/profile/Profile";
 import MyForms from "./components/myForms/MyForms";
 import Notification from "./components/notification/Notification";
+import Stats from "./components/stats/Stats";
 import Submit from "./components/submit/Submit";
 import SubmitFormTravel from "./components/submitFormTravel/SubmitFormTravel";
 import SubmitFormWork from "./components/submitFormWork/SubmitFormWork";
@@ -123,6 +124,13 @@ const App = () => {
                                 notifications={notifications}
                                 getNotifications={getNotifications}
                             />
+                        )}
+                    </Route>
+                    <Route exact path="/stats">
+                        {!localStorage.getItem("token") ? (
+                            <Redirect to="/" />
+                        ) : (
+                            <Stats />
                         )}
                     </Route>
                     <Route exact path="/submit">
