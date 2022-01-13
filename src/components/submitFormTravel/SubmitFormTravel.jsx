@@ -467,6 +467,7 @@ const SubmitFormTravel = (props) => {
                                 }}
                                 type="button"
                                 className="formButton"
+                                disabled={!fullName || !employeeId}
                             >
                                 Next
                             </button>
@@ -602,6 +603,11 @@ const SubmitFormTravel = (props) => {
                                 }}
                                 type="button"
                                 className="formButton"
+                                disabled={
+                                    isNcts &&
+                                    (!regulatoryNctsCode ||
+                                        !regulatoryNctsEmail)
+                                }
                             >
                                 Next
                             </button>
@@ -1136,7 +1142,6 @@ const SubmitFormTravel = (props) => {
                                 }
                                 className="formTextarea"
                             />
-
                             {regulatoryForeignTravel === "Foreign" && (
                                 <div className="formVerbage">
                                     <ul>
@@ -1194,6 +1199,13 @@ const SubmitFormTravel = (props) => {
                                     }}
                                     type="button"
                                     className="formButton"
+                                    disabled={
+                                        !destinationCity ||
+                                        !destinationState ||
+                                        !destinationStreetAddress ||
+                                        !destinationZipcode ||
+                                        !justificationType
+                                    }
                                 >
                                     Next
                                 </button>
@@ -1201,7 +1213,14 @@ const SubmitFormTravel = (props) => {
                                 <button
                                     type="submit"
                                     className="formButton"
-                                    disabled={loading}
+                                    disabled={
+                                        loading ||
+                                        !destinationCity ||
+                                        !destinationState ||
+                                        !destinationStreetAddress ||
+                                        !destinationZipcode ||
+                                        !justificationType
+                                    }
                                 >
                                     {loading ? "Loading..." : "Submit"}
                                 </button>
@@ -1335,34 +1354,48 @@ const SubmitFormTravel = (props) => {
                                     Travel Advance
                                 </p>
                             </div>
-                            <label
-                                className="formLabel"
-                                htmlFor="travelAdvanceAmount"
-                            >
-                                Amount
-                            </label>
-                            <input
-                                id="travelAdvanceAmount"
-                                name="travelAdvanceAmount"
-                                type="text"
-                                value={travelAdvanceAmount}
-                                onChange={(e) =>
-                                    setTravelAdvanceAmount(e.target.value)
-                                }
-                                className="formInput"
-                            />
-                            {travelAdvanceMoreThanTotal && (
-                                <p className="formError">
-                                    Travel advance amount can't be higher than
-                                    total travel cost.
-                                </p>
+                            {travelAdvanceCheckbox && (
+                                <>
+                                    <label
+                                        className="formLabel"
+                                        htmlFor="travelAdvanceAmount"
+                                    >
+                                        Amount
+                                    </label>
+                                    <input
+                                        id="travelAdvanceAmount"
+                                        name="travelAdvanceAmount"
+                                        type="text"
+                                        value={travelAdvanceAmount}
+                                        onChange={(e) =>
+                                            setTravelAdvanceAmount(
+                                                e.target.value
+                                            )
+                                        }
+                                        className="formInput"
+                                    />
+                                </>
                             )}
+                            {travelAdvanceMoreThanTotal &&
+                                travelAdvanceCheckbox && (
+                                    <p className="formError">
+                                        Travel advance amount can't be higher
+                                        than total travel cost.
+                                    </p>
+                                )}
                             {regulatoryForeignTravel !== "Foreign" ? (
                                 <>
                                     <button
                                         type="submit"
                                         className="formButton"
-                                        disabled={loading}
+                                        disabled={
+                                            loading ||
+                                            (travelAdvanceCheckbox &&
+                                                (travelAdvanceAmount >
+                                                    totalCostAmount ||
+                                                    !travelAdvanceAmount)) ||
+                                            totalCostAmount === 0
+                                        }
                                     >
                                         {loading ? "Loading..." : "Submit"}
                                     </button>
@@ -1389,6 +1422,13 @@ const SubmitFormTravel = (props) => {
                                         }}
                                         type="button"
                                         className="formButton"
+                                        disabled={
+                                            (travelAdvanceCheckbox &&
+                                                (travelAdvanceAmount >
+                                                    totalCostAmount ||
+                                                    !travelAdvanceAmount)) ||
+                                            totalCostAmount === 0
+                                        }
                                     >
                                         Next
                                     </button>
