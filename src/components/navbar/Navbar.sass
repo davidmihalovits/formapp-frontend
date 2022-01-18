@@ -1,8 +1,9 @@
 @import '../../App'
     
 .navbarContainer
-    background: rgba(#fff,.95)
-    padding: 14px 20px
+    background: rgba(#fff,.97)
+    border-top: 1px solid #f3f3f3
+    padding: 8px 0
     position: fixed
     bottom: 0
     left: 0
@@ -11,61 +12,46 @@
 
     .navbar
         display: grid
-        grid-template-columns: repeat(auto-fit, minmax(0, auto))
-        justify-content: space-between
-        align-items: center
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr  
         position: relative
 
-        .navbarBellIconBadgeContainer
-            position: relative
+        .navbarIconTextContainer
+            display: grid
+            grid-template-rows: 1fr auto
+            gap: 5px
+            justify-items: center
 
-            .navbarBellIcon
-                width: 30px
-                height: 30px
+            .navbarIcon
+                width: 24px
+                height: 24px
                 display: block
 
-            .navbarBellIconBadge
-                border-radius: 50%
-                width: 13px
-                height: 13px
-                background-color: $rejected
-                margin: 0 0 0 auto
-                position: absolute
-                top: -2px
-                right: 0
+            .navbarIconText
+                font-size: 11px
+                color: $smoke-black
+                line-height: 1
+                position: relative
 
-        .navbarHamburgerIcon
-            width: 30px
-            height: 30px
-            cursor: pointer
-
-        .navbarSettingsIcon
-            width: 30px
-            height: 30px
-            cursor: pointer
-            display: block
-
-        .navbarProfileIcon
-            width: 35px
-            height: 35px
-            background-color: $smoke-black
-            color: white
-            border-radius: 50%
-            display: grid
-            align-content: center
-            justify-content: center
-            font-size: 14px
-            text-decoration: none
+                .navbarBellIconBadge
+                    border-radius: 50%
+                    width: 13px
+                    height: 13px
+                    background-color: $rejected
+                    position: absolute
+                    top: -31px
+                    right: 20px
 
         .navbarHamburgerContainer
             position: fixed
-            background: rgba(#fff,.95)
+            background: rgba(#fff,.97)
+            border-left: 1px solid #f3f3f3
+            border-top: 1px solid #f3f3f3
+            border-top-left-radius: 10px
             z-index: 10
             right: 0
             bottom: 0
-            top: 0
             padding: 30px 
-            margin-bottom: 58px 
+            margin-bottom: 57px 
             display: grid
             align-items: end
 
@@ -83,7 +69,10 @@
 
 @media only screen and (min-width: 1100px)
     .navbarContainer
-        background: rgba(#fff,.95)
+        background: rgba(#fff,.85)
+        backdrop-filter: blur(5px) 
+        border-bottom: 1px solid #f3f3f3
+        border-top: none
         padding: 24px 0
         position: fixed
         top: 0

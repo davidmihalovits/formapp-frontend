@@ -185,77 +185,60 @@ const Navbar = (props) => {
                         to="/profile"
                         style={{ textDecoration: "none" }}
                         onClick={() => setHamburgerModal(false)}
+                        className="navbarIconTextContainer"
                     >
-                        {/*<div
-                            className="navbarProfileIcon"
-                            style={{
-                                background:
-                                    (props.user &&
-                                        props.user.supervisorRole === "TA" &&
-                                        "#90CAF9") ||
-                                    (props.user &&
-                                        props.user.supervisorRole === "TM" &&
-                                        "#FF8A65") ||
-                                    (props.user &&
-                                        props.user.supervisorRole === "PL" &&
-                                        "#2196F3") ||
-                                    (props.user &&
-                                        props.user.supervisorRole === "PM" &&
-                                        "#1565C0") ||
-                                    (props.user &&
-                                        props.user.supervisorRole === "CO" &&
-                                        "#FF5722"),
-                            }}
-                        >
-                            {props.user &&
-                                props.user.email.substring(0, 2).toUpperCase()}
-                            </div>*/}
                         <img
-                            className="navbarSettingsIcon"
+                            className="navbarIcon"
                             src={settings}
                             alt="settings"
                         />
+                        <p className="navbarIconText">Settings</p>
                     </Link>
                     <Link
                         to="/stats"
                         style={{ textDecoration: "none" }}
                         onClick={() => setHamburgerModal(false)}
+                        className="navbarIconTextContainer"
                     >
-                        <img
-                            className="navbarSettingsIcon"
-                            src={stats}
-                            alt="stats"
-                        />
+                        <img className="navbarIcon" src={stats} alt="stats" />
+                        <p className="navbarIconText">Statistics</p>
                     </Link>
                     <Link
                         to="/notification"
-                        className="navbarBellIconBadgeContainer"
+                        className="navbarIconTextContainer"
                         onClick={() => setHamburgerModal(false)}
                     >
-                        <img className="navbarBellIcon" src={bell} alt="bell" />
-                        {unreadNotifications.includes(false) && (
-                            <span className="navbarBellIconBadge"></span>
-                        )}
+                        <img className="navbarIcon" src={bell} alt="bell" />
+                        <p className="navbarIconText">
+                            Notifications
+                            {unreadNotifications.includes(false) && (
+                                <span className="navbarBellIconBadge"></span>
+                            )}
+                        </p>
                     </Link>
                     {props.user && props.user.role !== "Supervisor" && (
                         <Link
                             to="/submit"
-                            className="navbarBellIconBadgeContainer"
+                            className="navbarIconTextContainer"
                             onClick={() => setHamburgerModal(false)}
                         >
                             <img
-                                className="navbarBellIcon"
+                                className="navbarIcon"
                                 src={submit}
                                 alt="submit"
                             />
+                            <p className="navbarIconText">Forms</p>
                         </Link>
                     )}
-                    <img
-                        className="navbarHamburgerIcon"
-                        src={hamburger}
-                        alt="hamburger"
-                        onClick={() => setHamburgerModal(!hamburgerModal)}
-                    />
+                    <div className="navbarIconTextContainer">
+                        <img
+                            className="navbarIcon"
+                            src={hamburger}
+                            alt="hamburger"
+                            onClick={() => setHamburgerModal(!hamburgerModal)}
+                        />
+                        <p className="navbarIconText">Menu</p>
+                    </div>
                     {hamburgerModal && (
                         <div className="navbarHamburgerContainer">
                             <div>

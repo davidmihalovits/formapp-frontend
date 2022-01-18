@@ -4,22 +4,7 @@ import travelIcon from "../../assets/travel.svg";
 import workIcon from "../../assets/work.svg";
 import personnelIcon from "../../assets/personnel.svg";
 
-const Submit = (props) => {
-    if (props.user && props.user.role === "Supervisor") {
-        return (
-            <div
-                style={{
-                    display: "grid",
-                    alignContent: "center",
-                    textAlign: "center",
-                    height: "100vh",
-                }}
-            >
-                <p>You are a {props.user.role}. You can't submit forms.</p>
-            </div>
-        );
-    }
-
+const Submit = () => {
     return (
         <div className="submitContainer">
             <div className="submitContainerBoxes">
