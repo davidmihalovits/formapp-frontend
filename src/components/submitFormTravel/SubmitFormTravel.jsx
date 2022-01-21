@@ -177,7 +177,7 @@ const SubmitFormTravel = (props) => {
 
             setLoading(false);
             alert("Successful.");
-            return history.push(`/myforms`);
+            return history.push(`/forms`);
         } else {
             setLoading(false);
             return alert("Cancelled.");
