@@ -17,6 +17,7 @@ import Approved from "./components/approved/Approved";
 import COnotify from "./components/approved/COnotify";
 import Rejected from "./components/rejected/Rejected";
 import Form from "./components/form/Form";
+import Forms from "./components/forms/Forms";
 
 const App = () => {
     const devprodUrl =
@@ -99,6 +100,13 @@ const App = () => {
                             <Redirect to="/profile" />
                         ) : (
                             <Index />
+                        )}
+                    </Route>
+                    <Route exact path="/forms">
+                        {!localStorage.getItem("token") ? (
+                            <Redirect to="/" />
+                        ) : (
+                            <Forms user={user} />
                         )}
                     </Route>
                     <Route exact path="/profile">

@@ -15,6 +15,7 @@ const Form = (props) => {
     const [form, setForm] = useState("");
     const [comment, setComment] = useState("");
     const [loading, setLoading] = useState(false);
+    const [formLoading, setFormLoading] = useState(false);
     const [approveOrReject, setApproveOrReject] = useState("");
     const [editForm, setEditForm] = useState(false);
 
@@ -122,6 +123,8 @@ const Form = (props) => {
     }, [showSection, editForm]);
 
     const getForm = async () => {
+        setFormLoading(true);
+
         const token = localStorage.getItem("token");
 
         if (!token) {
@@ -140,6 +143,8 @@ const Form = (props) => {
         )
             .then((res) => res.json())
             .then((data) => setForm(data));
+
+        setFormLoading(false);
     };
 
     const viewed = async () => {
@@ -416,49 +421,6 @@ const Form = (props) => {
             <div className="formContainer">
                 <form className="form" onSubmit={submitEdit} noValidate>
                     <div className="formItems">
-                        {/*<div className="formStep">
-                            <div
-                                style={{ width: step }}
-                                className="formStepCompleted"
-                            ></div>
-                        </div>
-                        <div className="formStepCounter">
-                            <p>{step === "20%" && "Step 1 of 5"}</p>
-                            <p>{step === "40%" && "Step 2 of 5"}</p>
-                            <p>
-                                {step === "60%" &&
-                                    regulatoryForeignTravel === "Foreign" &&
-                                    "Step 3 of 5"}
-                            </p>
-                            <p>
-                                {step === "60%" && isVirtual && "Step 3 of 3"}
-                            </p>
-                            <p>
-                                {step === "60%" &&
-                                    regulatoryForeignTravel !== "Foreign" &&
-                                    !isVirtual &&
-                                    "Step 3 of 4"}
-                            </p>
-                            <p>
-                                {step === "80%" &&
-                                    regulatoryForeignTravel === "Foreign" &&
-                                    "Step 4 of 5"}
-                            </p>
-                            <p>
-                                {step === "100%" &&
-                                    regulatoryForeignTravel === "Foreign" &&
-                                    "Step 5 of 5"}
-                            </p>
-                            <p>
-                                {step === "100%" &&
-                                    regulatoryForeignTravel !== "Foreign" &&
-                                    !isVirtual &&
-                                    "Step 4 of 4"}
-                            </p>
-                            <p>
-                                {step === "100%" && isVirtual && "Step 3 of 3"}
-                            </p>
-                        </div>*/}
                         {showSection === "general" && (
                             <div className="formItem">
                                 <h2 className="formSubtitle">
@@ -1461,7 +1423,7 @@ const Form = (props) => {
                                             </li>
                                             <li className="formVerbageLi">
                                                 Register travel with the U.S.
-                                                State Department'’'s Smart
+                                                State Department's Smart
                                                 Traveler Enrollment Program
                                                 (STEP).
                                             </li>
@@ -1834,6 +1796,16 @@ const Form = (props) => {
         );
     }
 
+    if (formLoading) {
+        return (
+            <div className="submittedformContainer">
+                <div className="submittedform">
+                    <p className="submittedformLoading">Loading form...</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="submittedformContainer">
             <div className="submittedform">
@@ -1981,14 +1953,14 @@ const Form = (props) => {
                                                         }
                                                         )
                                                     </p>
-                                                    {f.approved ===
-                                                        "Approved" && (
+                                                    {f.approved.toUpperCase() ===
+                                                        "APPROVED" && (
                                                         <p className="submittedformActivityApproved">
                                                             Approved
                                                         </p>
                                                     )}
-                                                    {f.approved ===
-                                                        "Rejected" && (
+                                                    {f.approved.toUpperCase() ===
+                                                        "REJECTED" && (
                                                         <p className="submittedformActivityRejected">
                                                             Rejected
                                                         </p>
@@ -2112,7 +2084,7 @@ const Form = (props) => {
                 <div className="submittedformItemsContainer">
                     {props.user &&
                     props.user.email === form.email &&
-                    form.approved !== "Approved" ? (
+                    form.approved.toUpperCase() !== "APPROVED" ? (
                         <button
                             className="submittedformEditButton"
                             onClick={() => setEditForm(true)}
@@ -2385,7 +2357,7 @@ const Form = (props) => {
                     props.user.role !== "Traveler" &&
                     props.user.supervisorRole !== "TA" &&
                     props.user.email !== form.email &&
-                    form.approved !== "Approved" &&
+                    form.approved.toUpperCase() !== "APPROVED" &&
                     (form.routingPending.includes(props.user.supervisorRole) ||
                         form.routingRejected.includes(
                             props.user.supervisorRole
@@ -2412,7 +2384,7 @@ const Form = (props) => {
                             <div className="submittedformFormButtons">
                                 <button
                                     onClick={() =>
-                                        setApproveOrReject("Approved")
+                                        setApproveOrReject("approved")
                                     }
                                     type="submit"
                                     className="submittedformFormButtonsButton"
@@ -2422,7 +2394,7 @@ const Form = (props) => {
                                 </button>
                                 <button
                                     onClick={() =>
-                                        setApproveOrReject("Rejected")
+                                        setApproveOrReject("rejected")
                                     }
                                     type="submit"
                                     className="submittedformFormButtonsButton"
@@ -2435,7 +2407,7 @@ const Form = (props) => {
                     ) : null}
                     {props.user &&
                     props.user.email === form.email &&
-                    form.approved !== "Approved" ? (
+                    form.approved.toUpperCase() !== "APPROVED" ? (
                         <form
                             className="submittedformForm"
                             onSubmit={submitComment}

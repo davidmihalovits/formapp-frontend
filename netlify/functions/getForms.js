@@ -27,7 +27,7 @@ const getForms = async (req, res, next) => {
             path: "approvalBy",
             model: User,
         })
-        .sort({ updatedAt: -1 });
+        .sort({ createdAt: -1 });
 
     const formsForTravelers = await Form.find({
         email: verified.user.email,
@@ -36,7 +36,7 @@ const getForms = async (req, res, next) => {
             path: "approvalBy",
             model: User,
         })
-        .sort({ updatedAt: -1 });
+        .sort({ createdAt: -1 });
 
     if (
         verified.user.role === "Supervisor" ||

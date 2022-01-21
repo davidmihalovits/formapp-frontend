@@ -1,7 +1,8 @@
 @import '../../App'
     
 .navbarContainer
-    background: rgba(#fff,.97)
+    background: rgba(#fff,.85)
+    backdrop-filter: blur(5px) 
     border-top: 1px solid #f3f3f3
     padding: 8px 0
     position: fixed
@@ -12,7 +13,7 @@
 
     .navbar
         display: grid
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr  
+        grid-template-columns: repeat(auto-fit, minmax(0, 1fr)) 
         position: relative
 
         .navbarIconTextContainer
@@ -73,7 +74,7 @@
         backdrop-filter: blur(5px) 
         border-bottom: 1px solid #f3f3f3
         border-top: none
-        padding: 24px 0
+        padding: 18px 0
         position: fixed
         top: 0
         left: 0
@@ -94,11 +95,11 @@
                 grid-template-columns: repeat(auto-fit, minmax(0, auto))
                 justify-content: end
                 align-items: center
-                gap: 15px
+                gap: 20px
 
                 .navbarLeftSettingsIcon
-                    width: 28px
-                    height: 28px
+                    width: 32px
+                    height: 32px
                     display: block
 
                 .navbarLeftProfile
@@ -121,8 +122,8 @@
                     position: relative
 
                     .navbarLeftBellIcon
-                        width: 28px
-                        height: 28px
+                        width: 32px
+                        height: 32px
                         display: block
 
                     .navbarLeftBellIconBadge
@@ -145,7 +146,7 @@
                         outline: none
                         border-radius: 4px
                         color: white
-                        font-size: 17px
+                        font-size: 18px
                         height: 46px
                         width: 158px
                         cursor: pointer
@@ -161,7 +162,7 @@
                 grid-template-columns: repeat(auto-fit, minmax(0, auto))
                 align-items: center
                 justify-content: start
-                gap: 15px
+                gap: 20px
                 
                 .navbarLink
                     text-decoration: none
@@ -169,11 +170,11 @@
 
                     .navbarLinkItemActive
                         color: $primary-color
-                        font-size: 17px
+                        font-size: 18px
 
                     .navbarLinkItemInactive
                         color: $smoke-black
-                        font-size: 17px
+                        font-size: 18px
 
 
         

@@ -48,7 +48,7 @@ const approveReject = async (req, res, next) => {
         }
     );
 
-    if (req.body.approved === "Approved") {
+    if (req.body.approved === "approved") {
         await Form.updateOne(
             { _id: req.body.formDetails._id },
             {
@@ -62,7 +62,7 @@ const approveReject = async (req, res, next) => {
             }
         );
     }
-    if (req.body.approved === "Rejected") {
+    if (req.body.approved === "rejected") {
         await Form.updateOne(
             { _id: req.body.formDetails._id },
             {
