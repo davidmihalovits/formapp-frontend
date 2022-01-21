@@ -97,7 +97,7 @@ const App = () => {
                 <Switch>
                     <Route exact path="/">
                         {localStorage.getItem("token") ? (
-                            <Redirect to="/profile" />
+                            <Redirect to="/forms" />
                         ) : (
                             <Index />
                         )}

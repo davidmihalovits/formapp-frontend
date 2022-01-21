@@ -265,7 +265,7 @@ const SubmitFormTravel = (props) => {
                             <label className="formLabel" htmlFor="email">
                                 Email
                             </label>
-                            <p className="formInput">
+                            <p className="formInput formInputEmail">
                                 {props.user && props.user.email}
                             </p>
                             <label className="formLabel" htmlFor="employeeId">

@@ -157,20 +157,24 @@ const Forms = (props) => {
                             Concurrence
                         </button>
                     )}
-                    <button
-                        onClick={() => {
-                            if (filter.includes("self")) {
-                                return setFilter(filter.replace("self", ""));
-                            }
-                            return setFilter("self");
-                        }}
-                        className={`formsContainerFiltersLeftButton ${
-                            filter.includes("self") &&
-                            "formsContainerFiltersLeftButtonActive"
-                        }`}
-                    >
-                        Self
-                    </button>
+                    {props.user && props.user.role !== "Traveler" && (
+                        <button
+                            onClick={() => {
+                                if (filter.includes("self")) {
+                                    return setFilter(
+                                        filter.replace("self", "")
+                                    );
+                                }
+                                return setFilter("self");
+                            }}
+                            className={`formsContainerFiltersLeftButton ${
+                                filter.includes("self") &&
+                                "formsContainerFiltersLeftButtonActive"
+                            }`}
+                        >
+                            Self
+                        </button>
+                    )}
                 </div>
                 <div className="formsContainerFiltersRight">
                     <button
