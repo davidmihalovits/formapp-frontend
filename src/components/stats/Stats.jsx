@@ -38,9 +38,12 @@ const Stats = () => {
         // eslint-disable-next-line
     }, []);
 
-    const pending = forms && forms.filter((f) => f.approved === "pending");
-    const approved = forms && forms.filter((f) => f.approved === "Approved");
-    const rejected = forms && forms.filter((f) => f.approved === "Rejected");
+    const pending =
+        forms && forms.filter((f) => f.approved.toLowerCase() === "pending");
+    const approved =
+        forms && forms.filter((f) => f.approved.toLowerCase() === "approved");
+    const rejected =
+        forms && forms.filter((f) => f.approved.toLowerCase() === "rejected");
 
     const data = [
         { name: "Pending", value: pending.length, color: "#FFCA28" },

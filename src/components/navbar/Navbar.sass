@@ -95,46 +95,32 @@
                 grid-template-columns: repeat(auto-fit, minmax(0, auto))
                 justify-content: end
                 align-items: center
-                gap: 20px
+                gap: 30px
 
-                .navbarLeftSettingsIcon
-                    width: 32px
-                    height: 32px
-                    display: block
-
-                .navbarLeftProfile
-                    font-size: 17px
-                    color: $smoke-black
-
-                .navbarLeftProfileIcon
-                    width: 35px
-                    height: 35px
-                    background-color: $smoke-black
-                    color: white
-                    border-radius: 50%
+                .navbarIconTextContainer
                     display: grid
-                    align-content: center
-                    justify-content: center
-                    font-size: 14px
-                    text-decoration: none
+                    grid-template-rows: 1fr auto
+                    gap: 8px
+                    justify-items: center
 
-                .navbarLeftBellIconBadgeContainer
-                    position: relative
-
-                    .navbarLeftBellIcon
-                        width: 32px
-                        height: 32px
+                    .navbarIcon
+                        width: 36px
+                        height: 36px
                         display: block
 
-                    .navbarLeftBellIconBadge
-                        border-radius: 50%
-                        width: 13px
-                        height: 13px
-                        background-color: $rejected
-                        margin: 0 0 0 auto
-                        position: absolute
-                        top: -3px
-                        right: 0
+                    .navbarIconText
+                        font-size: 14px
+                        color: $smoke-black
+                        line-height: auto
+
+                        .navbarBellIconBadge
+                            border-radius: 50%
+                            width: 13px
+                            height: 13px
+                            background-color: $rejected
+                            position: absolute
+                            top: -47px
+                            right: 25px
 
                 .navbarLeftLink
                     text-decoration: none
@@ -146,35 +132,39 @@
                         outline: none
                         border-radius: 4px
                         color: white
-                        font-size: 18px
-                        height: 46px
-                        width: 158px
+                        font-size: 20px
+                        height: 55px
+                        width: 175px
                         cursor: pointer
 
                         .navbarLeftLinkSubmitIcon
-                            width: 24px
-                            height: 24px
+                            width: 30px
+                            height: 30px
                             vertical-align: middle
-                            margin-right: 5px
+                            margin-right: 7px
 
             .navbarRight
                 display: grid
                 grid-template-columns: repeat(auto-fit, minmax(0, auto))
                 align-items: center
                 justify-content: start
-                gap: 20px
+                gap: 30px
                 
-                .navbarLink
-                    text-decoration: none
-                    line-height: auto
+                .navbarIconTextContainer
+                    display: grid
+                    grid-template-rows: 1fr auto
+                    gap: 8px
+                    justify-items: center
 
-                    .navbarLinkItemActive
-                        color: $primary-color
-                        font-size: 18px
+                    .navbarIcon
+                        width: 36px
+                        height: 36px
+                        display: block
 
-                    .navbarLinkItemInactive
+                    .navbarIconText
+                        font-size: 14px
                         color: $smoke-black
-                        font-size: 18px
+                        line-height: auto
 
 
         

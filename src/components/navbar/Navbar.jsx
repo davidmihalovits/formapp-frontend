@@ -27,45 +27,57 @@ const Navbar = (props) => {
             <div className="navbarContainer">
                 <div className="navbar">
                     <div className="navbarRight">
-                        <Link to="/forms" className="navbarLink">
-                            <p
-                                className={
-                                    location.pathname === "/forms"
-                                        ? "navbarLinkItemActive"
-                                        : "navbarLinkItemInactive"
-                                }
-                            >
-                                Forms
-                            </p>
+                        <Link
+                            to="/forms"
+                            style={{ textDecoration: "none" }}
+                            className="navbarIconTextContainer"
+                        >
+                            <img
+                                className="navbarIcon"
+                                src={forms}
+                                alt="forms"
+                            />
+                            <p className="navbarIconText">Forms</p>
                         </Link>
                     </div>
                     <div className="navbarLeft">
-                        <Link to="/stats" style={{ textDecoration: "none" }}>
-                            <img
-                                className="navbarLeftSettingsIcon"
-                                src={stats}
-                                alt="stats"
-                            />
-                        </Link>
+                        {props.user && props.user.role !== "Traveler" && (
+                            <Link
+                                to="/stats"
+                                style={{ textDecoration: "none" }}
+                                className="navbarIconTextContainer"
+                            >
+                                <img
+                                    className="navbarIcon"
+                                    src={stats}
+                                    alt="stats"
+                                />
+                                <p className="navbarIconText">Statistics</p>
+                            </Link>
+                        )}
                         <Link
                             to="/notification"
-                            className="navbarLeftBellIconBadgeContainer"
+                            className="navbarIconTextContainer"
+                        >
+                            <img className="navbarIcon" src={bell} alt="bell" />
+                            <p className="navbarIconText">
+                                Notifications
+                                {unreadNotifications.includes(false) && (
+                                    <span className="navbarBellIconBadge"></span>
+                                )}
+                            </p>
+                        </Link>
+                        <Link
+                            to="/profile"
+                            style={{ textDecoration: "none" }}
+                            className="navbarIconTextContainer"
                         >
                             <img
-                                className="navbarLeftBellIcon"
-                                src={bell}
-                                alt="bell"
-                            />
-                            {unreadNotifications.includes(false) && (
-                                <span className="navbarLeftBellIconBadge"></span>
-                            )}
-                        </Link>
-                        <Link to="/profile" style={{ textDecoration: "none" }}>
-                            <img
-                                className="navbarLeftSettingsIcon"
+                                className="navbarIcon"
                                 src={settings}
                                 alt="settings"
                             />
+                            <p className="navbarIconText">Settings</p>
                         </Link>
                         {props.user && props.user.role !== "Supervisor" && (
                             <Link to="/submit" className="navbarLeftLink">

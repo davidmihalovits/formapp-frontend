@@ -172,7 +172,7 @@ const Forms = (props) => {
                                 "formsContainerFiltersLeftButtonActive"
                             }`}
                         >
-                            Self
+                            My Forms
                         </button>
                     )}
                 </div>
