@@ -1,9 +1,9 @@
 @import '../../App'
     
 .navbarContainer
-    background: rgba(#fff,.85)
+    background: rgba(#f9f9fc,.50)
     backdrop-filter: blur(5px) 
-    border-top: 1px solid #f3f3f3
+    border-top: 1px solid #dae1ec
     padding: 8px 0
     position: fixed
     bottom: 0
@@ -16,31 +16,37 @@
         grid-template-columns: repeat(auto-fit, minmax(0, 1fr)) 
         position: relative
 
-        .navbarIconTextContainer
-            display: grid
-            grid-template-rows: 1fr auto
-            gap: 5px
-            justify-items: center
+        .navbarButton
+            cursor: pointer
+            outline: none
+            border: none
+            background: none
 
-            .navbarIcon
-                width: 24px
-                height: 24px
-                display: block
+            .navbarIconTextContainer
+                display: grid
+                grid-template-rows: 1fr auto
+                gap: 5px
+                justify-items: center
 
-            .navbarIconText
-                font-size: 11px
-                color: $smoke-black
-                line-height: 1
-                position: relative
+                .navbarIcon
+                    width: 24px
+                    height: 24px
+                    display: block
 
-                .navbarBellIconBadge
-                    border-radius: 50%
-                    width: 13px
-                    height: 13px
-                    background-color: $rejected
-                    position: absolute
-                    top: -31px
-                    right: 20px
+                .navbarIconText
+                    font-size: 11px
+                    color: $smoke-black
+                    line-height: 1
+                    position: relative
+
+                    .navbarBellIconBadge
+                        border-radius: 50%
+                        width: 13px
+                        height: 13px
+                        background-color: $rejected
+                        position: absolute
+                        top: -31px
+                        right: 20px
 
         .navbarHamburgerContainer
             position: fixed
@@ -70,11 +76,11 @@
 
 @media only screen and (min-width: 1100px)
     .navbarContainer
-        background: rgba(#fff,.85)
+        background: rgba(#f9f9fc,.50)
         backdrop-filter: blur(5px) 
-        border-bottom: 1px solid #f3f3f3
+        border-bottom: 1px solid #dae1ec
         border-top: none
-        padding: 18px 0
+        padding: 10px 0
         position: fixed
         top: 0
         left: 0
@@ -133,7 +139,7 @@
                         border-radius: 4px
                         color: white
                         font-size: 20px
-                        height: 55px
+                        height: 58px
                         width: 175px
                         cursor: pointer
 

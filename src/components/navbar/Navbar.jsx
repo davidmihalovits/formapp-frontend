@@ -39,8 +39,7 @@ const Navbar = (props) => {
                             />
                             <p className="navbarIconText">Forms</p>
                         </Link>
-                    </div>
-                    <div className="navbarLeft">
+
                         {props.user && props.user.role !== "Traveler" && (
                             <Link
                                 to="/stats"
@@ -79,6 +78,8 @@ const Navbar = (props) => {
                             />
                             <p className="navbarIconText">Settings</p>
                         </Link>
+                    </div>
+                    <div className="navbarLeft">
                         {props.user && props.user.role !== "Supervisor" && (
                             <Link to="/submit" className="navbarLeftLink">
                                 <button className="navbarLeftLinkSubmit">
@@ -101,62 +102,79 @@ const Navbar = (props) => {
         return (
             <div className="navbarContainer">
                 <div className="navbar">
-                    <Link
-                        to="/forms"
-                        style={{ textDecoration: "none" }}
-                        className="navbarIconTextContainer"
-                    >
-                        <img className="navbarIcon" src={forms} alt="forms" />
-                        <p className="navbarIconText">Forms</p>
-                    </Link>
-                    {props.user && props.user.role !== "Traveler" && (
+                    <button className="navbarButton">
                         <Link
-                            to="/stats"
+                            to="/forms"
                             style={{ textDecoration: "none" }}
                             className="navbarIconTextContainer"
                         >
                             <img
                                 className="navbarIcon"
-                                src={stats}
-                                alt="stats"
+                                src={forms}
+                                alt="forms"
                             />
-                            <p className="navbarIconText">Statistics</p>
+                            <p className="navbarIconText">Forms</p>
                         </Link>
+                    </button>
+                    {props.user && props.user.role !== "Traveler" && (
+                        <button className="navbarButton">
+                            <Link
+                                to="/stats"
+                                style={{ textDecoration: "none" }}
+                                className="navbarIconTextContainer"
+                            >
+                                <img
+                                    className="navbarIcon"
+                                    src={stats}
+                                    alt="stats"
+                                />
+                                <p className="navbarIconText">Statistics</p>
+                            </Link>
+                        </button>
                     )}
                     {props.user && props.user.role !== "Supervisor" && (
-                        <Link to="/submit" className="navbarIconTextContainer">
+                        <button className="navbarButton">
+                            <Link
+                                to="/submit"
+                                className="navbarIconTextContainer"
+                            >
+                                <img
+                                    className="navbarIcon"
+                                    src={submit}
+                                    alt="submit"
+                                />
+                                <p className="navbarIconText">Request</p>
+                            </Link>
+                        </button>
+                    )}
+                    <button className="navbarButton">
+                        <Link
+                            to="/notification"
+                            className="navbarIconTextContainer"
+                        >
+                            <img className="navbarIcon" src={bell} alt="bell" />
+                            <p className="navbarIconText">
+                                Notifications
+                                {unreadNotifications.includes(false) && (
+                                    <span className="navbarBellIconBadge"></span>
+                                )}
+                            </p>
+                        </Link>
+                    </button>
+                    <button className="navbarButton">
+                        <Link
+                            to="/profile"
+                            style={{ textDecoration: "none" }}
+                            className="navbarIconTextContainer"
+                        >
                             <img
                                 className="navbarIcon"
-                                src={submit}
-                                alt="submit"
+                                src={settings}
+                                alt="settings"
                             />
-                            <p className="navbarIconText">Request</p>
+                            <p className="navbarIconText">Settings</p>
                         </Link>
-                    )}
-                    <Link
-                        to="/notification"
-                        className="navbarIconTextContainer"
-                    >
-                        <img className="navbarIcon" src={bell} alt="bell" />
-                        <p className="navbarIconText">
-                            Notifications
-                            {unreadNotifications.includes(false) && (
-                                <span className="navbarBellIconBadge"></span>
-                            )}
-                        </p>
-                    </Link>
-                    <Link
-                        to="/profile"
-                        style={{ textDecoration: "none" }}
-                        className="navbarIconTextContainer"
-                    >
-                        <img
-                            className="navbarIcon"
-                            src={settings}
-                            alt="settings"
-                        />
-                        <p className="navbarIconText">Settings</p>
-                    </Link>
+                    </button>
 
                     {hamburgerModal && (
                         <div className="navbarHamburgerContainer">

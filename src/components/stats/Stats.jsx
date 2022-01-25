@@ -106,7 +106,7 @@ const Stats = () => {
                         <div className="statsContainerInfoBox">
                             <div
                                 className="statsContainerInfoCircle"
-                                style={{ backgroundColor: "#272724" }}
+                                style={{ backgroundColor: "#40455e" }}
                             ></div>
                             <p className="statsContainerInfoText">
                                 Total: {forms.length}

@@ -27,11 +27,15 @@ const App = () => {
 
     const [user, setUser] = useState(null);
     const [notifications, setNotifications] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const getUser = async () => {
+        setLoading(true);
+
         const token = localStorage.getItem("token");
 
         if (!token) {
+            setLoading(false);
             return console.log("No token.");
         }
 
@@ -43,6 +47,8 @@ const App = () => {
         })
             .then((res) => res.json())
             .then((data) => setUser(data));
+
+        setLoading(false);
     };
 
     const logoutTokenExpired = async () => {
@@ -89,6 +95,22 @@ const App = () => {
 
         // eslint-disable-next-line
     }, []);
+
+    if (loading) {
+        return (
+            <div
+                style={{
+                    height: "100vh",
+                    display: "grid",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "26px",
+                }}
+            >
+                Loading app...
+            </div>
+        );
+    }
 
     return (
         <BrowserRouter>

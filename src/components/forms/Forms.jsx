@@ -2,6 +2,9 @@ import "./Forms.sass";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import arrowDown from "../../assets/arrowdown.svg";
+import arrowUp from "../../assets/arrowup.svg";
+import filters from "../../assets/filter.svg";
 
 const Forms = (props) => {
     const devprodUrl =
@@ -11,8 +14,10 @@ const Forms = (props) => {
 
     const [forms, setForms] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [filterButtons, setFilterButtons] = useState(false);
     const [newest, setNewest] = useState(true);
     const [filter, setFilter] = useState("");
+    const [search, setSearch] = useState("");
 
     const getForms = async () => {
         setLoading(true);
@@ -43,23 +48,32 @@ const Forms = (props) => {
 
     const filteredForms =
         forms &&
-        forms.filter((f) => {
-            if (filter.includes("notify")) {
-                return f.approved.toUpperCase() === "APPROVED" && f.COnotify;
-            }
-            if (filter.includes("concurrence")) {
-                return (
-                    f.approved.toUpperCase() === "PENDING" && f.COconcurrence
-                );
-            }
-            if (filter.includes("self")) {
-                return f.email === props.user.email;
-            }
-            if (filter) {
-                return filter.includes(f.approved.toLowerCase());
-            }
-            return f;
-        });
+        forms
+            .filter(
+                (f) =>
+                    f.fullName.toLowerCase().includes(search.toLowerCase()) ||
+                    f.formName.toLowerCase().includes(search.toLowerCase())
+            )
+            .filter((f) => {
+                if (filter.includes("notify")) {
+                    return (
+                        f.approved.toUpperCase() === "APPROVED" && f.COnotify
+                    );
+                }
+                if (filter.includes("concurrence")) {
+                    return (
+                        f.approved.toUpperCase() === "PENDING" &&
+                        f.COconcurrence
+                    );
+                }
+                if (filter.includes("self")) {
+                    return f.email === props.user.email;
+                }
+                if (filter) {
+                    return filter.includes(f.approved.toLowerCase());
+                }
+                return f;
+            });
 
     if (loading) {
         return (
@@ -74,129 +88,151 @@ const Forms = (props) => {
     return (
         <div className="formsContainer">
             <div className="formsContainerFilters">
-                <div className="formsContainerFiltersLeft">
-                    <button
-                        onClick={() => {
-                            if (filter.includes("pending")) {
-                                return setFilter(filter.replace("pending", ""));
-                            }
-                            return setFilter("pending");
-                        }}
-                        className={`formsContainerFiltersLeftButton ${
-                            filter.includes("pending") &&
-                            "formsContainerFiltersLeftButtonActive"
-                        }`}
-                    >
-                        Pending
-                    </button>
-                    <button
-                        onClick={() => {
-                            if (filter.includes("approved")) {
-                                return setFilter(
-                                    filter.replace("approved", "")
-                                );
-                            }
-                            return setFilter("approved");
-                        }}
-                        className={`formsContainerFiltersLeftButton ${
-                            filter.includes("approved") &&
-                            "formsContainerFiltersLeftButtonActive"
-                        }`}
-                    >
-                        Approved
-                    </button>
-                    <button
-                        onClick={() => {
-                            if (filter.includes("rejected")) {
-                                return setFilter(
-                                    filter.replace("rejected", "")
-                                );
-                            }
-                            return setFilter("rejected");
-                        }}
-                        className={`formsContainerFiltersLeftButton ${
-                            filter.includes("rejected") &&
-                            "formsContainerFiltersLeftButtonActive"
-                        }`}
-                    >
-                        Rejected
-                    </button>
-                    {props.user && props.user.supervisorRole === "CO" && (
-                        <button
-                            onClick={() => {
-                                if (filter.includes("notify")) {
-                                    return setFilter(
-                                        filter.replace("notify", "")
-                                    );
-                                }
-                                return setFilter("notify");
-                            }}
-                            className={`formsContainerFiltersLeftButton ${
-                                filter.includes("notify") &&
-                                "formsContainerFiltersLeftButtonActive"
-                            }`}
-                        >
-                            Notify
-                        </button>
-                    )}
-                    {props.user && props.user.supervisorRole === "CO" && (
-                        <button
-                            onClick={() => {
-                                if (filter.includes("concurrence")) {
-                                    return setFilter(
-                                        filter.replace("concurrence", "")
-                                    );
-                                }
-                                return setFilter("concurrence");
-                            }}
-                            className={`formsContainerFiltersLeftButton ${
-                                filter.includes("concurrence") &&
-                                "formsContainerFiltersLeftButtonActive"
-                            }`}
-                        >
-                            Concurrence
-                        </button>
-                    )}
-                    {props.user && props.user.role !== "Traveler" && (
-                        <button
-                            onClick={() => {
-                                if (filter.includes("self")) {
-                                    return setFilter(
-                                        filter.replace("self", "")
-                                    );
-                                }
-                                return setFilter("self");
-                            }}
-                            className={`formsContainerFiltersLeftButton ${
-                                filter.includes("self") &&
-                                "formsContainerFiltersLeftButtonActive"
-                            }`}
-                        >
-                            My Forms
-                        </button>
-                    )}
+                <div className="formsContainerFiltersSearchFilter">
+                    <input
+                        id="fullName"
+                        name="fullName"
+                        type="text"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Search by name..."
+                        className="formsContainerFiltersSearch"
+                    />
+                    <img
+                        onClick={() => setFilterButtons(!filterButtons)}
+                        src={filters}
+                        alt="filter"
+                        className="formsContainerFiltersFilter"
+                    />
                 </div>
-                <div className="formsContainerFiltersRight">
-                    <button
-                        onClick={() => {
-                            return setNewest(true);
-                        }}
-                        className={`formsContainerFiltersRightButton ${
-                            newest && "formsContainerFiltersRightButtonActive"
-                        }`}
+                {filterButtons && (
+                    <div className="formsContainerFiltersButtons">
+                        <button
+                            onClick={() => {
+                                if (filter.includes("pending")) {
+                                    return setFilter(
+                                        filter.replace("pending", "")
+                                    );
+                                }
+                                return setFilter("pending");
+                            }}
+                            className={`formsContainerFiltersButtonsButton ${
+                                filter.includes("pending") &&
+                                "formsContainerFiltersButtonsButtonActive"
+                            }`}
+                        >
+                            Pending
+                        </button>
+                        <button
+                            onClick={() => {
+                                if (filter.includes("approved")) {
+                                    return setFilter(
+                                        filter.replace("approved", "")
+                                    );
+                                }
+                                return setFilter("approved");
+                            }}
+                            className={`formsContainerFiltersButtonsButton ${
+                                filter.includes("approved") &&
+                                "formsContainerFiltersButtonsButtonActive"
+                            }`}
+                        >
+                            Approved
+                        </button>
+                        <button
+                            onClick={() => {
+                                if (filter.includes("rejected")) {
+                                    return setFilter(
+                                        filter.replace("rejected", "")
+                                    );
+                                }
+                                return setFilter("rejected");
+                            }}
+                            className={`formsContainerFiltersButtonsButton ${
+                                filter.includes("rejected") &&
+                                "formsContainerFiltersButtonsButtonActive"
+                            }`}
+                        >
+                            Rejected
+                        </button>
+                        {props.user && props.user.supervisorRole === "CO" && (
+                            <button
+                                onClick={() => {
+                                    if (filter.includes("notify")) {
+                                        return setFilter(
+                                            filter.replace("notify", "")
+                                        );
+                                    }
+                                    return setFilter("notify");
+                                }}
+                                className={`formsContainerFiltersButtonsButton ${
+                                    filter.includes("notify") &&
+                                    "formsContainerFiltersButtonsButtonActive"
+                                }`}
+                            >
+                                Notify
+                            </button>
+                        )}
+                        {props.user && props.user.supervisorRole === "CO" && (
+                            <button
+                                onClick={() => {
+                                    if (filter.includes("concurrence")) {
+                                        return setFilter(
+                                            filter.replace("concurrence", "")
+                                        );
+                                    }
+                                    return setFilter("concurrence");
+                                }}
+                                className={`formsContainerFiltersButtonsButton ${
+                                    filter.includes("concurrence") &&
+                                    "formsContainerFiltersButtonsButtonActive"
+                                }`}
+                            >
+                                Concurrence
+                            </button>
+                        )}
+                        {props.user && props.user.role !== "Traveler" && (
+                            <button
+                                onClick={() => {
+                                    if (filter.includes("self")) {
+                                        return setFilter(
+                                            filter.replace("self", "")
+                                        );
+                                    }
+                                    return setFilter("self");
+                                }}
+                                className={`formsContainerFiltersButtonsButton ${
+                                    filter.includes("self") &&
+                                    "formsContainerFiltersButtonsButtonActive"
+                                }`}
+                            >
+                                My Forms
+                            </button>
+                        )}
+                    </div>
+                )}
+                <div className="formsContainerFiltersDate">
+                    <p
+                        onClick={() => setNewest(!newest)}
+                        className="formsContainerFiltersRightText"
                     >
-                        New
-                    </button>
-                    <button
-                        onClick={() => {
-                            return setNewest(false);
-                        }}
-                        className={`formsContainerFiltersRightButton ${
-                            !newest && "formsContainerFiltersRightButtonActive"
-                        }`}
-                    >
-                        Old
-                    </button>
+                        Sort by date
+                    </p>
+                    {newest ? (
+                        <img
+                            onClick={() => setNewest(false)}
+                            src={arrowDown}
+                            alt="arrow"
+                            className="formsContainerFiltersRightArrow"
+                        />
+                    ) : (
+                        <img
+                            onClick={() => setNewest(true)}
+                            src={arrowUp}
+                            alt="arrow"
+                            className="formsContainerFiltersRightArrow"
+                        />
+                    )}
                 </div>
             </div>
             <div className="formsContainerStats">
@@ -241,161 +277,164 @@ const Forms = (props) => {
                                     </div>
 
                                     <div className="formsLinkFormDetails">
-                                        <p className="formsLinkFormName">
-                                            {f.formName}
-                                        </p>
-
-                                        <div className="formsLinkFormRouting">
-                                            <div className="formsLinkFormRoutingLine"></div>
-                                            <div className="formsLinkFormRoutingRoleCircle">
-                                                <div
-                                                    className={`formsLinkFormRoutingCircle 
-                                                    ${
-                                                        f.routingPending.includes(
-                                                            "TM"
-                                                        ) &&
-                                                        "formsLinkFormRoutingCirclePending"
-                                                    }
-                                                    ${
-                                                        f.routingApproved.includes(
-                                                            "TM"
-                                                        ) &&
-                                                        "formsLinkFormRoutingCircleApproved"
-                                                    }
-                                                    ${
-                                                        f.routingRejected.includes(
-                                                            "TM"
-                                                        ) &&
-                                                        "formsLinkFormRoutingCircleRejected"
-                                                    }
-                                                    `}
-                                                ></div>
-                                                <p className="formsLinkFormRoutingRole">
-                                                    TM
-                                                </p>
-                                            </div>
-                                            <div className="formsLinkFormRoutingRoleCircle">
-                                                <div
-                                                    className={`formsLinkFormRoutingCircle 
-                                                    ${
-                                                        f.routingPending.includes(
-                                                            "PL"
-                                                        ) &&
-                                                        "formsLinkFormRoutingCirclePending"
-                                                    }
-                                                    ${
-                                                        f.routingApproved.includes(
-                                                            "PL"
-                                                        ) &&
-                                                        "formsLinkFormRoutingCircleApproved"
-                                                    }
-                                                    ${
-                                                        f.routingRejected.includes(
-                                                            "PL"
-                                                        ) &&
-                                                        "formsLinkFormRoutingCircleRejected"
-                                                    }
-                                                    `}
-                                                ></div>
-                                                <p className="formsLinkFormRoutingRole">
-                                                    PL
-                                                </p>
-                                            </div>
-                                            <div className="formsLinkFormRoutingRoleCircle">
-                                                <div
-                                                    className={`formsLinkFormRoutingCircle 
-                                                    ${
-                                                        f.routingPending.includes(
-                                                            "PM"
-                                                        ) &&
-                                                        "formsLinkFormRoutingCirclePending"
-                                                    }
-                                                    ${
-                                                        f.routingApproved.includes(
-                                                            "PM"
-                                                        ) &&
-                                                        "formsLinkFormRoutingCircleApproved"
-                                                    }
-                                                    ${
-                                                        f.routingRejected.includes(
-                                                            "PM"
-                                                        ) &&
-                                                        "formsLinkFormRoutingCircleRejected"
-                                                    }
-                                                    `}
-                                                ></div>
-                                                <p className="formsLinkFormRoutingRole">
-                                                    PM
-                                                </p>
-                                            </div>
-                                            <div className="formsLinkFormRoutingRoleCircle">
-                                                <div
-                                                    className={`formsLinkFormRoutingCircle 
-                                                    ${
-                                                        f.routingPending.includes(
-                                                            "CO"
-                                                        ) &&
-                                                        "formsLinkFormRoutingCirclePending"
-                                                    }
-                                                    ${
-                                                        f.routingApproved.includes(
-                                                            "CO"
-                                                        ) &&
-                                                        "formsLinkFormRoutingCircleApproved"
-                                                    }
-                                                    ${
-                                                        f.routingRejected.includes(
-                                                            "CO"
-                                                        ) &&
-                                                        "formsLinkFormRoutingCircleRejected"
-                                                    }
-                                                    `}
-                                                ></div>
-                                                <p className="formsLinkFormRoutingRole">
-                                                    CO
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div className="formsLinkFormApprovedRejected">
-                                            <p
-                                                className={`formsLinkFormApprovedRejectedComment ${
-                                                    f.approved.toUpperCase() ===
-                                                        "APPROVED" &&
-                                                    "formsLinkFormApproved"
-                                                } ${
-                                                    f.approved.toUpperCase() ===
-                                                        "REJECTED" &&
-                                                    "formsLinkFormRejected"
-                                                }`}
-                                            >
-                                                {f.comment && `"${f.comment}"`}
+                                        <div>
+                                            <p className="formsLinkFormName">
+                                                {f.formName}
                                             </p>
 
-                                            <p
-                                                className={`formsLinkFormApprovedRejectedBy ${
-                                                    f.approved.toUpperCase() ===
-                                                        "APPROVED" &&
-                                                    "formsLinkFormApproved"
-                                                } ${
-                                                    f.approved.toUpperCase() ===
-                                                        "REJECTED" &&
-                                                    "formsLinkFormRejected"
-                                                }`}
-                                            >
-                                                {f.approvalBy &&
-                                                    f.approvalBy.email}
-                                                {f.approvalBy && (
-                                                    <span>
-                                                        (
-                                                        {
-                                                            f.approvalBy
-                                                                .supervisorRole
-                                                        }
-                                                        )
-                                                    </span>
-                                                )}
-                                            </p>
+                                            <div className="formsLinkFormRouting">
+                                                <div className="formsLinkFormRoutingLine"></div>
+                                                <div className="formsLinkFormRoutingRoleCircle">
+                                                    <div
+                                                        className={`formsLinkFormRoutingCircle 
+                                                    ${
+                                                        f.routingPending.includes(
+                                                            "TM"
+                                                        ) &&
+                                                        "formsLinkFormRoutingCirclePending"
+                                                    }
+                                                    ${
+                                                        f.routingApproved.includes(
+                                                            "TM"
+                                                        ) &&
+                                                        "formsLinkFormRoutingCircleApproved"
+                                                    }
+                                                    ${
+                                                        f.routingRejected.includes(
+                                                            "TM"
+                                                        ) &&
+                                                        "formsLinkFormRoutingCircleRejected"
+                                                    }
+                                                    `}
+                                                    ></div>
+                                                    <p className="formsLinkFormRoutingRole">
+                                                        TM
+                                                    </p>
+                                                </div>
+                                                <div className="formsLinkFormRoutingRoleCircle">
+                                                    <div
+                                                        className={`formsLinkFormRoutingCircle 
+                                                    ${
+                                                        f.routingPending.includes(
+                                                            "PL"
+                                                        ) &&
+                                                        "formsLinkFormRoutingCirclePending"
+                                                    }
+                                                    ${
+                                                        f.routingApproved.includes(
+                                                            "PL"
+                                                        ) &&
+                                                        "formsLinkFormRoutingCircleApproved"
+                                                    }
+                                                    ${
+                                                        f.routingRejected.includes(
+                                                            "PL"
+                                                        ) &&
+                                                        "formsLinkFormRoutingCircleRejected"
+                                                    }
+                                                    `}
+                                                    ></div>
+                                                    <p className="formsLinkFormRoutingRole">
+                                                        PL
+                                                    </p>
+                                                </div>
+                                                <div className="formsLinkFormRoutingRoleCircle">
+                                                    <div
+                                                        className={`formsLinkFormRoutingCircle 
+                                                    ${
+                                                        f.routingPending.includes(
+                                                            "PM"
+                                                        ) &&
+                                                        "formsLinkFormRoutingCirclePending"
+                                                    }
+                                                    ${
+                                                        f.routingApproved.includes(
+                                                            "PM"
+                                                        ) &&
+                                                        "formsLinkFormRoutingCircleApproved"
+                                                    }
+                                                    ${
+                                                        f.routingRejected.includes(
+                                                            "PM"
+                                                        ) &&
+                                                        "formsLinkFormRoutingCircleRejected"
+                                                    }
+                                                    `}
+                                                    ></div>
+                                                    <p className="formsLinkFormRoutingRole">
+                                                        PM
+                                                    </p>
+                                                </div>
+                                                <div className="formsLinkFormRoutingRoleCircle">
+                                                    <div
+                                                        className={`formsLinkFormRoutingCircle 
+                                                    ${
+                                                        f.routingPending.includes(
+                                                            "CO"
+                                                        ) &&
+                                                        "formsLinkFormRoutingCirclePending"
+                                                    }
+                                                    ${
+                                                        f.routingApproved.includes(
+                                                            "CO"
+                                                        ) &&
+                                                        "formsLinkFormRoutingCircleApproved"
+                                                    }
+                                                    ${
+                                                        f.routingRejected.includes(
+                                                            "CO"
+                                                        ) &&
+                                                        "formsLinkFormRoutingCircleRejected"
+                                                    }
+                                                    `}
+                                                    ></div>
+                                                    <p className="formsLinkFormRoutingRole">
+                                                        CO
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div className="formsLinkFormApprovedRejected">
+                                                <p
+                                                    className={`formsLinkFormApprovedRejectedComment ${
+                                                        f.approved.toUpperCase() ===
+                                                            "APPROVED" &&
+                                                        "formsLinkFormApproved"
+                                                    } ${
+                                                        f.approved.toUpperCase() ===
+                                                            "REJECTED" &&
+                                                        "formsLinkFormRejected"
+                                                    }`}
+                                                >
+                                                    {f.comment &&
+                                                        `"${f.comment}"`}
+                                                </p>
+
+                                                <p
+                                                    className={`formsLinkFormApprovedRejectedBy ${
+                                                        f.approved.toUpperCase() ===
+                                                            "APPROVED" &&
+                                                        "formsLinkFormApproved"
+                                                    } ${
+                                                        f.approved.toUpperCase() ===
+                                                            "REJECTED" &&
+                                                        "formsLinkFormRejected"
+                                                    }`}
+                                                >
+                                                    {f.approvalBy &&
+                                                        f.approvalBy.email}
+                                                    {f.approvalBy && (
+                                                        <span>
+                                                            (
+                                                            {
+                                                                f.approvalBy
+                                                                    .supervisorRole
+                                                            }
+                                                            )
+                                                        </span>
+                                                    )}
+                                                </p>
+                                            </div>
                                         </div>
 
                                         <div className="formsLinkFormCreatorCreated">
