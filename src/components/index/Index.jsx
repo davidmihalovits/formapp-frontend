@@ -11,7 +11,8 @@ const Index = () => {
     const [role, setRole] = useState("");
 
     const [loading, setLoading] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [errorMessageLogin, setErrorMessageLogin] = useState("");
+    const [errorMessageRegister, setErrorMessageRegister] = useState("");
     const [credential, setCredential] = useState("");
     const [code, setCode] = useState("");
     const [loginCodeSent, setLoginCodeSent] = useState(false);
@@ -19,7 +20,7 @@ const Index = () => {
     const register = async (e) => {
         e.preventDefault();
 
-        setErrorMessage("");
+        setErrorMessageRegister("");
         setLoading(true);
 
         await fetch(`${devprodUrl}/register`, {
@@ -36,7 +37,7 @@ const Index = () => {
             .then((data) => {
                 if (data === "User already registered.") {
                     setLoading(false);
-                    return setErrorMessage("User already registered.");
+                    return setErrorMessageRegister("User already registered.");
                 } else {
                     setLoading(false);
                     alert(data);
@@ -48,7 +49,7 @@ const Index = () => {
     const loginRequest = async (e) => {
         e.preventDefault();
 
-        setErrorMessage("");
+        setErrorMessageLogin("");
         setLoading(true);
 
         await fetch(`${devprodUrl}/loginRequest`, {
@@ -65,11 +66,10 @@ const Index = () => {
                 console.log(data);
                 if (data === "User not found.") {
                     setLoading(false);
-                    return setErrorMessage(data);
+                    return setErrorMessageLogin(data);
                 }
                 if (data.includes("Login code sent to")) {
                     setLoading(false);
-                    setErrorMessage("");
                     return setLoginCodeSent(true);
                 }
             });
@@ -78,7 +78,7 @@ const Index = () => {
     const login = async (e) => {
         e.preventDefault();
 
-        setErrorMessage("");
+        setErrorMessageLogin("");
         setLoading(true);
 
         await fetch(`${devprodUrl}/login`, {
@@ -95,12 +95,11 @@ const Index = () => {
             .then((data) => {
                 if (data === "Wrong login code.") {
                     setLoading(false);
-                    return setErrorMessage(data);
+                    return setErrorMessageLogin(data);
                 }
                 if (data.token) {
                     localStorage.setItem("token", data.token);
                     setLoading(false);
-                    setErrorMessage("");
                     return window.location.reload();
                 }
             });
@@ -132,8 +131,10 @@ const Index = () => {
                             <p className="indexBoxVerbage">
                                 Please check your email for the login code.
                             </p>
-                            {errorMessage && code && (
-                                <p className="indexBoxError">{errorMessage}</p>
+                            {errorMessageLogin && (
+                                <p className="indexBoxError">
+                                    {errorMessageLogin}
+                                </p>
                             )}
                         </>
                     ) : (
@@ -156,8 +157,10 @@ const Index = () => {
                                     ? "Loading..."
                                     : "Request login code"}
                             </button>
-                            {errorMessage && credential && (
-                                <p className="indexBoxError">{errorMessage}</p>
+                            {errorMessageLogin && (
+                                <p className="indexBoxError">
+                                    {errorMessageLogin}
+                                </p>
                             )}
                         </>
                     )}
@@ -226,8 +229,8 @@ const Index = () => {
                     >
                         {loading && email && role ? "Loading..." : "Register"}
                     </button>
-                    {errorMessage && email && role && (
-                        <p className="indexBoxError">{errorMessage}</p>
+                    {errorMessageRegister && (
+                        <p className="indexBoxError">{errorMessageRegister}</p>
                     )}
                 </div>
             </div>

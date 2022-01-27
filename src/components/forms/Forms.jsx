@@ -211,6 +211,11 @@ const Forms = (props) => {
                         )}
                     </div>
                 )}
+            </div>
+            <div className="formsContainerStats">
+                <p className="formsContainerStatsText">
+                    Showing {filteredForms.length} of {forms.length}
+                </p>
                 <div className="formsContainerFiltersDate">
                     <p
                         onClick={() => setNewest(!newest)}
@@ -234,11 +239,6 @@ const Forms = (props) => {
                         />
                     )}
                 </div>
-            </div>
-            <div className="formsContainerStats">
-                <p className="formsContainerStatsText">
-                    Showing {filteredForms.length} of {forms.length}
-                </p>
             </div>
             <div className="forms">
                 {filteredForms
