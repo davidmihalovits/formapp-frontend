@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 const FormSchema = mongoose.Schema(
     {
+        category: {
+            type: String,
+        },
         creator: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
         formName: {
             type: String,

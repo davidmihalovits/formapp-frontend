@@ -1,5 +1,6 @@
 import "./Form.sass";
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -7,6 +8,8 @@ import Papa from "papaparse";
 import chargeCodesCsv from "../../assets/chargecodes.csv";
 
 const Form = (props) => {
+    const params = useParams();
+
     const devprodUrl =
         process.env.NODE_ENV === "development"
             ? "http://localhost:8888/.netlify/functions"
@@ -132,7 +135,7 @@ const Form = (props) => {
         }
 
         await fetch(
-            `${devprodUrl}/getForm?id=${props.match.params.id}`,
+            `${devprodUrl}/getForm?id=${params.id}`,
 
             {
                 method: "GET",

@@ -1,7 +1,7 @@
 import React from "react";
 import "./SubmitFormTravel.sass";
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -15,7 +15,7 @@ const SubmitFormTravel = (props) => {
             : "https://awesome-minsky-48a20a.netlify.app/.netlify/functions";
 
     const today = new Date();
-    let history = useHistory();
+    let navigate = useNavigate();
 
     /*const places = async () => {
         await fetch(`${devprodUrl}/places`, {
@@ -177,7 +177,7 @@ const SubmitFormTravel = (props) => {
 
             setLoading(false);
             alert("Successful.");
-            return history.push(`/forms`);
+            return navigate(`/forms`);
         } else {
             setLoading(false);
             return alert("Cancelled.");

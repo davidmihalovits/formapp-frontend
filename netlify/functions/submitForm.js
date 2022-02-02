@@ -52,7 +52,6 @@ const submitForm = async (req, res) => {
         regulatoryCiBrief: res.regulatoryCiBrief,
         regulatoryItEquipment: res.regulatoryItEquipment,
         regulatoryVisa: res.regulatoryVisa,
-        //routingPending: "TA",
         approved: "pending",
     });
 

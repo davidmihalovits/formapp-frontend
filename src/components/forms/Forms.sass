@@ -9,9 +9,9 @@
     .formsContainerFilters
         .formsContainerFiltersSearchFilter
             display: grid
-            grid-template-columns: 1fr auto
+            grid-template-columns: 1fr auto auto
             align-items: center
-            gap: 10px
+            gap: 15px
             margin-bottom: 10px
 
             .formsContainerFiltersSearch
@@ -93,6 +93,35 @@
         gap: 20px
 
         .formsLink
+            .formsLinkFormRows
+                display: grid
+                grid-template-columns: 1fr auto
+                align-items: center
+                gap: 20px
+                //background: white
+                //border-bottom: 1px solid #dae1ec
+
+                .formsLinkFormRowsName
+                    font-size: 14px
+                    color: $smoke-black
+                    white-space: nowrap
+                    text-overflow: fade
+                    overflow: hidden
+
+                .formsLinkFormRowsTag
+                    width: 20px
+                    height: 20px
+                    border-radius: 50%
+
+                .formsLinkFormRowsTagPending
+                    background: $pending
+
+                .formsLinkFormRowsTagApproved
+                    background: $approved
+
+                .formsLinkFormRowsTagRejected
+                    background: $rejected
+
             .formsLinkForm
                 background: white
                 //border: 1px solid #e6e6e6
@@ -201,11 +230,11 @@
 
         .formsContainerFilters
             .formsContainerFiltersSearchFilter
-                gap: 0
+                //gap: 0
                 margin-bottom: 20px
 
                 .formsContainerFiltersSearch
-                    width: 300px
+                    //width: 450px
 
                 .formsContainerFiltersFilter
                     width: 30px
@@ -229,17 +258,21 @@
             grid-template-columns: 1fr 1fr 1fr
             gap: 20px
 
-            /*.formsLink
-                .formsLinkForm
-                    height: 400px*/
+        .formsRows
+            display: grid
+            grid-template-columns: 1fr
+            gap: 20px
+            width: 700px
+            margin: 0 auto
 
-                    /*.formsLinkFormDetails
-                        height: 100%
-                        display: grid
-                        grid-template-rows: auto 1fr*/
+            .formsLink
+                .formsLinkFormRows
+                    .formsLinkFormRowsName
+                        font-size: 18px
 
-                        /*.formsLinkFormCreatorCreated
-                            align-self: end*/
+                    .formsLinkFormRowsTag
+                        width: 30px
+                        height: 30px
 
 
 

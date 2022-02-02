@@ -5,6 +5,7 @@ import moment from "moment";
 import arrowDown from "../../assets/arrowdown.svg";
 import arrowUp from "../../assets/arrowup.svg";
 import filters from "../../assets/filter.svg";
+import change from "../../assets/change.svg";
 
 const Forms = (props) => {
     const devprodUrl =
@@ -15,6 +16,7 @@ const Forms = (props) => {
     const [forms, setForms] = useState([]);
     const [loading, setLoading] = useState(false);
     const [filterButtons, setFilterButtons] = useState(false);
+    const [filterRows, setFilterRows] = useState(false);
     const [newest, setNewest] = useState(true);
     const [filter, setFilter] = useState("");
     const [search, setSearch] = useState("");
@@ -97,6 +99,12 @@ const Forms = (props) => {
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Search by name..."
                         className="formsContainerFiltersSearch"
+                    />
+                    <img
+                        onClick={() => setFilterRows(!filterRows)}
+                        src={change}
+                        alt="change"
+                        className="formsContainerFiltersFilter"
                     />
                     <img
                         onClick={() => setFilterButtons(!filterButtons)}
@@ -240,7 +248,7 @@ const Forms = (props) => {
                     )}
                 </div>
             </div>
-            <div className="forms">
+            <div className={`forms ${filterRows && "formsRows"}`}>
                 {filteredForms
                     .sort((a, b) => {
                         if (newest) {
@@ -254,39 +262,61 @@ const Forms = (props) => {
                         return (
                             <Link
                                 key={key}
-                                to={`/${f.approved}/${f._id}`}
+                                to={`/form/${f._id}`}
                                 className="formsLink"
                             >
-                                <div className="formsLinkForm" form={f}>
-                                    <div
-                                        className={`formsLinkFormTag ${
-                                            f.approved.toUpperCase() ===
-                                                "PENDING" &&
-                                            "formsLinkFormTagPending"
-                                        } ${
-                                            f.approved.toUpperCase() ===
-                                                "APPROVED" &&
-                                            "formsLinkFormTagApproved"
-                                        } ${
-                                            f.approved.toUpperCase() ===
-                                                "REJECTED" &&
-                                            "formsLinkFormTagRejected"
-                                        }`}
-                                    >
-                                        {f.approved.toUpperCase()}
+                                {filterRows ? (
+                                    <div className="formsLinkFormRows" form={f}>
+                                        <p className="formsLinkFormRowsName">
+                                            {f.formName}
+                                        </p>
+                                        <div
+                                            className={`formsLinkFormRowsTag ${
+                                                f.approved.toUpperCase() ===
+                                                    "PENDING" &&
+                                                "formsLinkFormRowsTagPending"
+                                            } ${
+                                                f.approved.toUpperCase() ===
+                                                    "APPROVED" &&
+                                                "formsLinkFormRowsTagApproved"
+                                            } ${
+                                                f.approved.toUpperCase() ===
+                                                    "REJECTED" &&
+                                                "formsLinkFormRowsTagRejected"
+                                            }`}
+                                        ></div>
                                     </div>
+                                ) : (
+                                    <div className="formsLinkForm" form={f}>
+                                        <div
+                                            className={`formsLinkFormTag ${
+                                                f.approved.toUpperCase() ===
+                                                    "PENDING" &&
+                                                "formsLinkFormTagPending"
+                                            } ${
+                                                f.approved.toUpperCase() ===
+                                                    "APPROVED" &&
+                                                "formsLinkFormTagApproved"
+                                            } ${
+                                                f.approved.toUpperCase() ===
+                                                    "REJECTED" &&
+                                                "formsLinkFormTagRejected"
+                                            }`}
+                                        >
+                                            {f.approved.toUpperCase()}
+                                        </div>
 
-                                    <div className="formsLinkFormDetails">
-                                        <div>
-                                            <p className="formsLinkFormName">
-                                                {f.formName}
-                                            </p>
+                                        <div className="formsLinkFormDetails">
+                                            <div>
+                                                <p className="formsLinkFormName">
+                                                    {f.formName}
+                                                </p>
 
-                                            <div className="formsLinkFormRouting">
-                                                <div className="formsLinkFormRoutingLine"></div>
-                                                <div className="formsLinkFormRoutingRoleCircle">
-                                                    <div
-                                                        className={`formsLinkFormRoutingCircle 
+                                                <div className="formsLinkFormRouting">
+                                                    <div className="formsLinkFormRoutingLine"></div>
+                                                    <div className="formsLinkFormRoutingRoleCircle">
+                                                        <div
+                                                            className={`formsLinkFormRoutingCircle 
                                                     ${
                                                         f.routingPending.includes(
                                                             "TM"
@@ -306,14 +336,14 @@ const Forms = (props) => {
                                                         "formsLinkFormRoutingCircleRejected"
                                                     }
                                                     `}
-                                                    ></div>
-                                                    <p className="formsLinkFormRoutingRole">
-                                                        TM
-                                                    </p>
-                                                </div>
-                                                <div className="formsLinkFormRoutingRoleCircle">
-                                                    <div
-                                                        className={`formsLinkFormRoutingCircle 
+                                                        ></div>
+                                                        <p className="formsLinkFormRoutingRole">
+                                                            TM
+                                                        </p>
+                                                    </div>
+                                                    <div className="formsLinkFormRoutingRoleCircle">
+                                                        <div
+                                                            className={`formsLinkFormRoutingCircle 
                                                     ${
                                                         f.routingPending.includes(
                                                             "PL"
@@ -333,14 +363,14 @@ const Forms = (props) => {
                                                         "formsLinkFormRoutingCircleRejected"
                                                     }
                                                     `}
-                                                    ></div>
-                                                    <p className="formsLinkFormRoutingRole">
-                                                        PL
-                                                    </p>
-                                                </div>
-                                                <div className="formsLinkFormRoutingRoleCircle">
-                                                    <div
-                                                        className={`formsLinkFormRoutingCircle 
+                                                        ></div>
+                                                        <p className="formsLinkFormRoutingRole">
+                                                            PL
+                                                        </p>
+                                                    </div>
+                                                    <div className="formsLinkFormRoutingRoleCircle">
+                                                        <div
+                                                            className={`formsLinkFormRoutingCircle 
                                                     ${
                                                         f.routingPending.includes(
                                                             "PM"
@@ -360,14 +390,14 @@ const Forms = (props) => {
                                                         "formsLinkFormRoutingCircleRejected"
                                                     }
                                                     `}
-                                                    ></div>
-                                                    <p className="formsLinkFormRoutingRole">
-                                                        PM
-                                                    </p>
-                                                </div>
-                                                <div className="formsLinkFormRoutingRoleCircle">
-                                                    <div
-                                                        className={`formsLinkFormRoutingCircle 
+                                                        ></div>
+                                                        <p className="formsLinkFormRoutingRole">
+                                                            PM
+                                                        </p>
+                                                    </div>
+                                                    <div className="formsLinkFormRoutingRoleCircle">
+                                                        <div
+                                                            className={`formsLinkFormRoutingCircle 
                                                     ${
                                                         f.routingPending.includes(
                                                             "CO"
@@ -387,68 +417,69 @@ const Forms = (props) => {
                                                         "formsLinkFormRoutingCircleRejected"
                                                     }
                                                     `}
-                                                    ></div>
-                                                    <p className="formsLinkFormRoutingRole">
-                                                        CO
+                                                        ></div>
+                                                        <p className="formsLinkFormRoutingRole">
+                                                            CO
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="formsLinkFormApprovedRejected">
+                                                    <p
+                                                        className={`formsLinkFormApprovedRejectedComment ${
+                                                            f.approved.toUpperCase() ===
+                                                                "APPROVED" &&
+                                                            "formsLinkFormApproved"
+                                                        } ${
+                                                            f.approved.toUpperCase() ===
+                                                                "REJECTED" &&
+                                                            "formsLinkFormRejected"
+                                                        }`}
+                                                    >
+                                                        {f.comment &&
+                                                            `"${f.comment}"`}
+                                                    </p>
+
+                                                    <p
+                                                        className={`formsLinkFormApprovedRejectedBy ${
+                                                            f.approved.toUpperCase() ===
+                                                                "APPROVED" &&
+                                                            "formsLinkFormApproved"
+                                                        } ${
+                                                            f.approved.toUpperCase() ===
+                                                                "REJECTED" &&
+                                                            "formsLinkFormRejected"
+                                                        }`}
+                                                    >
+                                                        {f.approvalBy &&
+                                                            f.approvalBy.email}
+                                                        {f.approvalBy && (
+                                                            <span>
+                                                                (
+                                                                {
+                                                                    f.approvalBy
+                                                                        .supervisorRole
+                                                                }
+                                                                )
+                                                            </span>
+                                                        )}
                                                     </p>
                                                 </div>
                                             </div>
 
-                                            <div className="formsLinkFormApprovedRejected">
-                                                <p
-                                                    className={`formsLinkFormApprovedRejectedComment ${
-                                                        f.approved.toUpperCase() ===
-                                                            "APPROVED" &&
-                                                        "formsLinkFormApproved"
-                                                    } ${
-                                                        f.approved.toUpperCase() ===
-                                                            "REJECTED" &&
-                                                        "formsLinkFormRejected"
-                                                    }`}
-                                                >
-                                                    {f.comment &&
-                                                        `"${f.comment}"`}
+                                            <div className="formsLinkFormCreatorCreated">
+                                                <p className="formsLinkFormCreator">
+                                                    {f.email}
                                                 </p>
-
-                                                <p
-                                                    className={`formsLinkFormApprovedRejectedBy ${
-                                                        f.approved.toUpperCase() ===
-                                                            "APPROVED" &&
-                                                        "formsLinkFormApproved"
-                                                    } ${
-                                                        f.approved.toUpperCase() ===
-                                                            "REJECTED" &&
-                                                        "formsLinkFormRejected"
-                                                    }`}
-                                                >
-                                                    {f.approvalBy &&
-                                                        f.approvalBy.email}
-                                                    {f.approvalBy && (
-                                                        <span>
-                                                            (
-                                                            {
-                                                                f.approvalBy
-                                                                    .supervisorRole
-                                                            }
-                                                            )
-                                                        </span>
+                                                <p className="formsLinkFormCreated">
+                                                    {moment(f.createdAt).format(
+                                                        "MMMM Do YYYY, h:mm:ss a"
                                                     )}
                                                 </p>
                                             </div>
                                         </div>
-
-                                        <div className="formsLinkFormCreatorCreated">
-                                            <p className="formsLinkFormCreator">
-                                                {f.email}
-                                            </p>
-                                            <p className="formsLinkFormCreated">
-                                                {moment(f.createdAt).format(
-                                                    "MMMM Do YYYY, h:mm:ss a"
-                                                )}
-                                            </p>
-                                        </div>
                                     </div>
-                                </div>
+                                )}
                             </Link>
                         );
                     })}
