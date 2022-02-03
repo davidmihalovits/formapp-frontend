@@ -40,26 +40,35 @@ const Notification = (props) => {
             {props.notifications &&
                 props.notifications.map((n, key) => {
                     return (
-                        <Link
-                            key={key}
-                            to={`/form/${n.formId}`}
-                            className="notificationsLink"
-                            onClick={() => readNotification(n)}
-                        >
-                            <div className="notifications">
-                                {!n.read.includes(userEmail) && (
-                                    <div className="notificationsBadge"></div>
-                                )}
-                                <p className="notificationsText">
-                                    {n.notification}
-                                </p>
-                                <p className="notificationsDate">
-                                    {moment(n.createdAt).format(
-                                        "MMMM Do YYYY, h:mm:ss a"
-                                    )}
-                                </p>
-                            </div>
-                        </Link>
+                        <div key={key}>
+                            <Link
+                                to={`/form/${n.formId}`}
+                                className="notificationsLink"
+                                onClick={() => readNotification(n)}
+                            >
+                                <div className="notifications">
+                                    <div className="notificationsTextBadge">
+                                        <p className="notificationsText">
+                                            {n.notification}
+                                        </p>
+                                        {!n.read.includes(userEmail) && (
+                                            <div className="notificationsBadge"></div>
+                                        )}
+                                    </div>
+                                    <p className="notificationsDate">
+                                        {moment(n.createdAt).format(
+                                            "MMMM Do YYYY, h:mm:ss a"
+                                        )}
+                                    </p>
+                                </div>
+                            </Link>
+                            <div
+                                style={{
+                                    borderTop: "1px solid #dae1ec",
+                                    margin: "20px 0",
+                                }}
+                            ></div>
+                        </div>
                     );
                 })}
         </div>

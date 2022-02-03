@@ -2,56 +2,34 @@
 
 .notificationsContainer
     margin: 20px 20px 100px 20px
+    display: grid
+    grid-template-columns: 1fr
 
     .notificationsLink
         text-decoration: none
         color: $smoke-black
 
         .notifications
-            background: white
-            border-radius: 10px
-            padding: 30px 20px
-            margin: 20px 0 0 0
-            box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -3px 
+            .notificationsTextBadge
+                display: grid
+                grid-template-columns: 1fr auto
 
-            .notificationsText
-                font-size: 18px
+                .notificationsText
+                    font-size: 16px
+
+                .notificationsBadge
+                    border-radius: 50%
+                    width: 15px
+                    height: 15px
+                    background-color: $rejected
 
             .notificationsDate
-                font-size: 14px
-                color: $smoke-black
-                margin-top: 30px
-
-            .notificationsBadge
-                border-radius: 50%
-                width: 15px
-                height: 15px
-                background-color: $rejected
-                margin: 0 0 0 auto
+                font-size: 12px
+                color: #cfcfcf
 
 @media only screen and (min-width: 1100px)
     .notificationsContainer
         margin: 120px auto
-        display: grid
-        grid-template-columns: 1fr 1fr 1fr
-        gap: 20px
         width: 1100px
-
-        .notificationsLink
-            .notifications
-                margin: 0
-                height: 280px
-                display: grid
-                grid-template-rows: auto 1fr auto
-                position: relative
-
-                .notificationsDate
-                    align-self: end
-                    margin-top: 0
-
-                .notificationsBadge
-                    position: absolute
-                    right: 0
-                    margin: 15px
                 
             

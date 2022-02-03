@@ -6,6 +6,7 @@ import arrowDown from "../../assets/arrowdown.svg";
 import arrowUp from "../../assets/arrowup.svg";
 import filters from "../../assets/filter.svg";
 import change from "../../assets/change.svg";
+import travelIcon from "../../assets/travel.svg";
 
 const Forms = (props) => {
     const devprodUrl =
@@ -267,6 +268,15 @@ const Forms = (props) => {
                             >
                                 {filterRows ? (
                                     <div className="formsLinkFormRows" form={f}>
+                                        {f.category === "travel" ? (
+                                            <img
+                                                src={travelIcon}
+                                                alt="travelIcon"
+                                                className="formsLinkFormRowsIcon"
+                                            />
+                                        ) : (
+                                            <div className="formsLinkFormRowsIcon"></div>
+                                        )}
                                         <p className="formsLinkFormRowsName">
                                             {f.formName}
                                         </p>
@@ -468,14 +478,25 @@ const Forms = (props) => {
                                             </div>
 
                                             <div className="formsLinkFormCreatorCreated">
-                                                <p className="formsLinkFormCreator">
-                                                    {f.email}
-                                                </p>
-                                                <p className="formsLinkFormCreated">
-                                                    {moment(f.createdAt).format(
-                                                        "MMMM Do YYYY, h:mm:ss a"
-                                                    )}
-                                                </p>
+                                                <div>
+                                                    <p className="formsLinkFormCreator">
+                                                        {f.email}
+                                                    </p>
+                                                    <p className="formsLinkFormCreated">
+                                                        {moment(
+                                                            f.createdAt
+                                                        ).format(
+                                                            "MMMM Do YYYY, h:mm:ss a"
+                                                        )}
+                                                    </p>
+                                                </div>
+                                                {f.category === "travel" && (
+                                                    <img
+                                                        src={travelIcon}
+                                                        alt="travelIcon"
+                                                        className="formsLinkFormCreatorCreatedIcon"
+                                                    />
+                                                )}
                                             </div>
                                         </div>
                                     </div>

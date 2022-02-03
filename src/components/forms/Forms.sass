@@ -95,11 +95,15 @@
         .formsLink
             .formsLinkFormRows
                 display: grid
-                grid-template-columns: 1fr auto
+                grid-template-columns: auto 1fr auto
                 align-items: center
-                gap: 20px
+                gap: 10px
                 //background: white
                 //border-bottom: 1px solid #dae1ec
+
+                .formsLinkFormRowsIcon
+                    width: 20px
+                    height: 20px
 
                 .formsLinkFormRowsName
                     font-size: 14px
@@ -157,6 +161,10 @@
                         font-size: 20px
 
                     .formsLinkFormCreatorCreated
+                        display: grid
+                        grid-template-columns: 1fr auto
+                        align-items: center
+
                         .formsLinkFormCreator
                             color: $smoke-black
                             font-size: 12px
@@ -164,6 +172,10 @@
                         .formsLinkFormCreated
                             color: $smoke-black
                             font-size: 12px
+
+                        .formsLinkFormCreatorCreatedIcon
+                            width: 30px
+                            height: 30px
 
                     .formsLinkFormApprovedRejected
                         margin: 30px 0
@@ -262,17 +274,19 @@
             display: grid
             grid-template-columns: 1fr
             gap: 20px
-            width: 700px
-            margin: 0 auto
 
             .formsLink
                 .formsLinkFormRows
+                    .formsLinkFormRowsIcon
+                        width: 25px
+                        height: 25px
+
                     .formsLinkFormRowsName
-                        font-size: 18px
+                        font-size: 17px
 
                     .formsLinkFormRowsTag
-                        width: 30px
-                        height: 30px
+                        width: 25px
+                        height: 25px
 
 
 

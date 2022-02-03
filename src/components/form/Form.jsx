@@ -2101,6 +2101,14 @@ const Form = (props) => {
                         </h2>
                         <div className="submittedformDetails">
                             <p className="submittedformDetailsTitle">
+                                Form Category:
+                            </p>
+                            <p className="submittedformDetailsInput">
+                                {form.category}
+                            </p>
+                        </div>
+                        <div className="submittedformDetails">
+                            <p className="submittedformDetailsTitle">
                                 Form Name:
                             </p>
                             <p className="submittedformDetailsInput">

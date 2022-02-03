@@ -126,6 +126,7 @@ const SubmitFormTravel = (props) => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
+                    category: "travel",
                     creator: props.user && props.user._id,
                     travelPurposeDropdown: travelPurposeDropdown,
                     travelPurpose: travelPurpose,
